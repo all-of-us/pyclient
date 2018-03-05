@@ -1,0 +1,9 @@
+.settings
+.project
+.pydevproject
+sa-key.json
+py/.project
+py/.pydevproject
+py/test_creds.json
+**/*.pyc
+venv/*
