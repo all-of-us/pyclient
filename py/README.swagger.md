@@ -206,6 +206,7 @@ Class | Method | HTTP request | Description
  - [SortOrder](docs/SortOrder.md)
  - [StackTraceElement](docs/StackTraceElement.md)
  - [StatusResponse](docs/StatusResponse.md)
+ - [UnderservedPopulationEnum](docs/UnderservedPopulationEnum.md)
  - [UpdateWorkspaceRequest](docs/UpdateWorkspaceRequest.md)
  - [UserRole](docs/UserRole.md)
  - [UsernameTakenResponse](docs/UsernameTakenResponse.md)

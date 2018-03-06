@@ -13,6 +13,8 @@ Name | Type | Description | Notes
 **population** | **bool** |  | [default to False]
 **population_of_focus** | **str** |  | [optional] 
 **review_requested** | **bool** |  | [default to False]
+**contains_underserved_population** | **bool** |  | [optional] [default to False]
+**underserved_population_details** | [**list[UnderservedPopulationEnum]**](UnderservedPopulationEnum.md) |  | [optional] 
 **time_requested** | **int** | Milliseconds since the UNIX epoch. | [optional] 
 **approved** | **bool** |  | [optional] 
 **time_reviewed** | **int** | Milliseconds since the UNIX epoch. | [optional] 

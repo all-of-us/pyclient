@@ -82,6 +82,7 @@ from .models.share_workspace_response import ShareWorkspaceResponse
 from .models.sort_order import SortOrder
 from .models.stack_trace_element import StackTraceElement
 from .models.status_response import StatusResponse
+from .models.underserved_population_enum import UnderservedPopulationEnum
 from .models.update_workspace_request import UpdateWorkspaceRequest
 from .models.user_role import UserRole
 from .models.username_taken_response import UsernameTakenResponse

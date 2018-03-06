@@ -41,6 +41,8 @@ class ResearchPurpose(object):
         'population': 'bool',
         'population_of_focus': 'str',
         'review_requested': 'bool',
+        'contains_underserved_population': 'bool',
+        'underserved_population_details': 'list[UnderservedPopulationEnum]',
         'time_requested': 'int',
         'approved': 'bool',
         'time_reviewed': 'int',
@@ -58,13 +60,15 @@ class ResearchPurpose(object):
         'population': 'population',
         'population_of_focus': 'populationOfFocus',
         'review_requested': 'reviewRequested',
+        'contains_underserved_population': 'containsUnderservedPopulation',
+        'underserved_population_details': 'underservedPopulationDetails',
         'time_requested': 'timeRequested',
         'approved': 'approved',
         'time_reviewed': 'timeReviewed',
         'additional_notes': 'additionalNotes'
     }
 
-    def __init__(self, disease_focused_research=False, disease_of_focus=None, methods_development=False, control_set=False, aggregate_analysis=False, ancestry=False, commercial_purpose=False, population=False, population_of_focus=None, review_requested=False, time_requested=None, approved=None, time_reviewed=None, additional_notes=None):
+    def __init__(self, disease_focused_research=False, disease_of_focus=None, methods_development=False, control_set=False, aggregate_analysis=False, ancestry=False, commercial_purpose=False, population=False, population_of_focus=None, review_requested=False, contains_underserved_population=False, underserved_population_details=None, time_requested=None, approved=None, time_reviewed=None, additional_notes=None):
         """
         ResearchPurpose - a model defined in Swagger
         """
@@ -79,6 +83,8 @@ class ResearchPurpose(object):
         self._population = None
         self._population_of_focus = None
         self._review_requested = None
+        self._contains_underserved_population = None
+        self._underserved_population_details = None
         self._time_requested = None
         self._approved = None
         self._time_reviewed = None
@@ -97,6 +103,10 @@ class ResearchPurpose(object):
         if population_of_focus is not None:
           self.population_of_focus = population_of_focus
         self.review_requested = review_requested
+        if contains_underserved_population is not None:
+          self.contains_underserved_population = contains_underserved_population
+        if underserved_population_details is not None:
+          self.underserved_population_details = underserved_population_details
         if time_requested is not None:
           self.time_requested = time_requested
         if approved is not None:
@@ -331,6 +341,48 @@ class ResearchPurpose(object):
             raise ValueError("Invalid value for `review_requested`, must not be `None`")
 
         self._review_requested = review_requested
+
+    @property
+    def contains_underserved_population(self):
+        """
+        Gets the contains_underserved_population of this ResearchPurpose.
+
+        :return: The contains_underserved_population of this ResearchPurpose.
+        :rtype: bool
+        """
+        return self._contains_underserved_population
+
+    @contains_underserved_population.setter
+    def contains_underserved_population(self, contains_underserved_population):
+        """
+        Sets the contains_underserved_population of this ResearchPurpose.
+
+        :param contains_underserved_population: The contains_underserved_population of this ResearchPurpose.
+        :type: bool
+        """
+
+        self._contains_underserved_population = contains_underserved_population
+
+    @property
+    def underserved_population_details(self):
+        """
+        Gets the underserved_population_details of this ResearchPurpose.
+
+        :return: The underserved_population_details of this ResearchPurpose.
+        :rtype: list[UnderservedPopulationEnum]
+        """
+        return self._underserved_population_details
+
+    @underserved_population_details.setter
+    def underserved_population_details(self, underserved_population_details):
+        """
+        Sets the underserved_population_details of this ResearchPurpose.
+
+        :param underserved_population_details: The underserved_population_details of this ResearchPurpose.
+        :type: list[UnderservedPopulationEnum]
+        """
+
+        self._underserved_population_details = underserved_population_details
 
     @property
     def time_requested(self):
