@@ -1,8 +1,8 @@
 # coding: utf-8
 """
-    AllOfUs Workbench API
+    AllOfUs Client API
 
-    The API for the AllOfUs workbench.
+    The API used by AllOfUs workbench clients (including both notebooks and our UI.)
 
     OpenAPI spec version: 0.1.0
     
