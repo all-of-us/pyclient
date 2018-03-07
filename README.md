@@ -25,8 +25,8 @@ virtualenv venv
 pyclient$ ./project.rb swagger-regen
 ```
 
-This will place generated Python files in pyclient/py/aou_workbench_client/swagger_client,
-and generated README files in pyclient/py/swagger_docs and pyclient/README.swagger.md.
+This will place generated Python files in py/aou_workbench_client/swagger_client,
+and generated README files in py/swagger_docs and py/README.swagger.md.
 
 After running this, run the following to add new files to git:
 
@@ -40,7 +40,7 @@ git add py/swagger_docs
 pyclient$ ./project.rb test
 ```
 
-Running tests will place the test service account credentials in pyclient/sa-key.json.
+Running tests will place the test service account credentials in sa-key.json.
 
 The test service account owns free tier billing projects for the test environment, and has
 access to all workspaces created in them.
@@ -48,7 +48,7 @@ access to all workspaces created in them.
 If you want to do manual testing of the client when running locally, you can run:
 
 ```Shell
-export GOOGLE_APPLICATION_CREDENTIALS=<absolute path to pyclient/sa-key.json>
+export GOOGLE_APPLICATION_CREDENTIALS=<absolute path to sa-key.json>
 ```
 
 
