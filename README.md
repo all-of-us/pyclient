@@ -17,7 +17,8 @@ check in your changes if you want it to be permanent.
 ```Shell
 virtualenv venv
 . venv/bin/activate
-
+./project.rb setup-env
+```
 
 ### Regenerate the Swagger client
 
