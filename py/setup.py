@@ -6,10 +6,6 @@ from setuptools import setup, find_packages
 
 
 client_dir = os.path.abspath(os.path.dirname(__file__))
-with open(os.path.join(client_dir, 'README.md')) as readme:
-    readme_contents = readme.read()
-with open(os.path.join(client_dir, 'README.swagger.md')) as swagger_readme:
-    readme_contents += '\n\n' + swagger_readme.read()
 with open(os.path.join(client_dir, 'requirements.txt')) as requirements:
     requirements_list = [l.strip() for l in requirements.readlines()]
 with open(os.path.join(client_dir, 'swagger-requirements.txt')) as swagger_requirements:
@@ -23,8 +19,11 @@ setup(
         # TODO(danrodney) Automatically provide a version string here, bumped when publishing
         # (maybe from swagger-regen).
         version='1.1.1',
-
-        long_description=readme_contents,
+        
+        long_description="""\        
+        Python client library for interacting with the AllOfUs workbench API.
+        """,
+        
         url='https://github.com/all-of-us/pyclient',
 
         # These packages may be imported after the egg is installed. (We want all Python packages
