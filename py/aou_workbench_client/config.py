@@ -5,7 +5,9 @@ import json
 import os
 
 # Constants for keys in the configuration
-ALL_OF_US_CONFIG_FILE = os.getenv('ALL_OF_US_CONFIG_PATH', '~/config/all_of_us_config.json')
+# This assumes that the AOU config file is stored in a config subdirectory
+# of the directory containing a notebook. (This may change soon.)
+ALL_OF_US_CONFIG_FILE = os.getenv('ALL_OF_US_CONFIG_PATH', 'config/all_of_us_config.json')
 WORKSPACE_NAMESPACE_KEY = 'WORKSPACE_NAMESPACE'
 WORKSPACE_ID_KEY = 'WORKSPACE_ID'
 API_HOST_KEY = 'API_HOST'
