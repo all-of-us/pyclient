@@ -17,7 +17,8 @@ check in your changes if you want it to be permanent.
 ```Shell
 virtualenv venv
 . venv/bin/activate
-
+./project.rb setup-env
+```
 
 ### Regenerate the Swagger client
 
@@ -54,7 +55,8 @@ export GOOGLE_APPLICATION_CREDENTIALS=<absolute path to sa-key.json>
 
 ## Releases
 
-To publish a new version, merge any changes to master (including any regenerated
+To publish a new version, modify py/setup.py with the new version number,
+merge any changes to master (including any regenerated
 Swagger client changes), and then run:
 
 ```Shell
