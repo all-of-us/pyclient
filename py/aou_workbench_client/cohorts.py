@@ -1,5 +1,5 @@
-from auth import get_authenticated_swagger_client
-from config import all_of_us_config
+from aou_workbench_client.auth import get_authenticated_swagger_client
+from aou_workbench_client.config import all_of_us_config
 from aou_workbench_client.swagger_client.apis.cohorts_api import CohortsApi
 
 def materialize_cohort(request):
