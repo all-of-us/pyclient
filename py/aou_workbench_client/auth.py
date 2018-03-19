@@ -19,10 +19,10 @@ See https://www.googleapis.com/oauth2/v3/tokeninfo?access_token= for debugging.
 
 import time
 
-from config import all_of_us_config
 from oauth2client.client import GoogleCredentials
 
-from .swagger_client.api_client import ApiClient
+from aou_workbench_client.config import all_of_us_config
+from aou_workbench_client.swagger_client.api_client import ApiClient
 
 # These are sometimes ignored, see module doc.
 CLIENT_OAUTH_SCOPES = (

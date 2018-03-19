@@ -36,7 +36,7 @@ git add py/aou_workbench_client/swagger_client
 git add py/swagger_docs
 ```
 
-### Run tests
+## Run tests
 ```Shell
 pyclient$ ./project.rb test
 ```
@@ -52,6 +52,19 @@ If you want to do manual testing of the client when running locally, you can run
 export GOOGLE_APPLICATION_CREDENTIALS=<absolute path to sa-key.json>
 ```
 
+## Manual Testing
+
+- Fork this repo, then push your feature branch there.
+- On your fork, cut a release from that feature branch, e.g. USER-v1
+- From your notebook, run:
+
+  ```
+  !pip install --user --upgrade 'https://github.com/USER/pyclient/archive/pyclient-USER-v1.zip#egg=aou_workbench_client&subdirectory=py'
+  ```
+
+TODO: Once https://github.com/DataBiosphere/leonardo/pull/266 is resolved,
+switch these instructions to simply pip install directly from the feature
+branch; no fork or release needed.
 
 ## Releases
 
@@ -73,7 +86,7 @@ You will then be able to use the pushed version of the client library in a noteb
 by running:
 
 ```Shell
-!pip install 'https://github.com/all-of-us/pyclient/archive/pyclient-vX-Y-rcZ.zip#egg=aou_workbench_client&subdirectory=py'
+!pip install --user 'https://github.com/all-of-us/pyclient/archive/pyclient-vX-Y-rcZ.zip#egg=aou_workbench_client&subdirectory=py'
 ```
 
 
