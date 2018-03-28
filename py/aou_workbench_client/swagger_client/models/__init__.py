@@ -15,5 +15,9 @@ from __future__ import absolute_import
 
 # import models into model package
 from .cohort_status import CohortStatus
+from .column_filter import ColumnFilter
+from .field_set import FieldSet
 from .materialize_cohort_request import MaterializeCohortRequest
 from .materialize_cohort_response import MaterializeCohortResponse
+from .operator import Operator
+from .table_query import TableQuery

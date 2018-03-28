@@ -9,6 +9,7 @@ Name | Type | Description | Notes
 **cdr_version_name** | **str** | The name of a CDR version to use when evaluating the cohort; if none is specified, the CDR version currently associated with the workspace will be used  | [optional] 
 **page_token** | **str** | Pagination token retrieved from a previous call to materializeCohort; used for retrieving additional pages of results. If this is specified, all other fields on MaterializeCohortRequest apart from pageSize must match the values specified on the request that generated this token.  | [optional] 
 **page_size** | **int** | Maximum number of results to return in a response. Defaults to 1000.  | [optional] 
+**field_set** | [**FieldSet**](FieldSet.md) | Specification defining what data to return for participants in the cohort. Defaults to just participant IDs.  | [optional] 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

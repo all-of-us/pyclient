@@ -36,7 +36,8 @@ class MaterializeCohortRequest(object):
         'status_filter': 'list[CohortStatus]',
         'cdr_version_name': 'str',
         'page_token': 'str',
-        'page_size': 'int'
+        'page_size': 'int',
+        'field_set': 'FieldSet'
     }
 
     attribute_map = {
@@ -45,10 +46,11 @@ class MaterializeCohortRequest(object):
         'status_filter': 'statusFilter',
         'cdr_version_name': 'cdrVersionName',
         'page_token': 'pageToken',
-        'page_size': 'pageSize'
+        'page_size': 'pageSize',
+        'field_set': 'fieldSet'
     }
 
-    def __init__(self, cohort_name=None, cohort_spec=None, status_filter=None, cdr_version_name=None, page_token=None, page_size=None):
+    def __init__(self, cohort_name=None, cohort_spec=None, status_filter=None, cdr_version_name=None, page_token=None, page_size=None, field_set=None):
         """
         MaterializeCohortRequest - a model defined in Swagger
         """
@@ -59,6 +61,7 @@ class MaterializeCohortRequest(object):
         self._cdr_version_name = None
         self._page_token = None
         self._page_size = None
+        self._field_set = None
         self.discriminator = None
 
         if cohort_name is not None:
@@ -73,6 +76,8 @@ class MaterializeCohortRequest(object):
           self.page_token = page_token
         if page_size is not None:
           self.page_size = page_size
+        if field_set is not None:
+          self.field_set = field_set
 
     @property
     def cohort_name(self):
@@ -211,6 +216,29 @@ class MaterializeCohortRequest(object):
         """
 
         self._page_size = page_size
+
+    @property
+    def field_set(self):
+        """
+        Gets the field_set of this MaterializeCohortRequest.
+        Specification defining what data to return for participants in the cohort. Defaults to just participant IDs. 
+
+        :return: The field_set of this MaterializeCohortRequest.
+        :rtype: FieldSet
+        """
+        return self._field_set
+
+    @field_set.setter
+    def field_set(self, field_set):
+        """
+        Sets the field_set of this MaterializeCohortRequest.
+        Specification defining what data to return for participants in the cohort. Defaults to just participant IDs. 
+
+        :param field_set: The field_set of this MaterializeCohortRequest.
+        :type: FieldSet
+        """
+
+        self._field_set = field_set
 
     def to_dict(self):
         """

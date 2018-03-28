@@ -79,8 +79,12 @@ Class | Method | HTTP request | Description
 ## Documentation For Models
 
  - [CohortStatus](docs/CohortStatus.md)
+ - [ColumnFilter](docs/ColumnFilter.md)
+ - [FieldSet](docs/FieldSet.md)
  - [MaterializeCohortRequest](docs/MaterializeCohortRequest.md)
  - [MaterializeCohortResponse](docs/MaterializeCohortResponse.md)
+ - [Operator](docs/Operator.md)
+ - [TableQuery](docs/TableQuery.md)
 
 
 ## Documentation For Authorization
