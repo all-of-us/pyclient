@@ -181,7 +181,7 @@ class ColumnFilter(object):
     def value_date(self):
         """
         Gets the value_date of this ColumnFilter.
-        An ISO-formatted date / datetime value to use in comparisons. 
+        A date (yyyy-MM-dd) or datetime (yyyy-MM-dd HH:mm:ss zzz) value to use in comparisons. 
 
         :return: The value_date of this ColumnFilter.
         :rtype: str
@@ -192,7 +192,7 @@ class ColumnFilter(object):
     def value_date(self, value_date):
         """
         Sets the value_date of this ColumnFilter.
-        An ISO-formatted date / datetime value to use in comparisons. 
+        A date (yyyy-MM-dd) or datetime (yyyy-MM-dd HH:mm:ss zzz) value to use in comparisons. 
 
         :param value_date: The value_date of this ColumnFilter.
         :type: str

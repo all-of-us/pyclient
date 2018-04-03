@@ -20,4 +20,5 @@ from .field_set import FieldSet
 from .materialize_cohort_request import MaterializeCohortRequest
 from .materialize_cohort_response import MaterializeCohortResponse
 from .operator import Operator
+from .result_filters import ResultFilters
 from .table_query import TableQuery
