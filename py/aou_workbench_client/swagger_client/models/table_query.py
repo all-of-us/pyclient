@@ -33,7 +33,7 @@ class TableQuery(object):
     swagger_types = {
         'table_name': 'str',
         'columns': 'list[str]',
-        'filters': 'list[list[ColumnFilter]]',
+        'filters': 'ResultFilters',
         'order_by': 'list[str]'
     }
 
@@ -115,10 +115,10 @@ class TableQuery(object):
     def filters(self):
         """
         Gets the filters of this TableQuery.
-        An array of arrays of ColumnFilter objects to apply to results. Each child array represents a series of criteria to logically AND together; these expressions are then logically OR'd together at the top level. 
+        Filters on the results. Only results matching the criteria specified in the filters will be returned 
 
         :return: The filters of this TableQuery.
-        :rtype: list[list[ColumnFilter]]
+        :rtype: ResultFilters
         """
         return self._filters
 
@@ -126,10 +126,10 @@ class TableQuery(object):
     def filters(self, filters):
         """
         Sets the filters of this TableQuery.
-        An array of arrays of ColumnFilter objects to apply to results. Each child array represents a series of criteria to logically AND together; these expressions are then logically OR'd together at the top level. 
+        Filters on the results. Only results matching the criteria specified in the filters will be returned 
 
         :param filters: The filters of this TableQuery.
-        :type: list[list[ColumnFilter]]
+        :type: ResultFilters
         """
 
         self._filters = filters

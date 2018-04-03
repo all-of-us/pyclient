@@ -25,13 +25,14 @@ class Operator(object):
     """
     allowed enum values
     """
-    _ = "="
-    _ = "<"
-    _ = ">"
-    _ = "<="
-    _ = ">="
-    LIKE = "like"
-    IN = "in"
+    EQUAL = "EQUAL"
+    NOT_EQUAL = "NOT_EQUAL"
+    LESS_THAN = "LESS_THAN"
+    GREATER_THAN = "GREATER_THAN"
+    LESS_THAN_OR_EQUAL_TO = "LESS_THAN_OR_EQUAL_TO"
+    GREATER_THAN_OR_EQUAL_TO = "GREATER_THAN_OR_EQUAL_TO"
+    LIKE = "LIKE"
+    IN = "IN"
 
     """
     Attributes:

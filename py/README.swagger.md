@@ -84,6 +84,7 @@ Class | Method | HTTP request | Description
  - [MaterializeCohortRequest](docs/MaterializeCohortRequest.md)
  - [MaterializeCohortResponse](docs/MaterializeCohortResponse.md)
  - [Operator](docs/Operator.md)
+ - [ResultFilters](docs/ResultFilters.md)
  - [TableQuery](docs/TableQuery.md)
 
 
