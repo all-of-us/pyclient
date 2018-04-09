@@ -54,17 +54,16 @@ export GOOGLE_APPLICATION_CREDENTIALS=<absolute path to sa-key.json>
 
 ## Manual Testing
 
-- Fork this repo, then push your feature branch there.
-- On your fork, cut a release from that feature branch, e.g. USER-v1
+- Push your topic branch to GitHub.
 - From your notebook, run:
 
   ```
-  !pip install --user --upgrade 'https://github.com/USER/pyclient/archive/pyclient-USER-v1.zip#egg=aou_workbench_client&subdirectory=py'
+  %%bash
+  PY_VERSION=2.7 # or 3.4
+  MY_TOPIC_BRANCH=
+  "pip${PY_VERSION}" install --user --upgrade "git+https://github.com/all-of-us/pyclient.git@${MY_TOPIC_BRANCH}#egg=aou_workbench_client&subdirectory=py"
   ```
-
-TODO: Once https://github.com/DataBiosphere/leonardo/pull/266 is resolved,
-switch these instructions to simply pip install directly from the feature
-branch; no fork or release needed.
+ - You may also need to restart the kernel via the Jupyter UI: 'Kernels' -> 'Restart'
 
 ## Releases
 
