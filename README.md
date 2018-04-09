@@ -58,8 +58,12 @@ export GOOGLE_APPLICATION_CREDENTIALS=<absolute path to sa-key.json>
 - From your notebook, run:
 
   ```
-  !pip install --user --upgrade 'git+https://github.com/all-of-us/pyclient.git@my-topic-branch#egg=aou_workbench_client&subdirectory=py'
+  %%bash
+  PY_VERSION=2.7 # or 3.4
+  MY_TOPIC_BRANCH=
+  "pip${PY_VERSION}" install --user --upgrade "git+https://github.com/all-of-us/pyclient.git@${MY_TOPIC_BRANCH}#egg=aou_workbench_client&subdirectory=py"
   ```
+ - You may also need to restart the kernel via the Jupyter UI: 'Kernels' -> 'Restart'
 
 ## Releases
 
