@@ -14,6 +14,7 @@
 from __future__ import absolute_import
 
 # import models into model package
+from .annotation_query import AnnotationQuery
 from .cohort_status import CohortStatus
 from .column_filter import ColumnFilter
 from .field_set import FieldSet

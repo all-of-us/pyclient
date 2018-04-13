@@ -14,6 +14,7 @@
 from __future__ import absolute_import
 
 # import models into sdk package
+from .models.annotation_query import AnnotationQuery
 from .models.cohort_status import CohortStatus
 from .models.column_filter import ColumnFilter
 from .models.field_set import FieldSet

@@ -31,29 +31,34 @@ class FieldSet(object):
                             and the value is json key in definition.
     """
     swagger_types = {
-        'table_query': 'TableQuery'
+        'table_query': 'TableQuery',
+        'annotation_query': 'AnnotationQuery'
     }
 
     attribute_map = {
-        'table_query': 'tableQuery'
+        'table_query': 'tableQuery',
+        'annotation_query': 'annotationQuery'
     }
 
-    def __init__(self, table_query=None):
+    def __init__(self, table_query=None, annotation_query=None):
         """
         FieldSet - a model defined in Swagger
         """
 
         self._table_query = None
+        self._annotation_query = None
         self.discriminator = None
 
         if table_query is not None:
           self.table_query = table_query
+        if annotation_query is not None:
+          self.annotation_query = annotation_query
 
     @property
     def table_query(self):
         """
         Gets the table_query of this FieldSet.
-        A query specifying how to pull data out of a single table. 
+        A query specifying how to pull data out of a single table. Either this or annotationQuery should be set (not both.) 
 
         :return: The table_query of this FieldSet.
         :rtype: TableQuery
@@ -64,13 +69,36 @@ class FieldSet(object):
     def table_query(self, table_query):
         """
         Sets the table_query of this FieldSet.
-        A query specifying how to pull data out of a single table. 
+        A query specifying how to pull data out of a single table. Either this or annotationQuery should be set (not both.) 
 
         :param table_query: The table_query of this FieldSet.
         :type: TableQuery
         """
 
         self._table_query = table_query
+
+    @property
+    def annotation_query(self):
+        """
+        Gets the annotation_query of this FieldSet.
+        A query specifying how to retrieve annotation values created about participants in a cohort during cohort review. Either this or tableQuery should be set (not both.) 
+
+        :return: The annotation_query of this FieldSet.
+        :rtype: AnnotationQuery
+        """
+        return self._annotation_query
+
+    @annotation_query.setter
+    def annotation_query(self, annotation_query):
+        """
+        Sets the annotation_query of this FieldSet.
+        A query specifying how to retrieve annotation values created about participants in a cohort during cohort review. Either this or tableQuery should be set (not both.) 
+
+        :param annotation_query: The annotation_query of this FieldSet.
+        :type: AnnotationQuery
+        """
+
+        self._annotation_query = annotation_query
 
     def to_dict(self):
         """

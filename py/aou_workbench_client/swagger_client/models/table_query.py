@@ -138,7 +138,7 @@ class TableQuery(object):
     def order_by(self):
         """
         Gets the order_by of this TableQuery.
-        An array of columns to sort the resulting data by, taken from the table specified above, each one optionally followed by \" DESC\" for descending sort order. (Default varies by table.) 
+        An array of columns to sort the resulting data by, taken from the table specified above, each one optionally enclosed in \"DESCENDING()\" for descending sort order. Default sort order is \"person_id\" (in ascending order) followed by the ID of the specified table (in ascending order.) 
 
         :return: The order_by of this TableQuery.
         :rtype: list[str]
@@ -149,7 +149,7 @@ class TableQuery(object):
     def order_by(self, order_by):
         """
         Sets the order_by of this TableQuery.
-        An array of columns to sort the resulting data by, taken from the table specified above, each one optionally followed by \" DESC\" for descending sort order. (Default varies by table.) 
+        An array of columns to sort the resulting data by, taken from the table specified above, each one optionally enclosed in \"DESCENDING()\" for descending sort order. Default sort order is \"person_id\" (in ascending order) followed by the ID of the specified table (in ascending order.) 
 
         :param order_by: The order_by of this TableQuery.
         :type: list[str]
