@@ -4,9 +4,9 @@ from aou_workbench_client.swagger_client.apis.cohorts_api import CohortsApi
 from copy import deepcopy
 
 def materialize_cohort_page(request):
-    """Returns a page of results from materializing a cohort in the 
-    workspace containing this notebook, based
-    on the provided MateralizedCohortRequest."""
+    """Returns a MaterializeCohortResponse representing a page of results 
+    from materializing a cohort in the workspace containing this notebook, based
+    on the provided MateralizeCohortRequest."""
     client = get_authenticated_swagger_client()
     cohorts_api = CohortsApi(api_client=client)
     return cohorts_api.materialize_cohort(all_of_us_config.workspace_namespace,
@@ -15,7 +15,7 @@ def materialize_cohort_page(request):
 
 def materialize_cohort(request, max_results=None):
     """Materializes a cohort in the workspace containing this notebook, based
-    on the provided MateralizedCohortRequest. Returns a generator of 
+    on the provided MateralizeCohortRequest. Returns a generator of 
     dictionaries containing the results.
     
     If max_results is specified, up to that many results will be returned; 
