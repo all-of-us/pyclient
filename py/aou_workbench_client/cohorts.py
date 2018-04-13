@@ -17,16 +17,19 @@ def materialize_cohort(request, max_results=None):
     client = get_authenticated_swagger_client()
     cohorts_api = CohortsApi(api_client=client)
     num_results = 0
-    while True:
+    while True:      
       response = cohorts_api.materialize_cohort(all_of_us_config.workspace_namespace,
                                                 all_of_us_config.workspace_id,
                                                 request=request)
+      print "got %s responses, page_token = %s" % (response.results, response.next_page_token)
       for result in response.results:
+        print "result = %s, #%s" % (result, num_results + 1)
         yield result
         num_results += 1
         if max_results and num_results >= max_results:
           return
       if response.next_page_token:
         request.page_token = response.next_page_token
+        print "page token = %s" % response.next_page_token
       else:
         return
