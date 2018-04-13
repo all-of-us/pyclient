@@ -1,6 +1,7 @@
 from aou_workbench_client.auth import get_authenticated_swagger_client
 from aou_workbench_client.config import all_of_us_config
 from aou_workbench_client.swagger_client.apis.cohorts_api import CohortsApi
+from copy import deepcopy
 
 def materialize_cohort_page(request):
     """Materializes a cohort in the workspace containing this notebook, based
@@ -17,19 +18,20 @@ def materialize_cohort(request, max_results=None):
     client = get_authenticated_swagger_client()
     cohorts_api = CohortsApi(api_client=client)
     num_results = 0
-    while True:      
+    # Clone the request, since we're going to modifying it.
+    request = deepcopy(request)
+    while True:
+      if max_results and (max_results - num_results) < request.page_size:
+        request.page_size = max_results - num_results   
       response = cohorts_api.materialize_cohort(all_of_us_config.workspace_namespace,
                                                 all_of_us_config.workspace_id,
-                                                request=request)
-      print "got %s responses, page_token = %s" % (response.results, response.next_page_token)
-      for result in response.results:
-        print "result = %s, #%s" % (result, num_results + 1)
+                                                request=request)      
+      for result in response.results:        
         yield result
         num_results += 1
         if max_results and num_results >= max_results:
           return
       if response.next_page_token:
-        request.page_token = response.next_page_token
-        print "page token = %s" % response.next_page_token
+        request.page_token = response.next_page_token        
       else:
         return
