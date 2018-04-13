@@ -18,7 +18,7 @@ def materialize_cohort(request, max_results=None):
     client = get_authenticated_swagger_client()
     cohorts_api = CohortsApi(api_client=client)
     num_results = 0
-    # Clone the request, since we're going to modifying it.
+    # Clone the request, since we're going to be modifying it.
     request = deepcopy(request)
     while True:
       if max_results and (max_results - num_results) < request.page_size:
