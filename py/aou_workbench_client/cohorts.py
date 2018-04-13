@@ -27,7 +27,8 @@ def materialize_cohort(request, max_results=None):
     cohorts_api = CohortsApi(api_client=client)
     num_results = 0
     # Clone the request, since we're going to be modifying it.
-    request = deepcopy(request)
+    request = deepcopy(request)    
+    page_size = request.page_size or 1000
     while True:
       if max_results and (max_results - num_results) < request.page_size:
         request.page_size = max_results - num_results   
