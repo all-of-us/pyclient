@@ -78,6 +78,7 @@ Class | Method | HTTP request | Description
 
 ## Documentation For Models
 
+ - [AnnotationQuery](docs/AnnotationQuery.md)
  - [CohortStatus](docs/CohortStatus.md)
  - [ColumnFilter](docs/ColumnFilter.md)
  - [FieldSet](docs/FieldSet.md)

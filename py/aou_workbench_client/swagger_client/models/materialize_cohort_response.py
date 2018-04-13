@@ -49,8 +49,7 @@ class MaterializeCohortResponse(object):
         self._next_page_token = None
         self.discriminator = None
 
-        if results is not None:
-          self.results = results
+        self.results = results
         if next_page_token is not None:
           self.next_page_token = next_page_token
 
@@ -58,7 +57,7 @@ class MaterializeCohortResponse(object):
     def results(self):
         """
         Gets the results of this MaterializeCohortResponse.
-        An array of JSON dictionaries representing results to the cohort materialization. (In Java, this is represented as Map<String, Object>[]. In Python clients, this is a list[object] where each object is a dictionary. In Typescript clients, this is an Array<any> where each object is a dictionary.) 
+        An array of JSON dictionaries representing results to the cohort materialization. (In Java, this is represented as Map<String, Object>[]. In Python clients, this is a list[object] where each object is a dictionary. In Typescript clients, this is an Array<any> where each object is a dictionary.) Keys in the dictionaries will be the columns selected in the field set provided in the request, and the values will be the values of those columns. 
 
         :return: The results of this MaterializeCohortResponse.
         :rtype: list[object]
@@ -69,11 +68,13 @@ class MaterializeCohortResponse(object):
     def results(self, results):
         """
         Sets the results of this MaterializeCohortResponse.
-        An array of JSON dictionaries representing results to the cohort materialization. (In Java, this is represented as Map<String, Object>[]. In Python clients, this is a list[object] where each object is a dictionary. In Typescript clients, this is an Array<any> where each object is a dictionary.) 
+        An array of JSON dictionaries representing results to the cohort materialization. (In Java, this is represented as Map<String, Object>[]. In Python clients, this is a list[object] where each object is a dictionary. In Typescript clients, this is an Array<any> where each object is a dictionary.) Keys in the dictionaries will be the columns selected in the field set provided in the request, and the values will be the values of those columns. 
 
         :param results: The results of this MaterializeCohortResponse.
         :type: list[object]
         """
+        if results is None:
+            raise ValueError("Invalid value for `results`, must not be `None`")
 
         self._results = results
 
