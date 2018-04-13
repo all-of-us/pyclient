@@ -24,7 +24,7 @@ def materialize_cohort(request, max_results=None):
       for result in response.results:
         yield result
         num_results += 1
-        if num_results >= max_results:
+        if max_results and num_results >= max_results:
           return
       if response.next_page_token:
         request.page_token = response.next_page_token
