@@ -31,32 +31,32 @@ class ResultFilters(object):
                             and the value is json key in definition.
     """
     swagger_types = {
-        '_not': 'bool',
+        'if_not': 'bool',
         'all_of': 'list[ResultFilters]',
         'any_of': 'list[ResultFilters]',
         'column_filter': 'ColumnFilter'
     }
 
     attribute_map = {
-        '_not': 'not',
+        'if_not': 'if_not',
         'all_of': 'allOf',
         'any_of': 'anyOf',
         'column_filter': 'columnFilter'
     }
 
-    def __init__(self, _not=None, all_of=None, any_of=None, column_filter=None):
+    def __init__(self, if_not=None, all_of=None, any_of=None, column_filter=None):
         """
         ResultFilters - a model defined in Swagger
         """
 
-        self.__not = None
+        self._if_not = None
         self._all_of = None
         self._any_of = None
         self._column_filter = None
         self.discriminator = None
 
-        if _not is not None:
-          self._not = _not
+        if if_not is not None:
+          self.if_not = if_not
         if all_of is not None:
           self.all_of = all_of
         if any_of is not None:
@@ -65,27 +65,27 @@ class ResultFilters(object):
           self.column_filter = column_filter
 
     @property
-    def _not(self):
+    def if_not(self):
         """
-        Gets the _not of this ResultFilters.
+        Gets the if_not of this ResultFilters.
         Set to true if a result matching allOf or anyOf below should result in a result *not* being returned. 
 
-        :return: The _not of this ResultFilters.
+        :return: The if_not of this ResultFilters.
         :rtype: bool
         """
-        return self.__not
+        return self._if_not
 
-    @_not.setter
-    def _not(self, _not):
+    @if_not.setter
+    def if_not(self, if_not):
         """
-        Sets the _not of this ResultFilters.
+        Sets the if_not of this ResultFilters.
         Set to true if a result matching allOf or anyOf below should result in a result *not* being returned. 
 
-        :param _not: The _not of this ResultFilters.
+        :param if_not: The if_not of this ResultFilters.
         :type: bool
         """
 
-        self.__not = _not
+        self._if_not = if_not
 
     @property
     def all_of(self):
