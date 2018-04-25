@@ -59,7 +59,7 @@ Name | Required? | Description
 `table_name`|Yes|The primary / starting table to retrieve data from. You can find the list of supported tables for **table_name** in the **cohortTables** section of [our CDR schema](https://github.com/all-of-us/workbench/blob/master/api/config/cdm/cdm_5_2.json).
 `columns`|No|What columns you want to retrieve from the table or related tables. By default, all columns on the specified table (but no related tables) will be returned.
 `filters`|No|Filters that results returned must match based on matching values to the columns on the table or related tables.  By default, no filtering criteria is returned.
-`order_by`|No|The columns from the specified table or related tables to sort results by. By default, the results are sorted by `person_id` and the ID of the table you specified.
+`order_by`|No|The columns from the specified table or related tables to sort results by, optionally wrapped by DESCENDING() to indicate a descending sort order. By default, the results are sorted by `person_id` and the ID of the table you specified, in ascending order.
 
 Columns referred to by name in `columns`, `filters`, and `order_by` can either
 be the name of a column (e.g. "person_id", "observation_id") in the table you specified, 
@@ -75,8 +75,9 @@ and adding a dot, followed by the column name on the related table (e.g. gender_
 returns concept_name from the concept referred to by gender_concept_id on the person table.)
 
 Note that while you can filter or order by columns on related tables, the
-queries will run slower than just filtering and ordering by columsn on the
-primary table.
+queries will run slower than just filtering and ordering by columns on the
+primary table; if your cohort is large, this may result in your query timing
+out before it can be completed. (In future, we will support longer-running queries.)
 
 Result filters can represent arbitrarily complex combinations of comparisons between 
 column values and values provided by the notebook, using `all_of` to match
@@ -157,10 +158,24 @@ table_query = TableQuery(table_name='observation',
                                    'DESCENDING(value_as_number)'])
 ``` 
 
-Return person_id and gender concept name for rows in the person table:
+Return person_id, gender concept name, and care site's location city for rows in the person table:
 ```
 table_query = TableQuery(table_name='observation', 
-                        columns=['person_id', 'gender_concept.name'])
+                          columns=['person_id', 'gender_concept.name', 
+                                   'care_site.location.city'])
+```
+
+Return person_id and care site's location city for rows in the person table where 
+care site's location state is 'TX', ordered by care site's location city:
+```
+state_column_filter = ColumnFilter(column_name='care_site.location.city', 
+                                   value='TX')
+state_filter = ResultFilters(column_filter=state_column_filter)
+
+table_query = TableQuery(table_name='observation',
+                         columns=['person_id', 'care_site.location.city'],
+                         filters=state_filter, 
+                         order_by=['care_site.location.city'])
 ```
 
 #### Annotation queries
