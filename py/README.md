@@ -52,38 +52,26 @@ this notebook.
 You can retrieve, filter, and sort by data directly in the requested table, 
 or in related tables the table has foreign key relationships to.
 
-You must specify a **table_name** on the table query, indicating what primary
-table to retrieve data from. You can find the list of supported tables in the
-**cohortTables** section of [[our CDR schema]] (https://github.com/all-of-us/workbench/blob/master/api/config/cdm/cdm_5_2.json). 
+##### TableQuery Fields
 
-You may optionally specify **columns** to indicate what data you want to retrieve
-from the table or related tables. By default, all columns on the specified table
-(but no related tables) will be returned.
+Name|Required?|Description
+**table_name**|Yes|The primary / starting table to retrieve data from. You can find the list of supported tables in the **cohortTables** section of [[our CDR schema]] (https://github.com/all-of-us/workbench/blob/master/api/config/cdm/cdm_5_2.json).
+**columns**|No|What columns you want to retrieve from the table or related tables. By default, all columns on the specified table (but no related tables) will be returned.
+**filters**|No|Filters that results returned must match based on matching values to the columns on the table or related tables.  By default, no filtering criteria is returned.
+**order_by**|No|The columns from the specified table or related tables to sort results by. By default, the results are sorted by **person_id** and the primary key of the table you specified.
 
-You may optionally specify **filters** to filter the results that come back based
-on criteria matching values to the columns on the table or related tables. 
-By default, no filtering criteria is returned.
-
-You may optionally specify **order_by** to sort the results by one or more columns
-from the specified table or related tables. By default, the results are sorted
-by **person_id** and the primary key of the table you specified.
-
-Columns referred to in **columns**, **filters**, and **order_by** can either
+Columns referred to by name in **columns**, **filters**, and **order_by** can either
 be the name of a column (e.g. "person_id", "observation_id") in the table you specified, 
 found in the configuration with that name in 
 [[our CDR schema]] (https://github.com/all-of-us/workbench/blob/master/api/config/cdm/cdm_5_2.json);
 or they can be columns from related tables specified with a dot notation going one
 or more levels deep (e.g. "gender_concept.concept_name", "care_site.location.address_1").
 
-
-
-
-
-These can be the name of a column found in the list
-of columns in the configuration for the table you specified in 
-[[our CDR schema]] (https://github.com/all-of-us/workbench/blob/master/api/config/cdm/cdm_5_2.json);
- 
- 
+Related tables are indicated in [[our CDR schema]] (https://github.com/all-of-us/workbench/blob/master/api/config/cdm/cdm_5_2.json)
+by "foreignKey": "tableName" on column ending in "_id";
+referring to columns on the related table is done by stripping off the "_id" on that column
+and adding a dot, followed by the column name on the related table (e.g. gender_concept.concept_name
+returns concept_name from the concept referred to by gender_concept_id on the person table.)
  
 
 
