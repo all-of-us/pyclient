@@ -56,24 +56,20 @@ or in related tables the table has foreign key relationships to.
 
 Name | Required? | Description
 ---- | --------- | -----------
-**table_name**|Yes|The primary / starting table to retrieve data from.
+**table_name**|Yes|The primary / starting table to retrieve data from. You can find the list of supported tables for **table_name** in the **cohortTables** section of [our CDR schema](https://github.com/all-of-us/workbench/blob/master/api/config/cdm/cdm_5_2.json).
 **columns**|No|What columns you want to retrieve from the table or related tables. By default, all columns on the specified table (but no related tables) will be returned.
 **filters**|No|Filters that results returned must match based on matching values to the columns on the table or related tables.  By default, no filtering criteria is returned.
 **order_by**|No|The columns from the specified table or related tables to sort results by. By default, the results are sorted by **person_id** and the primary key of the table you specified.
 
-##### Usage
-
-You can find the list of supported tables for **table_name** in the **cohortTables** section 
-of [our CDR schema] (https://github.com/all-of-us/workbench/blob/master/api/config/cdm/cdm_5_2.json).
 
 Columns referred to by name in **columns**, **filters**, and **order_by** can either
 be the name of a column (e.g. "person_id", "observation_id") in the table you specified, 
 found in the configuration with that name in 
-[our CDR schema] (https://github.com/all-of-us/workbench/blob/master/api/config/cdm/cdm_5_2.json);
+[our CDR schema](https://github.com/all-of-us/workbench/blob/master/api/config/cdm/cdm_5_2.json);
 or they can be columns from related tables specified with a dot notation going one
 or more levels deep (e.g. "gender_concept.concept_name", "care_site.location.address_1").
 
-Related tables are indicated in [our CDR schema] (https://github.com/all-of-us/workbench/blob/master/api/config/cdm/cdm_5_2.json)
+Related tables are indicated in [our CDR schema](https://github.com/all-of-us/workbench/blob/master/api/config/cdm/cdm_5_2.json)
 by "foreignKey": "tableName" on column ending in "_id";
 referring to columns on the related table is done by stripping off the "_id" on that column
 and adding a dot, followed by the column name on the related table (e.g. gender_concept.concept_name
