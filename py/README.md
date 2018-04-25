@@ -46,6 +46,8 @@ use them to avoid running into out of memory errors.
 Note that for large cohorts, a single call to materialize_cohort may run for 
 a very long time.
 
+Full examples of calling materialize_cohort can be found [below](#putting-it-all-together).
+
 #### materialize_cohort parameters 
 Name | Required? | Description
 ---- | --------- | -----------  
@@ -333,7 +335,40 @@ annotation_query = AnnotationQuery(order_by=['is_obese', 'DESCENDING(review_stat
 ```
 
  
-#### Simple Example
+#### Putting it all together
 
+Here's an example of materializing a table query:
 
+```
+from aou_workbench_client.swagger_client.models import ResultFilters, MaterializeCohortRequest, CohortStatus
+from aou_workbench_client.swagger_client.models import TableQuery, ColumnFilter, Operator, FieldSet, AnnotationQuery
+from aou_workbench_client.cohorts import materialize_cohort
 
+temp_filter = ResultFilters(column_filter=ColumnFilter("measurement_source_value", 
+                                                        value='Temper'))
+measure_query = TableQuery(table_name="measurement",
+                          columns=['person_id', 'measurement_id', 
+                                   'measurement_date', 
+                                   'measurement_source_value',
+                                   'value_as_number'],
+                          filters=temp_filter)
+field_set = FieldSet(table_query=measure_query)
+measure_request = MaterializeCohortRequest(cohort_name="Flu", 
+                                           field_set=field_set, 
+                                           page_size=1000)
+measure_response = materialize_cohort(measure_request, max_results=1000)
+measure_df = pd.DataFrame(list(measure_response))
+```
+
+And here's an example of materializing an annotation query:
+```
+annotation_query = AnnotationQuery(columns=['person_id', 'review_status', 'my annotation'])
+annotation_field_set = FieldSet(annotation_query=annotation_query)
+annotation_request = MaterializeCohortRequest(cohort_name="Flu", 
+                                              field_set=annotation_field_set, 
+                                              page_size=1000)
+annotation_response = materialize_cohort(annotation_request, max_results=1000)
+annotation_df = pd.DataFrame(list(annotation_response))
+```
+                                           
+                                           
