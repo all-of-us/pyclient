@@ -37,6 +37,8 @@ _cached_client = None
 _token_expiration = 0  # Epoch seconds when the token is expired. Default to some time in the past.
 
 
+# TODO: This ApiClient should self-refresh its credentials. Currently this
+# ApiClient must not be cached, as this will lead to token expiration.
 def get_authenticated_swagger_client(force=False, debug=False):
     """Returns a Swagger ApiClient set up to make authenticated calls to the Workbench API.
 
