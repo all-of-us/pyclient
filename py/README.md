@@ -27,7 +27,7 @@ The modules you will use in your code are in the aou_workbench_client package.
 
 The aou_workbench_client.cohorts module provides functions for materializing cohorts.
 
-### MaterializeCohortRequest(swagger_docs/MaterializeCohortRequest.md)
+### MaterializeCohortRequest
 
 When you want to materialize data about a cohort you've defined in workbench, you construct
 a [MaterializeCohortRequest](swagger_docs/MaterializeCohortRequest.md). 
@@ -37,7 +37,7 @@ The two fields you must populate on it are **cohort_name** and **field_set**.
 The **cohort_name** field should refer to the name of a cohort you defined in workbench.
 (Make sure to update any references in notebooks if you change the cohort's name.)
 
-The **field_set** field must be set to a [[FieldSet]](swagger_docs/FieldSet.md)
+The **field_set** field must be set to a [FieldSet](swagger_docs/FieldSet.md)
 indicating what data you want to retrieve about the cohort. 
 
 Field sets must have either their **table_query** or **annotation_query** field
