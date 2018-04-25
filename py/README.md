@@ -27,49 +27,102 @@ The modules you will use in your code are in the aou_workbench_client package.
 
 The aou_workbench_client.cohorts module provides functions for materializing cohorts.
 
+### materialize_cohort
+
+materialize_cohort is used to fetch some or all results of cohort materialization, 
+and return a generator of dictionaries representing the results.
+
+This can be used to retrieve information about some or all of the participants in a
+cohort you defined in the AllOfUs workbench.
+
+No server call takes place to retrieve the data until you start iterating over
+the generator.
+
+For not-too-large result sets, it is reasonable to use a Pandas `DataFrame` 
+or call to `list()` to bring all the results from the generator into memory at once. 
+If the result sets are very large, you may need to stream the results to disk as you 
+use them to avoid running into out of memory errors.
+
+Note that for large cohorts, a single call to materialize_cohort may run for 
+a very long time.
+
+#### materialize_cohort parameters 
+Name | Required? | Description
+---- | --------- | -----------  
+`request` | Yes | A [MaterializeCohortRequest](#MaterializeCohortRequest) indicating what cohort to materialize, what filtering and ordering criteria to apply, and what fields to retrieve.
+`max_results` | No | The maximum number of results to retrieve in the generator. Defaults to returning all results matching the cohort and filtering criteria in the specified request, making as many server calls as needed. This may require multiple server calls -- request.page_size specifies the maximum number retrieved per call.  
+
+### materialize_cohort_page
+
+materialize_cohort_page is used to fetch a single page of results from cohort
+materialization, as a [MaterializeCohortResponse](swagger_docs/MaterializeCohortResponse.md).
+
+Normally you should be able to call [materialize_cohort](#materialize_cohort) instead
+of this function, but you may use this function to get better control over
+when requests to retrieve results from the server are executed.
+
+#### materialize_cohort_page parameters
+Name | Required? | Description
+---- | --------- | -----------  
+`request` | Yes | A [MaterializeCohortRequest](#MaterializeCohortRequest) indicating what cohort to materialize, what filtering and ordering criteria to apply, what fields to retrieve, and what pagination token to use (for subsequent requests.)
+ 
+
 ### MaterializeCohortRequest
 
 When you want to materialize data about a cohort you've defined in workbench, you construct
-a [MaterializeCohortRequest](swagger_docs/MaterializeCohortRequest.md). 
+a [MaterializeCohortRequest object](swagger_docs/MaterializeCohortRequest.md). 
+
+You will later pass this request to [materialize_cohort](#materialize_cohort) if you wish
+to retrieve all the results as a generator of dictionaries, or you can pass it to 
+[materialize_cohort_page](#materialize_cohort_page) if you wish to make server calls
+to retrieve paginated responses containing results, one page at a time.
 
 #### MaterializeCohortRequest fields
 
 Name | Required? | Description
 ---- | --------- | -----------
 `cohort_name`|Yes|The name of a cohort you defined in workbench. (Make sure to update any references in notebooks if you change the cohort's name.)
-`field_set`|Yes|A [FieldSet](swagger_docs/FieldSet.md) indicating what data you want to retrieve about the cohort. See [below](#field-sets).
-`status_filter`|No|A list of [CohortStatus](swagger_docs/CohortStatus.md) values indicating cohort review statuses to filter the participants whose data is returned. By default, [INCLUDED, NEEDS_FURTHER_REVIEW, NOT_REVIEWED] will be used -- everything except EXCLUDED (participants that have been explicitly excluded.) 
+`field_set`|Yes|A [FieldSet](#field-sets) indicating what data you want to retrieve about the cohort.
+`status_filter`|No|A list of [CohortStatus](swagger_docs/CohortStatus.md) values indicating cohort review statuses to filter the participants whose data is returned. By default, `[INCLUDED, NEEDS_FURTHER_REVIEW, NOT_REVIEWED]` will be used -- everything except `EXCLUDED` (participants that have been explicitly excluded.) There is no need to set this for cohorts which have not been reviewed. 
 `page_size`|No|The number of results to return in a single request to the server. Defaults to 1000. Depending on the size of data returned, you may try increasing or decreasing this to improve performance, but you generally should not have to set this.
 `page_token`|No|A pagination token used to retrieve additional results from the server after the first request. You will only need to set this if you use the [materialize_cohort_page][#materialize_cohort_page] function repeatedly to retrieve multiple pages of data explicitly.
 
 #### Field sets
 
-Field sets must have either their [`table_query`](#table-queries) or [`annotation_query`][#annotation-queries] 
+Field sets represent what data you want to retrieve about a cohort. 
+
+A [FieldSet object](swagger_docs/FieldSet.md) must have either its 
+[`table_query`](#table-queries) or [`annotation_query`](#annotation-queries) 
 field populated. Details for table queries and annotation queries follow.
 
 #### Table queries
 
-A [TableQuery](swagger_docs/TableQuery.md) is used to retrieve data about the cohort from a table with 
+A [TableQuery object](swagger_docs/TableQuery.md) is used to 
+specify how to retrieve data about the cohort from a table with 
 a person_id column in the CDR version associated with the workspace housing 
 this notebook. 
 
 You can retrieve, filter, and sort by data directly in the requested table, 
 or in related tables the table has foreign key relationships to.
 
-##### TableQuery Fields
+##### TableQuery fields
 
 Name | Required? | Description
 ---- | --------- | -----------
 `table_name`|Yes|The primary / starting table to retrieve data from. You can find the list of supported tables for **table_name** in the **cohortTables** section of [our CDR schema](https://github.com/all-of-us/workbench/blob/master/api/config/cdm/cdm_5_2.json).
 `columns`|No|What columns you want to retrieve from the table or related tables. By default, all columns on the specified table (but no related tables) will be returned.
-`filters`|No|Filters that results returned must match based on matching values to the columns on the table or related tables.  By default, no filtering criteria is returned.
-`order_by`|No|The columns from the specified table or related tables to sort results by, optionally wrapped by DESCENDING() to indicate a descending sort order. By default, the results are sorted by `person_id` and the ID of the table you specified, in ascending order.
+`filters`|No|[ResultFilters](#result-filters) that specifies criteria results returned must match based on matching values to the columns on the table or related tables.  By default, no filtering criteria is returned.
+`order_by`|No|The columns from the specified table or related tables to sort results by, optionally wrapped by `DESCENDING()` to indicate a descending sort order. Defaults to `['person_id', <table ID>]`.
 
 Columns referred to by name in `columns`, `filters`, and `order_by` can either
 be the name of a column (e.g. "person_id", "observation_id") in the table you specified, 
 found in the configuration with that name in 
 [our CDR schema](https://github.com/all-of-us/workbench/blob/master/api/config/cdm/cdm_5_2.json);
-or they can be columns from related tables specified with a dot notation going one
+or they can be columns from [related tables](#related-table-columns).
+
+##### Related table columns
+
+Related table columns are specified with a dot notation going one
 or more levels deep (e.g. "gender_concept.concept_name", "care_site.location.address_1").
 
 Related tables are indicated in [our CDR schema](https://github.com/all-of-us/workbench/blob/master/api/config/cdm/cdm_5_2.json)
@@ -88,6 +141,55 @@ column values and values provided by the notebook, using `all_of` to match
 results that match all of the filters in the list, `any_of` to match results that match
 at least one of the filters in the list, and `not` to match results that do NOT match
 the filter it is placed on.
+
+##### Result filters
+
+A [ResultFilters object](swagger_docs/ResultFilters.md) specifies criteria that
+table query results must match to be returned. If no results match the criteria, no 
+results will be returned.
+
+Exactly one of `column_filter`, `all_of`, or `any_of` must be specified on each
+ResultFilters.
+
+You can construct arbitrarily complex matching criteria by using nested
+`ResultFilters` with `all_of` or `any_of`.
+
+##### ResultFilters fields
+
+Name | Required? | Description
+---- | --------- | -----------
+column_filter | No | A [ColumnFilter](#column-filters) specifying that a column value in a table in the CDR must match a provided value. 
+all_of | No | A list of [ResultFilters](#result-filters) specifying a list of conditions that must ALL be satisfied for results that are returned.
+any_of | No | A list of [ResultFilters](#result-filters) specifying a list of conditions that at least one of must be satisfied for results that are returned.
+if_not | No | If set to True, only results that DO NOT match the criteria specified by this filter are returned. Defaults to False.
+
+##### Column filters
+
+A [ColumnFilter object](swagger_docs/ColumnFilters.md) specifies a filter
+that a given column value in a table in the CDR must match a provided value.
+
+If the `IN` operator is used, exactly one of `values` and `value_numbers` must be specified,
+depending on the type of column being compared against.
+
+If the `LIKE` operator is used, only `value` should be specified.
+
+If any other operator is used (or no operator is specified), 
+exactly one of `value`, `value_number`, `value_date`, and `value_null` must be specified,
+depending on the type of column being compared against.
+ 
+
+##### ColumnFilter fields
+
+Name | Required? | Description
+---- | --------- | -----------
+column_name | Yes | The name of the column on the primary table or [related table column](#related-table-columns) indicating what column to match against.
+operator | No | The [Operator](swagger_docs/Operator.md) to use in the comparison. Defaults to `EQUAL`.
+value | No | A string value to use in comparisons with string columns.
+values | No | A list of string values to use in comparisons with string columns using the `IN` operator.
+value_number | No | A numeric value to use in comparisons with numeric columns.
+value_numbers | No | A list of numeric values to use in comparisons with numeric columns using the `IN` operator.   
+value_date | No | A date value to use in comparisons with date columns.
+value_null | No | Set to true if you wish to compare to NULL / not set value (with the `EQUAL` operator for checking for matching NULL, or the `NOT_EQUAL` operator for matching anything but NULL.)  
 
 ##### TableQuery examples
 
@@ -184,27 +286,52 @@ table_query = TableQuery(table_name='observation',
 
 #### Annotation queries
 
-An [AnnotationQuery](swagger_docs/AnnotationQuery.md) is used to retrieve the 
+An [AnnotationQuery object](swagger_docs/AnnotationQuery.md) is used to retrieve the 
 review status and annotations created as a part of cohort review, along with
 the person_id they were created for. They are only useful for cohorts which have been
 reviewed; cohorts without reviews will get no results in response to these queries.
 
+Note that by default, participants that were sampled as a part of the review
+but have not had their cohort status updated will be included in the results,
+with a review status of `NOT_REVIEWED`. (These participants may have had 
+annotations created, even if their review status is not set.)
 
+If you wish to only get results for participants with an explicit cohort status,
+use the `status_filter` field on the request to not include `NOT_REVIEWED`.
 
+##### AnnotationQuery fields
  
+Name | Required? | Description
+---- | --------- | -----------
+columns | No | A list of `'person_id'`, `'review_status'`, or names of annotations defined on the cohort. Defaults to `['person_id', 'review_status', <all defined annotation names>]`.
+order_by | No | A list of `'person_id'`, `'review_status'`, or names of annotations defined on the cohort, any of which can optionally be wrapped in `DESCENDING()` to request descending sort order. Defaults to `['person_id']`. Any annotations in `order_by` must also be present in `columns` (if `columns` is specified.)
 
+##### AnnotationQuery examples
 
-### materialize_cohort
+Return `person_id`, `review_status`, and all annotations, ordered by `person_id`:
 
-materialize_cohort is used to fetch some or all results of cohort materialization.
-This can be used to retrieve information about some or all of the participants in a
-cohort you defined in the AllOfUs workbench.
+```
+annotation_query = AnnotationQuery()
+```
 
-#### Parameters 
-Name | Description
----------- | --------  
-`request` | A [MaterializeCohortRequest](swagger_docs/MaterializeCohortRequest.md) indicating what cohort to materialize, what filtering and ordering criteria to apply, and what fields to retrieve.
-`max_results` | The maximum number of results to retrieve. Defaults to returning all results matching the cohort and filtering criteria in the specified request. This may require multiple server calls -- request.page_size specifies the maximum number retrieved per call.  
+Return just `person_id` and `review_status`, ordered by `person_id`:
+
+```
+annotation_query = AnnotationQuery(columns=['person_id', 'review_status'])
+```
+
+Return `person_id` and an annotation named `is obese`, ordered by `person_id`:
+
+```
+annotation_query = AnnotationQuery(columns=['person_id', 'is_obese'])
+```
+
+Return `person_id`, `review_status, and all annotations, ordered by the `is_obese` annotation and review status, descending:
+
+```
+annotation_query = AnnotationQuery(order_by=['is_obese', 'DESCENDING(review_status)'])
+```
+
  
 #### Simple Example
 
