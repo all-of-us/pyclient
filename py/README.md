@@ -61,6 +61,8 @@ Name | Required? | Description
 **filters**|No|Filters that results returned must match based on matching values to the columns on the table or related tables.  By default, no filtering criteria is returned.
 **order_by**|No|The columns from the specified table or related tables to sort results by. By default, the results are sorted by **person_id** and the primary key of the table you specified.
 
+##### Usage
+
 You can find the list of supported tables for **table_name** in the **cohortTables** section 
 of [our CDR schema] (https://github.com/all-of-us/workbench/blob/master/api/config/cdm/cdm_5_2.json).
 
@@ -79,7 +81,6 @@ returns concept_name from the concept referred to by gender_concept_id on the pe
  
 
 
-
 ### materialize_cohort
 
 materialize_cohort is used to fetch some or all results of cohort materialization.
@@ -89,7 +90,7 @@ cohort you defined in the AllOfUs workbench.
 #### Parameters 
 Name | Description
 ---------- | --------  
-**request** | A [[MaterializeCohortRequest]](swagger_docs/MaterializeCohortRequest.md) indicating what cohort to materialize, what filtering and ordering criteria to apply, and what fields to retrieve.
+**request** | A [MaterializeCohortRequest](swagger_docs/MaterializeCohortRequest.md) indicating what cohort to materialize, what filtering and ordering criteria to apply, and what fields to retrieve.
 **max_results** | The maximum number of results to retrieve. Defaults to returning all results matching the cohort and filtering criteria in the specified request. This may require multiple server calls -- request.page_size specifies the maximum number retrieved per call.  
  
 #### Simple Example
