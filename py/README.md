@@ -27,10 +27,10 @@ The modules you will use in your code are in the aou_workbench_client package.
 
 The aou_workbench_client.cohorts module provides functions for materializing cohorts.
 
-### [[MaterializeCohortRequest]](swagger_docs/MaterializeCohortRequest.md)
+### MaterializeCohortRequest(swagger_docs/MaterializeCohortRequest.md)
 
 When you want to materialize data about a cohort you've defined in workbench, you construct
-a [[MaterializeCohortRequest]](swagger_docs/MaterializeCohortRequest.md). 
+a [MaterializeCohortRequest](swagger_docs/MaterializeCohortRequest.md). 
 
 The two fields you must populate on it are **cohort_name** and **field_set**.
 
@@ -54,7 +54,8 @@ or in related tables the table has foreign key relationships to.
 
 ##### TableQuery Fields
 
-Name|Required?|Description
+Name | Required? | Description
+---- | --------- | -----------
 **table_name**|Yes|The primary / starting table to retrieve data from. You can find the list of supported tables in the **cohortTables** section of [[our CDR schema]] (https://github.com/all-of-us/workbench/blob/master/api/config/cdm/cdm_5_2.json).
 **columns**|No|What columns you want to retrieve from the table or related tables. By default, all columns on the specified table (but no related tables) will be returned.
 **filters**|No|Filters that results returned must match based on matching values to the columns on the table or related tables.  By default, no filtering criteria is returned.
