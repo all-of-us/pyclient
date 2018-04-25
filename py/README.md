@@ -74,6 +74,10 @@ referring to columns on the related table is done by stripping off the "_id" on 
 and adding a dot, followed by the column name on the related table (e.g. gender_concept.concept_name
 returns concept_name from the concept referred to by gender_concept_id on the person table.)
 
+Note that while you can filter or order by columns on related tables, the
+queries will run slower than just filtering and ordering by columsn on the
+primary table.
+
 Result filters can represent arbitrarily complex combinations of comparisons between 
 column values and values provided by the notebook, using `all_of` to match
 results that match all of the filters in the list, `any_of` to match results that match
@@ -99,31 +103,65 @@ table_query = TableQuery(table_name='observation', columns=['observation_id', 'p
 Return all columns in observation for rows matching a filter on `observation_concept_id` = 123456:
 
 ```
-concept_filter = ResultFilters(column_filter=ColumnFilter(column_name='observation_concept_id', value_number=123456))
+concept_column_filter = ColumnFilter(column_name='observation_concept_id', 
+                                     value_number=123456)
+concept_filter = ResultFilters(column_filter=concept_column_filter)
 table_query = TableQuery(table_name='observation', filters=concept_filter)
 ```
 
-Return all columns in observation for rows matching `observation_concept_id` = 123456 and `value_as_number` > 1000:
+Return all columns in observation for rows matching `observation_concept_id` = 123456 AND `value_as_number` > 1000:
 ```
-concept_filter = ResultFilters(column_filter=ColumnFilter(column_name='observation_concept_id', value_number=123456))
-value_as_number_filter = ResultFilters(column_filter=ColumnFilter(column_name='value_as_number', value_number=1000, operator=Operator.GREATER_THAN))
+concept_column_filter = ColumnFilter(column_name='observation_concept_id', 
+                                     value_number=123456)
+concept_filter = ResultFilters(column_filter=concept_column_filter)
+value_column_filter = ColumnFilter(column_name='value_as_number', 
+                                   value_number=1000, 
+                                   operator=Operator.GREATER_THAN)
+value_as_number_filter = ResultFilters(column_filter=value_column_filter)
 both_filters = ResultFilters(all_of=[concept_filter, value_as_number_filter])
 table_query = TableQuery(table_name='observation', filters=both_filter)
 ```
  
-Return all columns in observation for rows matching `observation_concept_id` = 123456 or `value_as_number` > 1000:
+Return all columns in observation for rows matching `observation_concept_id` = 123456 OR `value_as_number` > 1000:
 ```
-concept_filter = ResultFilters(column_filter=ColumnFilter(column_name='observation_concept_id', value_number=123456))
-value_as_number_filter = ResultFilters(column_filter=ColumnFilter(column_name='value_as_number', value_number=1000, operator=Operator.GREATER_THAN))
-both_filters = ResultFilters(any_of=[concept_filter, value_as_number_filter])
-table_query = TableQuery(table_name='observation', filters=both_filter)
+concept_column_filter = ColumnFilter(column_name='observation_concept_id', 
+                                     value_number=123456)
+concept_filter = ResultFilters(column_filter=concept_column_filter)
+value_column_filter = ColumnFilter(column_name='value_as_number', 
+                                   value_number=1000, 
+                                   operator=Operator.GREATER_THAN)
+value_as_number_filter = ResultFilters(column_filter=value_column_filter)
+either_filter = ResultFilters(any_of=[concept_filter, value_as_number_filter])
+table_query = TableQuery(table_name='observation', filters=either_filter)
+```
+
+Return all columns in observation for rows that DO NOT match `observation_concept_id` = 123456 OR `value_as_number` > 1000:
+```
+concept_column_filter = ColumnFilter(column_name='observation_concept_id', 
+                                     value_number=123456)
+concept_filter = ResultFilters(column_filter=concept_column_filter)
+value_column_filter = ColumnFilter(column_name='value_as_number', 
+                                   value_number=1000, 
+                                   operator=Operator.GREATER_THAN)
+value_as_number_filter = ResultFilters(column_filter=value_column_filter)
+not_either_filter = ResultFilters(if_not=True, 
+                                  any_of=[concept_filter, 
+                                          value_as_number_filter])
+table_query = TableQuery(table_name='observation', filters=not_either_filter)
 ```
 
 Return all columns in observation for all rows ordered by observation_concept_id (ascending) and value_as_number (descending):
 ```
-table_query = TableQuery(table_name='observation', order_by=['observation_concept_id', 'DESCENDING(value_as_number)'])
+table_query = TableQuery(table_name='observation', 
+                         order_by=['observation_concept_id', 
+                                   'DESCENDING(value_as_number)'])
 ``` 
 
+Return person_id and gender concept name for rows in the person table:
+```
+table_query = TableQuery(table_name='observation', 
+                        columns=['person_id', 'gender_concept.name'])
+```
 
 #### Annotation queries
 
