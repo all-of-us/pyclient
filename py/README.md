@@ -32,20 +32,24 @@ The aou_workbench_client.cohorts module provides functions for materializing coh
 When you want to materialize data about a cohort you've defined in workbench, you construct
 a [MaterializeCohortRequest](swagger_docs/MaterializeCohortRequest.md). 
 
-The two fields you must populate on it are `cohort_name` and `field_set`.
+#### MaterializeCohortRequest fields
 
-The `cohort_name` field should refer to the name of a cohort you defined in workbench.
-(Make sure to update any references in notebooks if you change the cohort's name.)
+Name | Required? | Description
+---- | --------- | -----------
+`cohort_name`|Yes|The name of a cohort you defined in workbench. (Make sure to update any references in notebooks if you change the cohort's name.)
+`field_set`|Yes|A [FieldSet](swagger_docs/FieldSet.md) indicating what data you want to retrieve about the cohort. See [below](#field-sets).
+`status_filter`|No|A list of [CohortStatus](swagger_docs/CohortStatus.md) values indicating cohort review statuses to filter the participants whose data is returned. By default, [INCLUDED, NEEDS_FURTHER_REVIEW, NOT_REVIEWED] will be used -- everything except EXCLUDED (participants that have been explicitly excluded.) 
+`page_size`|No|The number of results to return in a single request to the server. Defaults to 1000. Depending on the size of data returned, you may try increasing or decreasing this to improve performance, but you generally should not have to set this.
+`page_token`|No|A pagination token used to retrieve additional results from the server after the first request. You will only need to set this if you use the [materialize_cohort_page][#materialize_cohort_page] function repeatedly to retrieve multiple pages of data explicitly.
 
-The `field_set` field must be set to a [FieldSet](swagger_docs/FieldSet.md)
-indicating what data you want to retrieve about the cohort. 
+#### Field sets
 
-Field sets must have either their `table_query` or `annotation_query` field
-populated. Details for table queries and annotation queries follow.
+Field sets must have either their [`table_query`](#table-queries) or [`annotation_query`][#annotation-queries] 
+field populated. Details for table queries and annotation queries follow.
 
 #### Table queries
 
-A table query is used to retrieve data about the cohort from a table with 
+A [TableQuery](swagger_docs/TableQuery.md) is used to retrieve data about the cohort from a table with 
 a person_id column in the CDR version associated with the workspace housing 
 this notebook. 
 
@@ -179,6 +183,15 @@ table_query = TableQuery(table_name='observation',
 ```
 
 #### Annotation queries
+
+An [AnnotationQuery](swagger_docs/AnnotationQuery.md) is used to retrieve the 
+review status and annotations created as a part of cohort review, along with
+the person_id they were created for. They are only useful for cohorts which have been
+reviewed; cohorts without reviews will get no results in response to these queries.
+
+
+
+ 
 
 
 ### materialize_cohort
