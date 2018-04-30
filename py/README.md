@@ -365,7 +365,7 @@ measure_df = pd.DataFrame(list(measure_response))
 The resulting data frame would look like:
 
 Row | measurement_date | measurement_id | measurement_source_value | person_id | value_as_number
-_ | ---------------- | -------------- | ------------------------ | --------- | ---------------
+--- | ---------------- | -------------- | ------------------------ | --------- | ---------------
 0 |	2015-07-31 | 160349813 | Temper | 81 | 36.78
 1 |	2009-11-26 | 101713778 | Temper	| 172 |	37.06
 2 | 2011-08-08 | 104223671 | Temper | 172 | 36.72
@@ -385,7 +385,7 @@ annotation_df = pd.DataFrame(list(annotation_response))
 resulting in a data frame like:
 
 Row | person_id | review_status | my annotation
-_ | -------- | ------------- | -------------
+--- | --------- | ------------- | -------------
 0 | 123456789 | INCLUDED | value 1
 1 | 987654321 | EXCLUDED | value 2
 2 | 789321456 | NOT_REVIEWED | value 3
