@@ -162,10 +162,10 @@ You can construct arbitrarily complex matching criteria by using nested
 
 Name | Required? | Description
 ---- | --------- | -----------
-column_filter | No | A [ColumnFilter](#column-filters) specifying that a column value in a table in the CDR must match a provided value. 
-all_of | No | A list of [ResultFilters](#result-filters) specifying a list of conditions that must ALL be satisfied for results that are returned.
-any_of | No | A list of [ResultFilters](#result-filters) specifying a list of conditions that at least one of must be satisfied for results that are returned.
-if_not | No | If set to True, only results that DO NOT match the criteria specified by this filter are returned. Defaults to False.
+`column_filter` | No | A [ColumnFilter](#column-filters) specifying that a column value in a table in the CDR must match a provided value.
+`all_of` | No | A list of [ResultFilters](#result-filters) specifying a list of conditions that must ALL be satisfied for results that are returned.
+`any_of` | No | A list of [ResultFilters](#result-filters) specifying a list of conditions that at least one of must be satisfied for results that are returned.
+`if_not` | No | If set to True, only results that DO NOT match the criteria specified by this filter are returned. Defaults to False.
 
 ##### Column filters
 
@@ -186,14 +186,14 @@ depending on the type of column being compared against.
 
 Name | Required? | Description
 ---- | --------- | -----------
-column_name | Yes | The name of the column on the primary table or [related table column](#related-table-columns) indicating what column to match against.
-operator | No | The [Operator](swagger_docs/Operator.md) to use in the comparison. Defaults to `EQUAL`.
-value | No | A string value to use in comparisons with string columns.
-values | No | A list of string values to use in comparisons with string columns using the `IN` operator.
-value_number | No | A numeric value to use in comparisons with numeric columns.
-value_numbers | No | A list of numeric values to use in comparisons with numeric columns using the `IN` operator.   
-value_date | No | A date value to use in comparisons with date columns.
-value_null | No | Set to true if you wish to compare to NULL / not set value (with the `EQUAL` operator for checking for matching NULL, or the `NOT_EQUAL` operator for matching anything but NULL.)  
+`column_name` | Yes | The name of the column on the primary table or [related table column](#related-table-columns) indicating what column to match against.
+`operator` | No | The [Operator](swagger_docs/Operator.md) to use in the comparison. Defaults to `EQUAL`.
+`value` | No | A string value to use in comparisons with string columns.
+`values` | No | A list of string values to use in comparisons with string columns using the `IN` operator.
+`value_number` | No | A numeric value to use in comparisons with numeric columns.
+`value_numbers` | No | A list of numeric values to use in comparisons with numeric columns using the `IN` operator.
+`value_date` | No | A date value to use in comparisons with date columns.
+`value_null` | No | Set to true if you wish to compare to NULL / not set value (with the `EQUAL` operator for checking for matching NULL, or the `NOT_EQUAL` operator for matching anything but NULL.)
 
 ##### `TableQuery` examples
 
@@ -307,8 +307,8 @@ use the `status_filter` field on the request to not include `NOT_REVIEWED`.
  
 Name | Required? | Description
 ---- | --------- | -----------
-columns | No | A list of `'person_id'`, `'review_status'`, or names of annotations defined on the cohort. Defaults to `['person_id', 'review_status', <all defined annotation names>]`.
-order_by | No | A list of `'person_id'`, `'review_status'`, or names of annotations defined on the cohort, any of which can optionally be wrapped in `DESCENDING()` to request descending sort order. Defaults to `['person_id']`. Any annotations in `order_by` must also be present in `columns` (if `columns` is specified.)
+`columns` | No | A list of `'person_id'`, `'review_status'`, or names of annotations defined on the cohort. Defaults to `['person_id', 'review_status', <all defined annotation names>]`.
+`order_by` | No | A list of `'person_id'`, `'review_status'`, or names of annotations defined on the cohort, any of which can optionally be wrapped in `DESCENDING()` to request descending sort order. Defaults to `['person_id']`. Any annotations in `order_by` must also be present in `columns` (if `columns` is specified.)
 
 ##### `AnnotationQuery` examples
 
@@ -364,7 +364,7 @@ measure_df = pd.DataFrame(list(measure_response))
 
 The resulting data frame would look like:
 
- | measurement_date | measurement_id | measurement_source_value | person_id | value_as_number
+Row | measurement_date | measurement_id | measurement_source_value | person_id | value_as_number
 _ | ---------------- | -------------- | ------------------------ | --------- | ---------------
 0 |	2015-07-31 | 160349813 | Temper | 81 | 36.78
 1 |	2009-11-26 | 101713778 | Temper	| 172 |	37.06
@@ -384,7 +384,7 @@ annotation_df = pd.DataFrame(list(annotation_response))
 
 resulting in a data frame like:
 
- | person_id | review_status | my annotation
+Row | person_id | review_status | my annotation
 _ | -------- | ------------- | -------------
 0 | 123456789 | INCLUDED | value 1
 1 | 987654321 | EXCLUDED | value 2
