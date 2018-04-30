@@ -23,13 +23,13 @@ and then restarting your Python kernel.
 
 The modules you will use in your code are in the aou_workbench_client package.
 
-## Using cohorts in a notebook
+## Using cohorts
 
-The aou_workbench_client.cohorts module provides functions for materializing cohorts.
+The `aou_workbench_client.cohorts` module provides functions for materializing cohorts.
 
-### materialize_cohort
+### `materialize_cohort`
 
-materialize_cohort is used to fetch some or all results of cohort materialization, 
+`materialize_cohort` is used to fetch some or all results of cohort materialization,
 and return a generator of dictionaries representing the results.
 
 This can be used to retrieve information about some or all of the participants in a
@@ -38,32 +38,34 @@ cohort you defined in the AllOfUs workbench.
 No server call takes place to retrieve the data until you start iterating over
 the generator.
 
-For not-too-large result sets, it is reasonable to use a Pandas `DataFrame` 
-or call to `list()` to bring all the results from the generator into memory at once. 
+For not-too-large result sets, it is reasonable to wrap the results in a call to `list()`
+to bring all the results from the generator into memory at once. (You can then optionally pass that
+list to the constructor of a Pandas `DataFrame`.)
+
 If the result sets are very large, you may need to stream the results to disk as you 
 use them to avoid running into out of memory errors.
 
 Note that for large cohorts, a single call to materialize_cohort may run for 
 a very long time.
 
-Full examples of calling materialize_cohort can be found [below](#putting-it-all-together).
+Full examples of calling `materialize_cohort` can be found [below](#putting-it-all-together).
 
-#### materialize_cohort parameters 
+#### `materialize_cohort` parameters
 Name | Required? | Description
 ---- | --------- | -----------  
-`request` | Yes | A [MaterializeCohortRequest](#MaterializeCohortRequest) indicating what cohort to materialize, what filtering and ordering criteria to apply, and what fields to retrieve.
+`request` | Yes | A [MaterializeCohortRequest](#materializecohortrequest) indicating what cohort to materialize, what filtering and ordering criteria to apply, and what fields to retrieve.
 `max_results` | No | The maximum number of results to retrieve in the generator. Defaults to returning all results matching the cohort and filtering criteria in the specified request, making as many server calls as needed. This may require multiple server calls -- request.page_size specifies the maximum number retrieved per call.  
 
-### materialize_cohort_page
+### `materialize_cohort_page`
 
-materialize_cohort_page is used to fetch a single page of results from cohort
+`materialize_cohort_page` is used to fetch a single page of results from cohort
 materialization, as a [MaterializeCohortResponse](swagger_docs/MaterializeCohortResponse.md).
 
-Normally you should be able to call [materialize_cohort](#materialize_cohort) instead
+Normally you should be able to call [`materialize_cohort`](#materialize_cohort) instead
 of this function, but you may use this function to get better control over
 when requests to retrieve results from the server are executed.
 
-#### materialize_cohort_page parameters
+#### `materialize_cohort_page` parameters
 Name | Required? | Description
 ---- | --------- | -----------  
 `request` | Yes | A [MaterializeCohortRequest](#MaterializeCohortRequest) indicating what cohort to materialize, what filtering and ordering criteria to apply, what fields to retrieve, and what pagination token to use (for subsequent requests.)
@@ -76,10 +78,10 @@ a [MaterializeCohortRequest object](swagger_docs/MaterializeCohortRequest.md).
 
 You will later pass this request to [materialize_cohort](#materialize_cohort) if you wish
 to retrieve all the results as a generator of dictionaries, or you can pass it to 
-[materialize_cohort_page](#materialize_cohort_page) if you wish to make server calls
+[`materialize_cohort_page`](#materialize_cohort_page) if you wish to make server calls
 to retrieve paginated responses containing results, one page at a time.
 
-#### MaterializeCohortRequest fields
+#### `MaterializeCohortRequest` fields
 
 Name | Required? | Description
 ---- | --------- | -----------
@@ -107,7 +109,7 @@ this notebook.
 You can retrieve, filter, and sort by data directly in the requested table, 
 or in related tables the table has foreign key relationships to.
 
-##### TableQuery fields
+##### `TableQuery` fields
 
 Name | Required? | Description
 ---- | --------- | -----------
@@ -156,7 +158,7 @@ ResultFilters.
 You can construct arbitrarily complex matching criteria by using nested
 `ResultFilters` with `all_of` or `any_of`.
 
-##### ResultFilters fields
+##### `ResultFilters` fields
 
 Name | Required? | Description
 ---- | --------- | -----------
@@ -180,7 +182,7 @@ exactly one of `value`, `value_number`, `value_date`, and `value_null` must be s
 depending on the type of column being compared against.
  
 
-##### ColumnFilter fields
+##### `ColumnFilter` fields
 
 Name | Required? | Description
 ---- | --------- | -----------
@@ -193,25 +195,25 @@ value_numbers | No | A list of numeric values to use in comparisons with numeric
 value_date | No | A date value to use in comparisons with date columns.
 value_null | No | Set to true if you wish to compare to NULL / not set value (with the `EQUAL` operator for checking for matching NULL, or the `NOT_EQUAL` operator for matching anything but NULL.)  
 
-##### TableQuery examples
+##### `TableQuery` examples
 
 All examples below reference modules that can be imported from `aou_workbench_client.swagger_client.models`.
 
 Return all columns in observation for all observation rows:
 
-```
+```python
 table_query = TableQuery(table_name='observation')
 ```
 
 Return specific columns on observation for all observation rows:
 
-```
+```python
 table_query = TableQuery(table_name='observation', columns=['observation_id', 'person_id', 'value_as_number'])
 ```
 
 Return all columns in observation for rows matching a filter on `observation_concept_id` = 123456:
 
-```
+```python
 concept_column_filter = ColumnFilter(column_name='observation_concept_id', 
                                      value_number=123456)
 concept_filter = ResultFilters(column_filter=concept_column_filter)
@@ -219,7 +221,7 @@ table_query = TableQuery(table_name='observation', filters=concept_filter)
 ```
 
 Return all columns in observation for rows matching `observation_concept_id` = 123456 AND `value_as_number` > 1000:
-```
+```python
 concept_column_filter = ColumnFilter(column_name='observation_concept_id', 
                                      value_number=123456)
 concept_filter = ResultFilters(column_filter=concept_column_filter)
@@ -232,7 +234,7 @@ table_query = TableQuery(table_name='observation', filters=both_filter)
 ```
  
 Return all columns in observation for rows matching `observation_concept_id` = 123456 OR `value_as_number` > 1000:
-```
+```python
 concept_column_filter = ColumnFilter(column_name='observation_concept_id', 
                                      value_number=123456)
 concept_filter = ResultFilters(column_filter=concept_column_filter)
@@ -245,7 +247,7 @@ table_query = TableQuery(table_name='observation', filters=either_filter)
 ```
 
 Return all columns in observation for rows that DO NOT match `observation_concept_id` = 123456 OR `value_as_number` > 1000:
-```
+```python
 concept_column_filter = ColumnFilter(column_name='observation_concept_id', 
                                      value_number=123456)
 concept_filter = ResultFilters(column_filter=concept_column_filter)
@@ -260,14 +262,14 @@ table_query = TableQuery(table_name='observation', filters=not_either_filter)
 ```
 
 Return all columns in observation for all rows ordered by observation_concept_id (ascending) and value_as_number (descending):
-```
+```python
 table_query = TableQuery(table_name='observation', 
                          order_by=['observation_concept_id', 
                                    'DESCENDING(value_as_number)'])
 ``` 
 
 Return person_id, gender concept name, and care site's location city for rows in the person table:
-```
+```python
 table_query = TableQuery(table_name='observation', 
                           columns=['person_id', 'gender_concept.name', 
                                    'care_site.location.city'])
@@ -275,7 +277,7 @@ table_query = TableQuery(table_name='observation',
 
 Return person_id and care site's location city for rows in the person table where 
 care site's location state is 'TX', ordered by care site's location city:
-```
+```python
 state_column_filter = ColumnFilter(column_name='care_site.location.city', 
                                    value='TX')
 state_filter = ResultFilters(column_filter=state_column_filter)
@@ -301,36 +303,36 @@ annotations created, even if their review status is not set.)
 If you wish to only get results for participants with an explicit cohort status,
 use the `status_filter` field on the request to not include `NOT_REVIEWED`.
 
-##### AnnotationQuery fields
+##### `AnnotationQuery` fields
  
 Name | Required? | Description
 ---- | --------- | -----------
 columns | No | A list of `'person_id'`, `'review_status'`, or names of annotations defined on the cohort. Defaults to `['person_id', 'review_status', <all defined annotation names>]`.
 order_by | No | A list of `'person_id'`, `'review_status'`, or names of annotations defined on the cohort, any of which can optionally be wrapped in `DESCENDING()` to request descending sort order. Defaults to `['person_id']`. Any annotations in `order_by` must also be present in `columns` (if `columns` is specified.)
 
-##### AnnotationQuery examples
+##### `AnnotationQuery` examples
 
 Return `person_id`, `review_status`, and all annotations, ordered by `person_id`:
 
-```
+```python
 annotation_query = AnnotationQuery()
 ```
 
 Return just `person_id` and `review_status`, ordered by `person_id`:
 
-```
+```python
 annotation_query = AnnotationQuery(columns=['person_id', 'review_status'])
 ```
 
 Return `person_id` and an annotation named `is obese`, ordered by `person_id`:
 
-```
+```python
 annotation_query = AnnotationQuery(columns=['person_id', 'is_obese'])
 ```
 
 Return `person_id`, `review_status, and all annotations, ordered by the `is_obese` annotation and review status, descending:
 
-```
+```python
 annotation_query = AnnotationQuery(order_by=['is_obese', 'DESCENDING(review_status)'])
 ```
 
@@ -339,7 +341,7 @@ annotation_query = AnnotationQuery(order_by=['is_obese', 'DESCENDING(review_stat
 
 Here's an example of materializing a table query:
 
-```
+```python
 from aou_workbench_client.swagger_client.models import ResultFilters, MaterializeCohortRequest, CohortStatus
 from aou_workbench_client.swagger_client.models import TableQuery, ColumnFilter, Operator, FieldSet, AnnotationQuery
 from aou_workbench_client.cohorts import materialize_cohort
@@ -360,8 +362,17 @@ measure_response = materialize_cohort(measure_request, max_results=1000)
 measure_df = pd.DataFrame(list(measure_response))
 ```
 
+The resulting data frame would look like:
+
+ | measurement_date | measurement_id | measurement_source_value | person_id | value_as_number
+_ | ---------------- | -------------- | ------------------------ | --------- | ---------------
+0 |	2015-07-31 | 160349813 | Temper | 81 | 36.78
+1 |	2009-11-26 | 101713778 | Temper	| 172 |	37.06
+2 | 2011-08-08 | 104223671 | Temper | 172 | 36.72
+
+
 And here's an example of materializing an annotation query:
-```
+```python
 annotation_query = AnnotationQuery(columns=['person_id', 'review_status', 'my annotation'])
 annotation_field_set = FieldSet(annotation_query=annotation_query)
 annotation_request = MaterializeCohortRequest(cohort_name="Flu", 
@@ -370,5 +381,17 @@ annotation_request = MaterializeCohortRequest(cohort_name="Flu",
 annotation_response = materialize_cohort(annotation_request, max_results=1000)
 annotation_df = pd.DataFrame(list(annotation_response))
 ```
-                                           
+
+resulting in a data frame like:
+
+ | person_id | review_status | my annotation
+_ | -------- | ------------- | -------------
+0 | 123456789 | INCLUDED | value 1
+1 | 987654321 | EXCLUDED | value 2
+2 | 789321456 | NOT_REVIEWED | value 3
+3 | 543216748 | NEEDS_FURTHER_REVIEW |
+
+
+
+
                                            
