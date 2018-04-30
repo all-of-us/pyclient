@@ -68,7 +68,7 @@ when requests to retrieve results from the server are executed.
 #### `materialize_cohort_page` parameters
 Name | Required? | Description
 ---- | --------- | -----------  
-`request` | Yes | A [MaterializeCohortRequest](#MaterializeCohortRequest) indicating what cohort to materialize, what filtering and ordering criteria to apply, what fields to retrieve, and what pagination token to use (for subsequent requests.)
+`request` | Yes | A [MaterializeCohortRequest](#materializecohortrequest) indicating what cohort to materialize, what filtering and ordering criteria to apply, what fields to retrieve, and what pagination token to use (for subsequent requests.)
  
 
 ### MaterializeCohortRequest
