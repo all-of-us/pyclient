@@ -103,8 +103,8 @@ field populated. Details for table queries and annotation queries follow.
 
 A [TableQuery object](swagger_docs/TableQuery.md) is used to 
 specify how to retrieve data about the cohort from a table with 
-a person_id column in the CDR version associated with the workspace housing 
-this notebook. 
+a person_id column in the version of the curated data repository (CDR)
+associated with the workspace that contains this notebook.
 
 You can retrieve, filter, and sort by data directly in the requested table, 
 or in related tables the table has foreign key relationships to.
