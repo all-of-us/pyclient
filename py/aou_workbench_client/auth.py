@@ -23,6 +23,7 @@ from oauth2client.client import GoogleCredentials
 
 from aou_workbench_client.config import all_of_us_config
 from aou_workbench_client.swagger_client.api_client import ApiClient
+from aou_workbench_client.swagger_client.configuration import Configuration
 
 # These are sometimes ignored, see module doc.
 CLIENT_OAUTH_SCOPES = (
@@ -31,31 +32,30 @@ CLIENT_OAUTH_SCOPES = (
 )
 
 
-# We use custom cache management because cachetools.TTLCache (for example) uses a
-# constant / whole-cache TTL, whereas we want a varying expiration time.
-_cached_client = None
-_token_expiration = 0  # Epoch seconds when the token is expired. Default to some time in the past.
+class OauthConfiguration(Configuration):
+    """Self-refreshing oauth API client configuration."""
+    def __init__(self, force=False, **kwargs):
+        Configuration.__init__(self, **kwargs)
+        self.force = force
+        self.token_expiration = None
+
+    def auth_settings(self):
+      # check expiry
+      if (not self.access_token or
+          self.force or (time.time() >= self.token_expiration)):
+          self.access_token, self.token_expiration = _get_bearer_token_and_expiration()
+      return Configuration.auth_settings(self)
 
 
 # TODO: This ApiClient should self-refresh its credentials. Currently this
 # ApiClient must not be cached, as this will lead to token expiration.
 def get_authenticated_swagger_client(force=False, debug=False):
     """Returns a Swagger ApiClient set up to make authenticated calls to the Workbench API.
-
-    This function caches the client until its OAuth token expires, so prefer calling this function
-    frequently to get a refreshed client, rather than keeping a reference to the client locally.
     """
-    global _cached_client
-    global _token_expiration
-    if _cached_client is None:
-        _cached_client = ApiClient()
-        _cached_client.configuration.host = all_of_us_config.api_host        
-    if force or (time.time() >= _token_expiration):
-        token, _token_expiration = _get_bearer_token_and_expiration()
-        _cached_client.configuration.access_token = token
-    if debug:
-      _cached_client.configuration.debug = True
-    return _cached_client
+    conf = OauthConfiguration(force)
+    conf.debug = debug
+    conf.host = all_of_us_config.api_host
+    return ApiClient(conf)
 
 
 def _get_bearer_token_and_expiration():
@@ -72,10 +72,3 @@ def _get_bearer_token_and_expiration():
     token_info = scoped_creds.get_access_token()
 
     return token_info.access_token, t + token_info.expires_in
-
-
-def clear_cache():
-    global _cached_client
-    global _token_expiration
-    _cached_client = None
-    _token_expiration = 0
