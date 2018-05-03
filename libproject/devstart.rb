@@ -78,6 +78,7 @@ def write_tables(f, tables, add_to_cohort_tables)
     f.puts('  columns = pd.DataFrame([' + 
         table_columns.map {|x| column_dict(x)}.join(',') + '],
         columns=["Name", "Type", "Description"])')
+    f.puts('  foreign_keys = []')    
     f.puts('  table_columns["' + capitalize(table_name) + '"] = columns')
     if add_to_cohort_tables then
       f.puts('  cohort_tables.append("' + capitalize(table_name) + '")')
@@ -96,6 +97,8 @@ def write_foreign_keys(f, tables)
         f.puts(capitalize(table_name) + '.' + field_name + 
             ' = RelatedTableWrapper("' + field_name +
             '", ' + capitalize(column['foreignKey']) + '())')
+        f.puts(capitalize(table_name) + '.foreign_keys.append("' + 
+            field_name + '")')
       end
     end
   end
@@ -125,6 +128,17 @@ def cdr_regen()
       f.puts('###### Foreign keys ')
       write_foreign_keys(f, cdm_json["metadataTables"])
       write_foreign_keys(f, cdm_json["cohortTables"])
+      f.puts
+      f.puts('##### Helper functions')
+      f.puts('def print_cdr_schema():')
+      f.puts('  for table_name in sorted(table_columns):')
+      f.puts('    print "Table: %s" % table_name ')
+      f.puts('    print table_columns[table_name]')
+      f.puts('    print')
+      f.puts
+      f.puts('def descending(column_name):')
+      f.puts('  return "DESCENDING(%s)" % column_name')
+      f.puts
     end        
   end
 end
