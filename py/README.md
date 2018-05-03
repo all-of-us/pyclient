@@ -150,6 +150,9 @@ The `table_columns` dictionary maps table names to column data frames. You can
 use the `print_cdr_schema` function to print the schema for all the tables in 
 the CDR.
 
+The `descending` function can be used to produce a `DESCENDING()` expression for
+use in `order_by` lists.
+
 ##### Related table columns
 
 Related table columns are specified with a dot notation going one
