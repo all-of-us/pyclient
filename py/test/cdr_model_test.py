@@ -12,4 +12,8 @@ class CdrModelTest(unittest.TestCase):
         self.assertEquals('ConditionOccurrence', cohort_tables[0])
         print_cdr_schema()
         
+    def test_related_table_wrappers(self):
+      self.assertEquals('care_site.location_id', Person.care_site.location_id)
+      self.assertEquals('care_site.location.city', Person.care_site.location.city)
+        
         

@@ -7,4 +7,7 @@ class RelatedTableWrapper(object):
     self._related_obj = related_obj
 
   def __getattr__(self, name):
-    return self._prefix + getattr(self._related_obj, name)
+    result = getattr(self._related_obj, name)
+    if type(result) is RelatedTableWrapper:
+      return RelatedTableWrapper(self._prefix + '.' + name, result._related_obj)
+    return self._prefix + '.' + result
