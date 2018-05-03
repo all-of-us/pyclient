@@ -1,2 +1,2 @@
 oauth2client>=4.0.0
-pandas>=0.22.0
+pandas>=0.14.1
