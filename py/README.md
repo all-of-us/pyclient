@@ -135,7 +135,7 @@ Each class in the `aou_workbench_client.cdr.model` module (e.g. `Person`)
 has:
 
 * a `table_name` field indicating the name of the table to use (e.g. 'person').
-* a `columns` field containing a data frame describing the columns on the table
+* a `columns` field containing a data frame describing the columns on the table; you can print this to get documentation (e.g. `print Person.columns`)
 * a `foreign_keys` field containing a list of zero or more names of fields for foreign keys to related tables
 * fields for the names of columns on the table itself, which can be referenced in column filters (e.g. `Person.person_id`)
 * zero or more fields for referencing columns on related tables (e.g. `Person.gender_concept`)
@@ -374,6 +374,8 @@ from aou_workbench_client.swagger_client.models import ResultFilters, Materializ
 from aou_workbench_client.swagger_client.models import TableQuery, ColumnFilter, Operator, FieldSet, AnnotationQuery
 from aou_workbench_client.cohorts import materialize_cohort
 from aou_workbench_client.cdr.model import Measurement
+
+import pandas as pd
 
 temp_filter = ResultFilters(column_filter=ColumnFilter(Measurement.measurement_source_value, 
                                                        value='Temper'))

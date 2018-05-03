@@ -47,7 +47,7 @@ end
 ID_SUFFIX = "_id"
 
 def remove_id(id_column)
-  if not id_column.end_with? ID_SUFFIX then
+  unless id_column.end_with? ID_SUFFIX then
     raise "Foreign key did not end with " + ID_SUFFIX
   end
   return id_column[0..(id_column.length - ID_SUFFIX.length - 1)] 
