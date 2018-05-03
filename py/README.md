@@ -109,31 +109,57 @@ associated with the workspace that contains this notebook.
 You can retrieve, filter, and sort by data directly in the requested table, 
 or in related tables the table has foreign key relationships to.
 
+Tables and columns referenced in table queries can be specified using fields 
+from the [CDR model](#cdr-model).
+
 ##### `TableQuery` fields
 
 Name | Required? | Description
 ---- | --------- | -----------
-`table_name`|Yes|The primary / starting table to retrieve data from. You can find the list of supported tables for **table_name** in the **cohortTables** section of [our CDR schema](https://github.com/all-of-us/workbench/blob/master/api/config/cdm/cdm_5_2.json).
+`table_name`|Yes|The primary / starting table to retrieve data from. The list of supported tables for **table_name** is `aou_workbench_client.cdr.model.cohort_tables`; the value of the `table_name` field on each class in `aou_workbench_client.cdr.model` can be provided here.
 `columns`|No|What columns you want to retrieve from the table or related tables. By default, all columns on the specified table (but no related tables) will be returned.
 `filters`|No|[ResultFilters](#result-filters) that specifies criteria results returned must match based on matching values to the columns on the table or related tables.  By default, no filtering criteria is returned.
-`order_by`|No|The columns from the specified table or related tables to sort results by, optionally wrapped by `DESCENDING()` to indicate a descending sort order. Defaults to `['person_id', <table ID>]`.
+`order_by`|No|The columns from the specified table or related tables to sort results by, optionally wrapped by `DESCENDING()` (which can be generated using `aou_workbench_client.cdr.model.descending`) to indicate a descending sort order. Defaults to `['person_id', <table ID>]`.
 
 Columns referred to by name in `columns`, `filters`, and `order_by` can either
 be the name of a column (e.g. "person_id", "observation_id") in the table you specified, 
-found in the configuration with that name in 
-[our CDR schema](https://github.com/all-of-us/workbench/blob/master/api/config/cdm/cdm_5_2.json);
+as listed in the [CDR model](#cdr-model);
 or they can be columns from [related tables](#related-table-columns).
+
+##### CDR model
+
+Metadata about the tables and columns you can query against can be found in 
+the client library in the `aou_workbench_client.cdr.model` module.
+
+Each class in the `aou_workbench_client.cdr.model` module (e.g. `Person`)
+has:
+
+* a `table_name` field indicating the name of the table to use (e.g. 'person').
+* a `columns` field containing a data frame describing the columns on the table; you can print this to get documentation (e.g. `print Person.columns`)
+* a `foreign_keys` field containing a list of zero or more names of fields for foreign keys to related tables
+* fields for the names of columns on the table itself, which can be referenced in column filters (e.g. `Person.person_id`)
+* zero or more fields for referencing columns on related tables (e.g. `Person.gender_concept`)
+
+You can use foreign keys to reference fields on related tables many levels deep;
+for example, `Person.care_site.location.city'.
+
+The `cohort_tables` list contains the names of Python classes representing 
+tables you can use for materializing cohorts. 
+
+The `table_columns` dictionary maps table names to column data frames. You can
+use the `print_cdr_schema` function to print the schema for all the tables in 
+the CDR.
+
+The `descending` function can be used to produce a `DESCENDING()` expression for
+use in `order_by` lists.
 
 ##### Related table columns
 
 Related table columns are specified with a dot notation going one
 or more levels deep (e.g. "gender_concept.concept_name", "care_site.location.address_1").
-
-Related tables are indicated in [our CDR schema](https://github.com/all-of-us/workbench/blob/master/api/config/cdm/cdm_5_2.json)
-by "foreignKey": "tableName" on column ending in "_id";
-referring to columns on the related table is done by stripping off the "_id" on that column
-and adding a dot, followed by the column name on the related table (e.g. gender_concept.concept_name
-returns concept_name from the concept referred to by gender_concept_id on the person table.)
+You can use the [CDR model](#cdr-model) to specify these column names. 
+Related tables are indicated in the [CDR model](#cdr-model)
+by the `foreign_keys` field on objects (e.g. `Person.foreign_keys`).
 
 Note that while you can filter or order by columns on related tables, the
 queries will run slower than just filtering and ordering by columns on the
@@ -197,95 +223,97 @@ Name | Required? | Description
 
 ##### `TableQuery` examples
 
-All examples below reference modules that can be imported from `aou_workbench_client.swagger_client.models`.
+All examples below reference modules that can be imported from `aou_workbench_client.swagger_client.models`
+and `aou_workbench_client.cdr.model`.
 
 Return all columns in observation for all observation rows:
 
 ```python
-table_query = TableQuery(table_name='observation')
+table_query = TableQuery(table_name=Observation.table_name)
 ```
 
 Return specific columns on observation for all observation rows:
 
 ```python
-table_query = TableQuery(table_name='observation', columns=['observation_id', 'person_id', 'value_as_number'])
+table_query = TableQuery(table_name=Observation.table_name, 
+    columns=[Observation.observation_id, Observation.person_id, Observation.value_as_number])
 ```
 
 Return all columns in observation for rows matching a filter on `observation_concept_id` = 123456:
 
 ```python
-concept_column_filter = ColumnFilter(column_name='observation_concept_id', 
+concept_column_filter = ColumnFilter(column_name=Observation.observation_concept_id, 
                                      value_number=123456)
 concept_filter = ResultFilters(column_filter=concept_column_filter)
-table_query = TableQuery(table_name='observation', filters=concept_filter)
+table_query = TableQuery(table_name=Observation.table_name, filters=concept_filter)
 ```
 
 Return all columns in observation for rows matching `observation_concept_id` = 123456 AND `value_as_number` > 1000:
 ```python
-concept_column_filter = ColumnFilter(column_name='observation_concept_id', 
+concept_column_filter = ColumnFilter(column_name=Observation.observation_concept_id, 
                                      value_number=123456)
 concept_filter = ResultFilters(column_filter=concept_column_filter)
-value_column_filter = ColumnFilter(column_name='value_as_number', 
+value_column_filter = ColumnFilter(column_name=Observation.value_as_number, 
                                    value_number=1000, 
                                    operator=Operator.GREATER_THAN)
 value_as_number_filter = ResultFilters(column_filter=value_column_filter)
 both_filters = ResultFilters(all_of=[concept_filter, value_as_number_filter])
-table_query = TableQuery(table_name='observation', filters=both_filter)
+table_query = TableQuery(table_name=Observation.table_name, filters=both_filter)
 ```
  
 Return all columns in observation for rows matching `observation_concept_id` = 123456 OR `value_as_number` > 1000:
 ```python
-concept_column_filter = ColumnFilter(column_name='observation_concept_id', 
+concept_column_filter = ColumnFilter(column_name=Observation.observation_concept_id, 
                                      value_number=123456)
 concept_filter = ResultFilters(column_filter=concept_column_filter)
-value_column_filter = ColumnFilter(column_name='value_as_number', 
+value_column_filter = ColumnFilter(column_name=Observation.value_as_number, 
                                    value_number=1000, 
                                    operator=Operator.GREATER_THAN)
 value_as_number_filter = ResultFilters(column_filter=value_column_filter)
 either_filter = ResultFilters(any_of=[concept_filter, value_as_number_filter])
-table_query = TableQuery(table_name='observation', filters=either_filter)
+table_query = TableQuery(table_name=Observation.table_name, filters=either_filter)
 ```
 
 Return all columns in observation for rows that DO NOT match `observation_concept_id` = 123456 OR `value_as_number` > 1000:
 ```python
-concept_column_filter = ColumnFilter(column_name='observation_concept_id', 
+concept_column_filter = ColumnFilter(column_name=Observation.observation_concept_id, 
                                      value_number=123456)
 concept_filter = ResultFilters(column_filter=concept_column_filter)
-value_column_filter = ColumnFilter(column_name='value_as_number', 
+value_column_filter = ColumnFilter(column_name=Observation.value_as_number, 
                                    value_number=1000, 
                                    operator=Operator.GREATER_THAN)
 value_as_number_filter = ResultFilters(column_filter=value_column_filter)
 not_either_filter = ResultFilters(if_not=True, 
                                   any_of=[concept_filter, 
                                           value_as_number_filter])
-table_query = TableQuery(table_name='observation', filters=not_either_filter)
+table_query = TableQuery(table_name=Observation.table_name, filters=not_either_filter)
 ```
 
 Return all columns in observation for all rows ordered by observation_concept_id (ascending) and value_as_number (descending):
 ```python
-table_query = TableQuery(table_name='observation', 
-                         order_by=['observation_concept_id', 
-                                   'DESCENDING(value_as_number)'])
+table_query = TableQuery(table_name=Observation.table_name, 
+                         order_by=[Observation.observation_concept_id, 
+                                   descending(Observation.value_as_number)])
 ``` 
 
 Return person_id, gender concept name, and care site's location city for rows in the person table:
 ```python
-table_query = TableQuery(table_name='observation', 
-                          columns=['person_id', 'gender_concept.name', 
-                                   'care_site.location.city'])
+table_query = TableQuery(table_name=Person.table_name, 
+                          columns=[Person.person_id, Person.gender_concept.name, 
+                                   Person.care_site.location.city])
 ```
 
 Return person_id and care site's location city for rows in the person table where 
 care site's location state is 'TX', ordered by care site's location city:
 ```python
-state_column_filter = ColumnFilter(column_name='care_site.location.city', 
+state_column_filter = ColumnFilter(column_name=Person.care_site.location.city, 
                                    value='TX')
 state_filter = ResultFilters(column_filter=state_column_filter)
 
-table_query = TableQuery(table_name='observation',
-                         columns=['person_id', 'care_site.location.city'],
+table_query = TableQuery(table_name=Person.table_name,
+                         columns=[Person.person_id, Person.care_site.location.city],
                          filters=state_filter, 
-                         order_by=['care_site.location.city'])
+                         order_by=[Person.care_site.location.city])
 ```
 
 #### Annotation queries
@@ -345,14 +373,18 @@ Here's an example of materializing a table query:
 from aou_workbench_client.swagger_client.models import ResultFilters, MaterializeCohortRequest, CohortStatus
 from aou_workbench_client.swagger_client.models import TableQuery, ColumnFilter, Operator, FieldSet, AnnotationQuery
 from aou_workbench_client.cohorts import materialize_cohort
+from aou_workbench_client.cdr.model import Measurement
 
-temp_filter = ResultFilters(column_filter=ColumnFilter("measurement_source_value", 
-                                                        value='Temper'))
-measure_query = TableQuery(table_name="measurement",
-                          columns=['person_id', 'measurement_id', 
-                                   'measurement_date', 
-                                   'measurement_source_value',
-                                   'value_as_number'],
+import pandas as pd
+
+temp_filter = ResultFilters(column_filter=ColumnFilter(Measurement.measurement_source_value, 
+                                                       value='Temper'))
+measure_query = TableQuery(table_name=Measurement.table_name,
+                          columns=[Measurement.person_id, 
+                                   Measurement.measurement_id, 
+                                   Measurement.measurement_date, 
+                                   Measurement.measurement_source_value,
+                                   Measurement.value_as_number],
                           filters=temp_filter)
 field_set = FieldSet(table_query=measure_query)
 measure_request = MaterializeCohortRequest(cohort_name="Flu", 

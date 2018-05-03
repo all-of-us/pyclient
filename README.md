@@ -36,6 +36,16 @@ git add py/aou_workbench_client/swagger_client
 git add py/swagger_docs
 ```
 
+### Regenerate the CDR model
+
+```Shell
+pyclient$ ./project.rb cdr-regen
+```
+
+This will regenerate the file py/aou_workbench_client/cdr/model.py based
+on the CDR schema.
+
+
 ## Run tests
 ```Shell
 pyclient$ ./project.rb test
