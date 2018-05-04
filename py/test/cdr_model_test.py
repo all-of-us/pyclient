@@ -15,5 +15,6 @@ class CdrModelTest(unittest.TestCase):
     def test_related_table_wrappers(self):
       self.assertEquals('care_site.location_id', Person.care_site.location_id)
       self.assertEquals('care_site.location.city', Person.care_site.location.city)
-        
-        
+      self.assertTrue('care_site' in dir(Person))
+      self.assertTrue('location' in dir(Person.care_site))
+      self.assertTrue('city' in dir(Person.care_site.location))
