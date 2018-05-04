@@ -40,7 +40,7 @@ class OauthConfiguration(Configuration):
         self.token_expiration = None
 
     def auth_settings(self):
-        # check expiry
+        # This method gets called by ApiClient on each API call - check expiry.
         if (not self.access_token or
             self.force or (time.time() >= self.token_expiration)):
             self.access_token, self.token_expiration = _get_bearer_token_and_expiration()
