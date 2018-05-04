@@ -92,6 +92,7 @@ def write_tables_markdown(f, tables)
     table_columns = table_dict['columns']
     f.puts('### ' + table_name)
     f.puts('Columns:')
+    f.puts
     f.puts('Name | Type | Foreign key to | Description')
     f.puts('---- | ---- | -------------- | -----------')
     table_columns.each do |column|

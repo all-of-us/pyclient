@@ -9,6 +9,7 @@ table name for `TableQuery.table_name`.
 
 ### condition_occurrence
 Columns:
+
 Name | Type | Foreign key to | Description
 ---- | ---- | -------------- | -----------
 condition_occurrence_id | integer |  | A unique identifier for each Condition Occurrence event.
@@ -29,6 +30,7 @@ condition_status_concept_id | integer | [concept](#concept) | A foreign key to t
 
 ### death
 Columns:
+
 Name | Type | Foreign key to | Description
 ---- | ---- | -------------- | -----------
 person_id | integer |  | A foreign key identifier to the deceased person. The demographic details of that person are stored in the person table.
@@ -41,6 +43,7 @@ cause_source_concept_id | integer | [concept](#concept) | A foreign key to the c
 
 ### device_exposure
 Columns:
+
 Name | Type | Foreign key to | Description
 ---- | ---- | -------------- | -----------
 device_exposure_id | integer |  | A system-generated unique identifier for each Device Exposure.
@@ -60,6 +63,7 @@ device_source_concept_id | integer | [concept](#concept) |
 
 ### drug_exposure
 Columns:
+
 Name | Type | Foreign key to | Description
 ---- | ---- | -------------- | -----------
 drug_exposure_id | integer |  | A system-generated unique identifier for each Drug utilization event.
@@ -87,6 +91,7 @@ dose_unit_source_value | string |  | The information about the dose unit as deta
 
 ### measurement
 Columns:
+
 Name | Type | Foreign key to | Description
 ---- | ---- | -------------- | -----------
 measurement_id | integer |  | A unique identifier for each Measurement.
@@ -110,6 +115,7 @@ value_source_value | string |  | The source value associated with the content of
 
 ### observation
 Columns:
+
 Name | Type | Foreign key to | Description
 ---- | ---- | -------------- | -----------
 observation_id | integer |  | A unique identifier for each observation.
@@ -135,6 +141,7 @@ questionnaire_response_id | integer |  | An ID for a questionnaire response that
 
 ### person
 Columns:
+
 Name | Type | Foreign key to | Description
 ---- | ---- | -------------- | -----------
 person_id | integer |  | A unique identifier for each person.
@@ -158,6 +165,7 @@ ethnicity_source_concept_id | integer | [concept](#concept) | A foreign key to t
 
 ### procedure_occurrence
 Columns:
+
 Name | Type | Foreign key to | Description
 ---- | ---- | -------------- | -----------
 procedure_occurrence_id | integer |  | A system-generated unique identifier for each Procedure Occurrence.
@@ -176,6 +184,7 @@ qualifier_source_value | string |  |
 
 ### visit_occurrence
 Columns:
+
 Name | Type | Foreign key to | Description
 ---- | ---- | -------------- | -----------
 visit_occurrence_id | integer |  | A unique identifier for each Person's visit or encounter at a healthcare provider.
@@ -203,6 +212,7 @@ data from them by requesting data from related tables.
 
 ### care_site
 Columns:
+
 Name | Type | Foreign key to | Description
 ---- | ---- | -------------- | -----------
 care_site_id | integer |  | A unique identifier for each Care Site.
@@ -214,6 +224,7 @@ place_of_service_source_value | string |  | The source code for the Place of Ser
 
 ### concept
 Columns:
+
 Name | Type | Foreign key to | Description
 ---- | ---- | -------------- | -----------
 concept_id | integer |  | A unique identifier for each Concept across all domains.
@@ -229,6 +240,7 @@ invalid_reason | string |  | Reason the Concept was invalidated. Possible values
 
 ### domain
 Columns:
+
 Name | Type | Foreign key to | Description
 ---- | ---- | -------------- | -----------
 domain_id | string |  | A unique key for each domain.
@@ -237,6 +249,7 @@ domain_concept_id | integer | [concept](#concept) | A foreign key that refers to
 
 ### location
 Columns:
+
 Name | Type | Foreign key to | Description
 ---- | ---- | -------------- | -----------
 location_id | integer |  | A unique identifier for each geographic location.
@@ -250,6 +263,7 @@ location_source_value | string |  | The verbatim information that is used to uni
 
 ### provider
 Columns:
+
 Name | Type | Foreign key to | Description
 ---- | ---- | -------------- | -----------
 provider_id | integer |  | A unique identifier for each Provider.
@@ -268,6 +282,7 @@ gender_source_concept_id | integer | [concept](#concept) | A foreign key to a Co
 
 ### vocabulary
 Columns:
+
 Name | Type | Foreign key to | Description
 ---- | ---- | -------------- | -----------
 vocabulary_id | string |  | A unique identifier for each Vocabulary, such as ICD9CM, SNOMED, Visit.
