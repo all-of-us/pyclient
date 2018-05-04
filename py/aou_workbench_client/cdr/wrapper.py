@@ -14,3 +14,4 @@ class RelatedTableWrapper(object):
   
   def __dir__(self):
     return dir(self._related_obj)
+  

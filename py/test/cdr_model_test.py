@@ -18,7 +18,3 @@ class CdrModelTest(unittest.TestCase):
       self.assertTrue('care_site' in dir(Person))
       self.assertTrue('location' in dir(Person.care_site))
       self.assertTrue('city' in dir(Person.care_site.location))
-      
-    
-        
-        
