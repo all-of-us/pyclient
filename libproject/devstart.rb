@@ -91,7 +91,20 @@ def write_tables_markdown(f, tables)
   tables.each do |table_name, table_dict|
     table_columns = table_dict['columns']
     f.puts('### ' + table_name)
-    f.puts('
+    f.puts('Columns:')
+    f.puts('Name | Type | Foreign key to | Description')
+    f.puts('---- | ---- | -------------- | -----------')
+    table_columns.each do |column|
+      foreign_key_link = ''
+      if column.key?('foreignKey') then
+        foreign_key_table = column['foreignKey']
+        foreign_key_link = '[' + foreign_key_table + '](#' + foreign_key_table + ')'
+      end      
+      values = [column['name'], column['type'], foreign_key_link, column['description']]
+      f.puts(values.join(' | '))      
+    end
+    f.puts
+  end    
 end
 
 def write_foreign_keys_python(f, tables)

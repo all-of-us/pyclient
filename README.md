@@ -42,8 +42,8 @@ git add py/swagger_docs
 pyclient$ ./project.rb cdr-regen
 ```
 
-This will regenerate the file py/aou_workbench_client/cdr/model.py based
-on the CDR schema.
+This will regenerate the file py/aou_workbench_client/cdr/model.py and
+py/aou_workbench_client/cdr/README.md based on the CDR schema.
 
 
 ## Run tests
