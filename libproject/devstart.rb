@@ -66,7 +66,7 @@ def column_dict(column)
            escape(column['description']) + '}'
 end
 
-def write_tables(f, tables, add_to_cohort_tables)   
+def write_tables_python(f, tables, add_to_cohort_tables)
   tables.each do |table_name, table_dict|
     table_columns = table_dict['columns']
     f.puts('class ' + capitalize(table_name) + '(object):')    
@@ -87,7 +87,14 @@ def write_tables(f, tables, add_to_cohort_tables)
   end 
 end
 
-def write_foreign_keys(f, tables)
+def write_tables_markdown(f, tables)
+  tables.each do |table_name, table_dict|
+    table_columns = table_dict['columns']
+    f.puts('### ' + table_name)
+    f.puts('
+end
+
+def write_foreign_keys_python(f, tables)
   tables.each do |table_name, table_dict|
     table_columns = table_dict['columns']
     table_columns.each do |column|
@@ -122,12 +129,12 @@ def cdr_regen()
       f.puts('cohort_tables = []')
       f.puts
       f.puts('###### Table classes ')
-      write_tables(f, cdm_json["metadataTables"], false)
-      write_tables(f, cdm_json["cohortTables"], true)
+      write_tables_python(f, cdm_json["metadataTables"], false)
+      write_tables_python(f, cdm_json["cohortTables"], true)
       f.puts
       f.puts('###### Foreign keys ')
-      write_foreign_keys(f, cdm_json["metadataTables"])
-      write_foreign_keys(f, cdm_json["cohortTables"])
+      write_foreign_keys_python(f, cdm_json["metadataTables"])
+      write_foreign_keys_python(f, cdm_json["cohortTables"])
       f.puts
       f.puts('##### Helper functions')
       f.puts('def print_cdr_schema():')
@@ -139,7 +146,25 @@ def cdr_regen()
       f.puts('def descending(column_name):')
       f.puts('  return "DESCENDING(%s)" % column_name')
       f.puts
-    end        
+    end
+    File.open('py/aou_workbench_client/cdr/README.md', 'wb') do |f|
+      f.puts('# CDR metadata documentation')
+      f.puts('This documentation provides information on the tables and columns in the curated data repository.')
+      f.puts('In notebook code, you can reference the names of tables and columns using the objects defined in ')
+      f.puts('[model.py](model.py).')
+      f.puts
+      f.puts('## Cohort tables')
+      f.puts('Below are tables that you can use directly when materializing a cohort, passing in their ')
+      f.puts('table name for `TableQuery.table_name`.')
+      f.puts
+      write_tables_markdown(f, cdm_json["cohortTables"])
+      f.puts
+      f.puts('## Metadata tables')
+      f.puts('Below are tables that provide metadata related to the cohort tables; you can retrive ')
+      f.puts('data from them by requesting data from related tables.')
+      f.puts
+      write_tables_markdown(f, cdm_json["metadataTables"])
+    end
   end
 end
 
