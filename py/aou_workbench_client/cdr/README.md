@@ -8,7 +8,6 @@ Below are tables that you can use directly when materializing a cohort, passing 
 table name for `TableQuery.table_name`.
 
 ### condition_occurrence
-Columns:
 
 Name | Type | Foreign key to | Description
 ---- | ---- | -------------- | -----------
@@ -29,7 +28,6 @@ condition_status_source_value | string |  | The source code for the condition st
 condition_status_concept_id | integer | [concept](#concept) | A foreign key to the predefined Concept in the Standard Vocabulary reflecting the condition status
 
 ### death
-Columns:
 
 Name | Type | Foreign key to | Description
 ---- | ---- | -------------- | -----------
@@ -42,7 +40,6 @@ cause_source_value | string |  | The source code for the cause of death as it ap
 cause_source_concept_id | integer | [concept](#concept) | A foreign key to the concept that refers to the code used in the source. Note, this variable name is abbreviated to ensure it will be allowable across database platforms.
 
 ### device_exposure
-Columns:
 
 Name | Type | Foreign key to | Description
 ---- | ---- | -------------- | -----------
@@ -62,7 +59,6 @@ device_source_value | string |  | The source code for the Device as it appears i
 device_source_concept_id | integer | [concept](#concept) | 
 
 ### drug_exposure
-Columns:
 
 Name | Type | Foreign key to | Description
 ---- | ---- | -------------- | -----------
@@ -90,7 +86,6 @@ route_source_value | string |  | The information about the route of administrati
 dose_unit_source_value | string |  | The information about the dose unit as detailed in the source.
 
 ### measurement
-Columns:
 
 Name | Type | Foreign key to | Description
 ---- | ---- | -------------- | -----------
@@ -114,7 +109,6 @@ unit_source_value | string |  | The source code for the unit as it appears in th
 value_source_value | string |  | The source value associated with the content of the value_as_number or value_as_concept_id as stored in the source data.
 
 ### observation
-Columns:
 
 Name | Type | Foreign key to | Description
 ---- | ---- | -------------- | -----------
@@ -140,7 +134,6 @@ value_source_value | string |  | The name of the concept referred to be value_so
 questionnaire_response_id | integer |  | An ID for a questionnaire response that produced this observation. This is applicable to AllOfUs questionnaire answers only. All answers with the same questionnaire response ID were submitted in the same response.
 
 ### person
-Columns:
 
 Name | Type | Foreign key to | Description
 ---- | ---- | -------------- | -----------
@@ -164,7 +157,6 @@ ethnicity_source_value | string |  | The source code for the ethnicity of the pe
 ethnicity_source_concept_id | integer | [concept](#concept) | A foreign key to the ethnicity concept that refers to the code used in the source.
 
 ### procedure_occurrence
-Columns:
 
 Name | Type | Foreign key to | Description
 ---- | ---- | -------------- | -----------
@@ -183,7 +175,6 @@ procedure_source_concept_id | integer | [concept](#concept) | A foreign key to a
 qualifier_source_value | string |  | 
 
 ### visit_occurrence
-Columns:
 
 Name | Type | Foreign key to | Description
 ---- | ---- | -------------- | -----------
@@ -207,11 +198,10 @@ preceding_visit_occurrence_id | integer | [visit_occurrence](#visit_occurrence) 
 
 
 ## Metadata tables
-Below are tables that provide metadata related to the cohort tables; you can retrive 
+Below are tables that provide metadata related to the cohort tables; you can retrieve 
 data from them by requesting data from related tables.
 
 ### care_site
-Columns:
 
 Name | Type | Foreign key to | Description
 ---- | ---- | -------------- | -----------
@@ -223,7 +213,6 @@ care_site_source_value | string |  | The identifier for the Care Site in the sou
 place_of_service_source_value | string |  | The source code for the Place of Service as it appears in the source data, stored here for reference.
 
 ### concept
-Columns:
 
 Name | Type | Foreign key to | Description
 ---- | ---- | -------------- | -----------
@@ -239,7 +228,6 @@ valid_end_date | date |  | The date when the Concept became invalid because it w
 invalid_reason | string |  | Reason the Concept was invalidated. Possible values are D (deleted), U (replaced with an update) or NULL when valid_end_date has the default value.
 
 ### domain
-Columns:
 
 Name | Type | Foreign key to | Description
 ---- | ---- | -------------- | -----------
@@ -248,7 +236,6 @@ domain_name | string |  | The name describing the Domain, e.g. "Condition", "Pro
 domain_concept_id | integer | [concept](#concept) | A foreign key that refers to an identifier in the [CONCEPT](https://github.com/OHDSI/CommonDataModel/wiki/CONCEPT) table for the unique Domain Concept the Domain record belongs to.
 
 ### location
-Columns:
 
 Name | Type | Foreign key to | Description
 ---- | ---- | -------------- | -----------
@@ -262,7 +249,6 @@ county | string |  | The county.
 location_source_value | string |  | The verbatim information that is used to uniquely identify the location as it appears in the source data.
 
 ### provider
-Columns:
 
 Name | Type | Foreign key to | Description
 ---- | ---- | -------------- | -----------
@@ -281,7 +267,6 @@ gender_source_value | string |  | The gender code for the Provider as it appears
 gender_source_concept_id | integer | [concept](#concept) | A foreign key to a Concept that refers to the code used in the source.
 
 ### vocabulary
-Columns:
 
 Name | Type | Foreign key to | Description
 ---- | ---- | -------------- | -----------
