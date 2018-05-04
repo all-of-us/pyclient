@@ -90,8 +90,7 @@ end
 def write_tables_markdown(f, tables)
   tables.each do |table_name, table_dict|
     table_columns = table_dict['columns']
-    f.puts('### ' + table_name)
-    f.puts('Columns:')
+    f.puts('### ' + table_name)    
     f.puts
     f.puts('Name | Type | Foreign key to | Description')
     f.puts('---- | ---- | -------------- | -----------')
@@ -174,7 +173,7 @@ def cdr_regen()
       write_tables_markdown(f, cdm_json["cohortTables"])
       f.puts
       f.puts('## Metadata tables')
-      f.puts('Below are tables that provide metadata related to the cohort tables; you can retrive ')
+      f.puts('Below are tables that provide metadata related to the cohort tables; you can retrieve ')
       f.puts('data from them by requesting data from related tables.')
       f.puts
       write_tables_markdown(f, cdm_json["metadataTables"])
