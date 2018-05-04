@@ -40,11 +40,11 @@ class OauthConfiguration(Configuration):
         self.token_expiration = None
 
     def auth_settings(self):
-      # check expiry
-      if (not self.access_token or
-          self.force or (time.time() >= self.token_expiration)):
-          self.access_token, self.token_expiration = _get_bearer_token_and_expiration()
-      return Configuration.auth_settings(self)
+        # check expiry
+        if (not self.access_token or
+            self.force or (time.time() >= self.token_expiration)):
+            self.access_token, self.token_expiration = _get_bearer_token_and_expiration()
+        return Configuration.auth_settings(self)
 
 
 # TODO: This ApiClient should self-refresh its credentials. Currently this

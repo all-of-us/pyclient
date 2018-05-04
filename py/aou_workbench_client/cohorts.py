@@ -32,17 +32,17 @@ def materialize_cohort(request, max_results=None):
     request = deepcopy(request)
     request.page_size = request.page_size or 1000
     while True:
-      if max_results and (max_results - num_results) < request.page_size:
-        request.page_size = max_results - num_results
-      response = cohorts_api.materialize_cohort(all_of_us_config.workspace_namespace,
-                                                all_of_us_config.workspace_id,
-                                                request=request)
-      for result in response.results:
-        yield result
-        num_results += 1
-        if max_results and num_results >= max_results:
-          return
-      if response.next_page_token:
-        request.page_token = response.next_page_token
-      else:
-        return
+        if max_results and (max_results - num_results) < request.page_size:
+            request.page_size = max_results - num_results
+        response = cohorts_api.materialize_cohort(all_of_us_config.workspace_namespace,
+                                                  all_of_us_config.workspace_id,
+                                                  request=request)
+        for result in response.results:
+            yield result
+            num_results += 1
+            if max_results and num_results >= max_results:
+                return
+        if response.next_page_token:
+            request.page_token = response.next_page_token
+        else:
+            return
