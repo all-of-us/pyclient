@@ -130,7 +130,7 @@ or they can be columns from [related tables](#related-table-columns).
 
 Metadata about the tables and columns you can query against can be found in 
 the client library in the [`aou_workbench_client.cdr.model`](aou_workbench_client/cdr/model.py) module. 
-Documentation on the tables and columns can be found [here](aou_workbench/cdr/README.md).
+Documentation on the tables and columns can be found [here](aou_workbench_client/cdr/README.md).
 
 Each class in the `aou_workbench_client.cdr.model` module (e.g. `Person`)
 has:
