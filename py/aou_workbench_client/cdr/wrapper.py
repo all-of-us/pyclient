@@ -11,3 +11,6 @@ class RelatedTableWrapper(object):
     if type(result) is RelatedTableWrapper:
       return RelatedTableWrapper(self._prefix + '.' + name, result._related_obj)
     return self._prefix + '.' + result
+  
+  def __dir__(self):
+    return dir(self._related_obj)
