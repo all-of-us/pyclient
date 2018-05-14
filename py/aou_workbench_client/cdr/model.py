@@ -467,7 +467,7 @@ VisitOccurrence.preceding_visit_occurrence = RelatedTableWrapper("preceding_visi
 VisitOccurrence.foreign_keys.append("preceding_visit_occurrence")
 
 ##### Helper functions
-def print_cdr_schema():
+def display_cdr_schema():
   for table_name in sorted(table_columns):
     display(HTML("<h3>" + table_name + "</h3>"))
     display(table_columns[table_name])
