@@ -148,7 +148,7 @@ The `cohort_tables` list contains the names of Python classes representing
 tables you can use for materializing cohorts. 
 
 The `table_columns` dictionary maps table names to column data frames. You can
-use the `print_cdr_schema` function to print the schema for all the tables in 
+use the `display_cdr_schema` function to display the schema for all the tables in 
 the CDR.
 
 The `descending` function can be used to produce a `DESCENDING()` expression for
