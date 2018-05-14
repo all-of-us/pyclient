@@ -1,0 +1,26 @@
+version: 2
+
+defaults: &defaults
+  docker:
+    - image: allofustest/pyclient:buildimage-1.1.1
+  working_directory: ~/pyclient
+
+jobs:
+  test:
+     steps:
+      - checkout
+      - run:
+          name: Run tests
+          command: ./project.rb test
+
+workflows:
+  version: 2
+  test:
+    jobs:
+      - test
+
+experimental:
+  notify:
+    branches:
+      only:
+        - master
