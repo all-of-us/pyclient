@@ -11,6 +11,8 @@ jobs:
      steps:
       - checkout
       - run:
+          command: git submodule update --init --recursive
+      - run:
           name: Run tests
           command: ./project.rb test
 
