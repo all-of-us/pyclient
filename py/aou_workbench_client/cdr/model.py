@@ -7,6 +7,7 @@ found at https://raw.githubusercontent.com/all-of-us/workbench/master/api/config
 
 from .wrapper import RelatedTableWrapper
 import pandas as pd
+from IPython.display import display, HTML
 table_columns = {}
 cohort_tables = []
 
@@ -468,9 +469,9 @@ VisitOccurrence.foreign_keys.append("preceding_visit_occurrence")
 ##### Helper functions
 def print_cdr_schema():
   for table_name in sorted(table_columns):
-    print "Table: %s" % table_name 
-    print table_columns[table_name]
-    print
+    display(HTML("<h3>" + table_name + "</h3>"))
+    display(table_columns[table_name])
+    display(HTML("<br/>"))
 
 def descending(column_name):
   return "DESCENDING(%s)" % column_name

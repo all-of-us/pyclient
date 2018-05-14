@@ -138,6 +138,7 @@ def cdr_regen()
       f.puts
       f.puts('from .wrapper import RelatedTableWrapper')
       f.puts('import pandas as pd')
+      f.puts('from IPython.display import display, HTML')
       f.puts('table_columns = {}')
       f.puts('cohort_tables = []')
       f.puts
@@ -150,11 +151,11 @@ def cdr_regen()
       write_foreign_keys_python(f, cdm_json["cohortTables"])
       f.puts
       f.puts('##### Helper functions')
-      f.puts('def print_cdr_schema():')
+      f.puts('def display_cdr_schema():')
       f.puts('  for table_name in sorted(table_columns):')
-      f.puts('    print "Table: %s" % table_name ')
-      f.puts('    print table_columns[table_name]')
-      f.puts('    print')
+      f.puts('    display(HTML("<h3>" + table_name + "</h3>"))')
+      f.puts('    display(table_columns[table_name])')
+      f.puts('    display(HTML("<br/>"))')
       f.puts
       f.puts('def descending(column_name):')
       f.puts('  return "DESCENDING(%s)" % column_name')
