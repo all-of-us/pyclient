@@ -136,7 +136,7 @@ Each class in the `aou_workbench_client.cdr.model` module (e.g. `Person`)
 has:
 
 * a `table_name` field indicating the name of the table to use (e.g. 'person').
-* a `columns` field containing a data frame describing the columns on the table; you can print this to get documentation (e.g. `print Person.columns`)
+* a `columns` field containing a data frame describing the columns on the table; you can print this to get documentation (e.g. `print(Person.columns)`)
 * a `foreign_keys` field containing a list of zero or more names of fields for foreign keys to related tables
 * fields for the names of columns on the table itself, which can be referenced in column filters (e.g. `Person.person_id`)
 * zero or more fields for referencing columns on related tables (e.g. `Person.gender_concept`)

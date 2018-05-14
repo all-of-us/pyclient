@@ -468,8 +468,8 @@ VisitOccurrence.foreign_keys.append("preceding_visit_occurrence")
 ##### Helper functions
 def print_cdr_schema():
   for table_name in sorted(table_columns):
-    print "Table: %s" % table_name 
-    print table_columns[table_name]
+    print("Table: %s" % table_name )
+    print(table_columns[table_name])
     print
 
 def descending(column_name):
