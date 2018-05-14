@@ -1,3 +1,4 @@
+# Dockerfile for pyclient used by CircleCI
 # To build and deploy, from this directory:
 # $ docker build -f Dockerfile.circle_build -t allofustest/pyclient:buildimage-X.Y.Z .
 # Test out the new image with:
