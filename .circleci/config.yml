@@ -13,6 +13,9 @@ jobs:
       - run:
           command: git submodule update --init --recursive
       - run:
+          working_directory: ~/workbench
+          command: ci/activate_creds.sh workbench/circle-sa-key.json
+      - run:
           name: Run tests
           command: ./project.rb test
 
