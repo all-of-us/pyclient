@@ -14,7 +14,7 @@ jobs:
           command: git submodule update --init --recursive
       - run:
           working_directory: ~/pyclient
-          command: ci/activate_creds.sh pyclient/circle-sa-key.json
+          command: ci/activate_creds.sh circle-sa-key.json
       - run:
           name: Run tests
           command: ./project.rb test
