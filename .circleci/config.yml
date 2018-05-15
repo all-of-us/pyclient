@@ -11,6 +11,10 @@ jobs:
      steps:
       - checkout
       - run:
+          command: cat py/requirements.txt py/swagger-requirements.txt > all_requirements.txt
+      - restore_cache:
+          key: deps1-{{ .Branch }}-{{ checksum "all_requirements.txt" }}
+      - run:
           command: git submodule update --init --recursive
       - run:
           command: ci/activate_creds.sh circle-sa-key.json
@@ -20,6 +24,10 @@ jobs:
           command: |
             . venv/bin/activate
             ./project.rb setup-env
+      - save_cache:
+          key: deps1-{{ .Branch }}-{{ checksum "all_requirements.txt" }}
+          paths:
+            - "venv"
       - run:
           name: Run tests
           command: |
