@@ -15,9 +15,9 @@ jobs:
       - run:
           command: ci/activate_creds.sh circle-sa-key.json
       - run:
-          command: virtualenv venv
+          command: python3 -m venv venv
       - run:
-          command: source venv/bin/activate
+          command: . venv/bin/activate
       - run:
           name: Setup environment
           command: ./project.rb setup-env
