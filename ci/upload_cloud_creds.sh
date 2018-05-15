@@ -2,7 +2,8 @@
 
 # Run this script to upload service-account keys for gcloud on Circle CI.
 # Usage: ./upload_cloud_creds.sh [path to all-of-us-workbench-test service account JSON file]
-# Requires CI_TOKEN environment variable containing a valid Circle CI token.
+# Requires CI_TOKEN environment variable containing a valid Circle CI token,
+# which is found in the Token column at https://circleci.com/gh/all-of-us/pyclient/edit#api
 
 set -e
 

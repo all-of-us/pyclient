@@ -13,7 +13,7 @@ jobs:
       - run:
           command: cat py/requirements.txt py/swagger-requirements.txt > all_requirements.txt
       - restore_cache:
-          key: deps1-{{ .Branch }}-{{ checksum "all_requirements.txt" }}
+          key: deps-{{ .Branch }}-{{ checksum "all_requirements.txt" }}
       - run:
           command: git submodule update --init --recursive
       - run:
@@ -26,7 +26,7 @@ jobs:
             . venv/bin/activate
             ./project.rb setup-env
       - save_cache:
-          key: deps1-{{ .Branch }}-{{ checksum "all_requirements.txt" }}
+          key: deps-{{ .Branch }}-{{ checksum "all_requirements.txt" }}
           paths:
             - "venv"
       - run:
