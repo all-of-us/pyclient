@@ -17,13 +17,14 @@ jobs:
       - run:
           command: python3 -m venv venv
       - run:
-          command: source venv/bin/activate
-      - run:
-          name: Setup environment
-          command: ./project.rb setup-env
+          command: |
+            . venv/bin/activate
+            ./project.rb setup-env
       - run:
           name: Run tests
-          command: ./project.rb test
+          command: |
+            . venv/bin/activate
+            ./project.rb test
 
 workflows:
   version: 2
