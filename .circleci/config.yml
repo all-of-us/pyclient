@@ -13,10 +13,13 @@ jobs:
       - run:
           command: git submodule update --init --recursive
       - run:
-          working_directory: ~/pyclient
           command: ci/activate_creds.sh circle-sa-key.json
       - run:
-          working_directory: ~/pyclient
+          command: virtualenv venv
+      - run:
+          command: source venv/bin/activate
+      - run:
+          name: Setup environment
           command: ./project.rb setup-env
       - run:
           name: Run tests
