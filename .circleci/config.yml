@@ -1,0 +1,48 @@
+version: 2
+
+defaults: &defaults
+  docker:
+    - image: allofustest/pyclient:buildimage-1.1.2
+  working_directory: ~/pyclient
+
+jobs:
+  test:
+     <<: *defaults
+     steps:
+      - checkout
+      - run:
+          command: cat py/requirements.txt py/swagger-requirements.txt > all_requirements.txt
+      - restore_cache:
+          key: deps-{{ .Branch }}-{{ checksum "all_requirements.txt" }}
+      - run:
+          command: git submodule update --init --recursive
+      - run:
+          command: ci/activate_creds.sh circle-sa-key.json
+      - run:
+          command: python3 -m venv venv
+      - run:
+          name: "Set up environment"
+          command: |
+            . venv/bin/activate
+            ./project.rb setup-env
+      - save_cache:
+          key: deps-{{ .Branch }}-{{ checksum "all_requirements.txt" }}
+          paths:
+            - "venv"
+      - run:
+          name: Run tests
+          command: |
+            . venv/bin/activate
+            ./project.rb test
+
+workflows:
+  version: 2
+  test:
+    jobs:
+      - test
+
+experimental:
+  notify:
+    branches:
+      only:
+        - master
