@@ -16,6 +16,9 @@ jobs:
           working_directory: ~/pyclient
           command: ci/activate_creds.sh circle-sa-key.json
       - run:
+          working_directory: ~/pyclient
+          command: ./project.rb setup-env
+      - run:
           name: Run tests
           command: ./project.rb test
 
