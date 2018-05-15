@@ -21,6 +21,7 @@ jobs:
       - run:
           command: python3 -m venv venv
       - run:
+          name: "Set up environment"
           command: |
             . venv/bin/activate
             ./project.rb setup-env
