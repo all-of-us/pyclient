@@ -230,13 +230,13 @@ and `aou_workbench_client.cdr.model`.
 Return all columns in observation for all observation rows:
 
 ```python
-table_query = TableQuery(table_name=Observation.table_name)
+table_query = TableQuery(table=Observation)
 ```
 
 Return specific columns on observation for all observation rows:
 
 ```python
-table_query = TableQuery(table_name=Observation.table_name, 
+table_query = TableQuery(table=Observation, 
     columns=[Observation.observation_id, Observation.person_id, Observation.value_as_number])
 ```
 
@@ -246,7 +246,7 @@ Return all columns in observation for rows matching a filter on `observation_con
 concept_column_filter = ColumnFilter(column_name=Observation.observation_concept_id, 
                                      value_number=123456)
 concept_filter = ResultFilters(column_filter=concept_column_filter)
-table_query = TableQuery(table_name=Observation.table_name, filters=concept_filter)
+table_query = TableQuery(table=Observation, filters=concept_filter)
 ```
 
 Return all columns in observation for rows matching `observation_concept_id` = 123456 AND `value_as_number` > 1000:
@@ -259,7 +259,7 @@ value_column_filter = ColumnFilter(column_name=Observation.value_as_number,
                                    operator=Operator.GREATER_THAN)
 value_as_number_filter = ResultFilters(column_filter=value_column_filter)
 both_filters = ResultFilters(all_of=[concept_filter, value_as_number_filter])
-table_query = TableQuery(table_name=Observation.table_name, filters=both_filter)
+table_query = TableQuery(table=Observation, filters=both_filter)
 ```
  
 Return all columns in observation for rows matching `observation_concept_id` = 123456 OR `value_as_number` > 1000:
@@ -272,7 +272,7 @@ value_column_filter = ColumnFilter(column_name=Observation.value_as_number,
                                    operator=Operator.GREATER_THAN)
 value_as_number_filter = ResultFilters(column_filter=value_column_filter)
 either_filter = ResultFilters(any_of=[concept_filter, value_as_number_filter])
-table_query = TableQuery(table_name=Observation.table_name, filters=either_filter)
+table_query = TableQuery(table=Observation, filters=either_filter)
 ```
 
 Return all columns in observation for rows that DO NOT match `observation_concept_id` = 123456 OR `value_as_number` > 1000:
@@ -287,19 +287,19 @@ value_as_number_filter = ResultFilters(column_filter=value_column_filter)
 not_either_filter = ResultFilters(if_not=True, 
                                   any_of=[concept_filter, 
                                           value_as_number_filter])
-table_query = TableQuery(table_name=Observation.table_name, filters=not_either_filter)
+table_query = TableQuery(table=Observation, filters=not_either_filter)
 ```
 
 Return all columns in observation for all rows ordered by observation_concept_id (ascending) and value_as_number (descending):
 ```python
-table_query = TableQuery(table_name=Observation.table_name, 
+table_query = TableQuery(table=Observation, 
                          order_by=[Observation.observation_concept_id, 
                                    descending(Observation.value_as_number)])
 ``` 
 
 Return person_id, gender concept name, and care site's location city for rows in the person table:
 ```python
-table_query = TableQuery(table_name=Person.table_name, 
+table_query = TableQuery(table=Person, 
                           columns=[Person.person_id, Person.gender_concept.name, 
                                    Person.care_site.location.city])
 ```
@@ -311,7 +311,7 @@ state_column_filter = ColumnFilter(column_name=Person.care_site.location.city,
                                    value='TX')
 state_filter = ResultFilters(column_filter=state_column_filter)
 
-table_query = TableQuery(table_name=Person.table_name,
+table_query = TableQuery(table=Person,
                          columns=[Person.person_id, Person.care_site.location.city],
                          filters=state_filter, 
                          order_by=[Person.care_site.location.city])
@@ -380,7 +380,7 @@ import pandas as pd
 
 temp_filter = ResultFilters(column_filter=ColumnFilter(Measurement.measurement_source_value, 
                                                        value='Temper'))
-measure_query = TableQuery(table_name=Measurement.table_name,
+measure_query = TableQuery(table=Measurement,
                           columns=[Measurement.person_id, 
                                    Measurement.measurement_id, 
                                    Measurement.measurement_date, 

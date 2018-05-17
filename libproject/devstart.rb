@@ -37,7 +37,7 @@ def swagger_regen()
   # TableQuery constructor
   text = File.read(TABLE_QUERY_FILE_NAME)
   text = text.gsub(/table_name=None,/, "table=None, table_name=None,")
-  text = text.gsub(/self\.table_name = table_name/, "self.table_name = table_name or table.table_name")
+  text = text.gsub(/self\.table_name = table_name/, "self.table_name = table_name or (table.table_name if table else None)")
   File.open(TABLE_QUERY_FILE_NAME, 'wb') do |f|
     f.puts text
   end
