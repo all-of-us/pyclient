@@ -44,7 +44,7 @@ class TableQuery(object):
         'order_by': 'orderBy'
     }
 
-    def __init__(self, table_name=None, columns=None, filters=None, order_by=None):
+    def __init__(self, table=None, table_name=None, columns=None, filters=None, order_by=None):
         """
         TableQuery - a model defined in Swagger
         """
@@ -55,7 +55,7 @@ class TableQuery(object):
         self._order_by = None
         self.discriminator = None
 
-        self.table_name = table_name
+        self.table_name = table_name or table.table_name
         if columns is not None:
           self.columns = columns
         if filters is not None:
