@@ -13,6 +13,7 @@ API_TAG = "api_v1_6"
 SWAGGER_SPEC = "https://raw.githubusercontent.com/all-of-us/workbench/#{API_TAG}/api/src/main/resources/client_api.yaml"
 CDM_SPEC = "https://raw.githubusercontent.com/all-of-us/workbench/master/api/config/cdm/cdm_5_2.json"
 TEST_PROJECT = "all-of-us-workbench-test"
+TABLE_QUERY_FILE_NAME = "py/aou_workbench_client/swagger_client/models/table_query.py"
 
 def swagger_regen()
   Workbench::Swagger.download_swagger_codegen_cli
@@ -32,6 +33,15 @@ def swagger_regen()
   FileUtils.mv('py/tmp/README.md', 'py/README.swagger.md', file_opts)
   FileUtils.mv('py/tmp/requirements.txt', 'py/swagger-requirements.txt', file_opts)
   FileUtils.rm_rf('py/tmp', file_opts)
+  # Add an optional "table" parameter as a convenience to the generated 
+  # TableQuery constructor
+  text = File.read(TABLE_QUERY_FILE_NAME)
+  text = text.gsub(/table_name=None,/, "table=None, table_name=None,")
+  text = text.gsub(/self\.table_name = table_name/, "self.table_name = table.table_name if table else table_name")
+  File.open(TABLE_QUERY_FILE_NAME, 'wb') do |f|
+    f.puts text
+  end
+  
 end
 
 Common.register_command({
