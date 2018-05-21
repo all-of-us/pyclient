@@ -55,7 +55,7 @@ class TableQuery(object):
         self._order_by = None
         self.discriminator = None
 
-        self.table_name = table_name or (table.table_name if table else None)
+        self.table_name = table.table_name if table else table_name
         if columns is not None:
           self.columns = columns
         if filters is not None:
