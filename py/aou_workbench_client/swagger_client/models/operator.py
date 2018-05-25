@@ -33,7 +33,7 @@ class Operator(object):
     GREATER_THAN_OR_EQUAL_TO = "GREATER_THAN_OR_EQUAL_TO"
     LIKE = "LIKE"
     IN = "IN"
-    BETWEEN = "BETWEEN"
+    
 
     """
     Attributes:
