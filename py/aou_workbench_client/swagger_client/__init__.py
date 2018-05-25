@@ -17,15 +17,21 @@ from __future__ import absolute_import
 from .models.annotation_query import AnnotationQuery
 from .models.cohort_status import CohortStatus
 from .models.column_filter import ColumnFilter
+from .models.concept import Concept
+from .models.concept_list_response import ConceptListResponse
+from .models.domain import Domain
 from .models.field_set import FieldSet
 from .models.materialize_cohort_request import MaterializeCohortRequest
 from .models.materialize_cohort_response import MaterializeCohortResponse
 from .models.operator import Operator
 from .models.result_filters import ResultFilters
+from .models.search_concepts_request import SearchConceptsRequest
+from .models.standard_concept_filter import StandardConceptFilter
 from .models.table_query import TableQuery
 
 # import apis into sdk package
 from .apis.cohorts_api import CohortsApi
+from .apis.concepts_api import ConceptsApi
 
 # import ApiClient
 from .api_client import ApiClient

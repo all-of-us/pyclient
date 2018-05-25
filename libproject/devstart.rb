@@ -8,12 +8,13 @@ require_relative "../aou-utils/workbench"
 require_relative "../aou-utils/swagger"
 
 # Update this whenever we want to generate libraries for the latest version of the workbench API.
-API_TAG = "api_v1_6"
+API_TAG = "api_v1_7"
 
 SWAGGER_SPEC = "https://raw.githubusercontent.com/all-of-us/workbench/#{API_TAG}/api/src/main/resources/client_api.yaml"
 CDM_SPEC = "https://raw.githubusercontent.com/all-of-us/workbench/master/api/config/cdm/cdm_5_2.json"
 TEST_PROJECT = "all-of-us-workbench-test"
 TABLE_QUERY_FILE_NAME = "py/aou_workbench_client/swagger_client/models/table_query.py"
+OPERATOR_FILE_NAME = "py/aou_workbench_client/swagger_client/models/operator.py"
 
 def swagger_regen()
   Workbench::Swagger.download_swagger_codegen_cli
@@ -33,6 +34,8 @@ def swagger_regen()
   FileUtils.mv('py/tmp/README.md', 'py/README.swagger.md', file_opts)
   FileUtils.mv('py/tmp/requirements.txt', 'py/swagger-requirements.txt', file_opts)
   FileUtils.rm_rf('py/tmp', file_opts)
+  
+  
   # Add an optional "table" parameter as a convenience to the generated 
   # TableQuery constructor
   text = File.read(TABLE_QUERY_FILE_NAME)
@@ -42,6 +45,13 @@ def swagger_regen()
     f.puts text
   end
   
+  # Remove the BETWEEN operator. TODO: either support BETWEEN in the materialize 
+  # cohort API, or have separate operator types for different APIs.
+  operator_text = File.read(OPERATOR_FILE_NAME)
+  operator_text = operator_text.gsub(/BETWEEN = \"BETWEEN\"/, "")
+  File.open(OPERATOR_FILE_NAME, 'wb') do |f|
+    f.puts operator_text
+  end
 end
 
 Common.register_command({

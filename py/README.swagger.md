@@ -74,6 +74,7 @@ All URIs are relative to *https://api.pmi-ops.org*
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
 *CohortsApi* | [**materialize_cohort**](docs/CohortsApi.md#materialize_cohort) | **POST** /v1/workspaces/{workspaceNamespace}/{workspaceId}/materializeCohort | 
+*ConceptsApi* | [**search_concepts**](docs/ConceptsApi.md#search_concepts) | **POST** /v1/workspaces/{workspaceNamespace}/{workspaceId}/searchConcepts | 
 
 
 ## Documentation For Models
@@ -81,11 +82,16 @@ Class | Method | HTTP request | Description
  - [AnnotationQuery](docs/AnnotationQuery.md)
  - [CohortStatus](docs/CohortStatus.md)
  - [ColumnFilter](docs/ColumnFilter.md)
+ - [Concept](docs/Concept.md)
+ - [ConceptListResponse](docs/ConceptListResponse.md)
+ - [Domain](docs/Domain.md)
  - [FieldSet](docs/FieldSet.md)
  - [MaterializeCohortRequest](docs/MaterializeCohortRequest.md)
  - [MaterializeCohortResponse](docs/MaterializeCohortResponse.md)
  - [Operator](docs/Operator.md)
  - [ResultFilters](docs/ResultFilters.md)
+ - [SearchConceptsRequest](docs/SearchConceptsRequest.md)
+ - [StandardConceptFilter](docs/StandardConceptFilter.md)
  - [TableQuery](docs/TableQuery.md)
 
 
