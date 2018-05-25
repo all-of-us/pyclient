@@ -17,9 +17,14 @@ from __future__ import absolute_import
 from .annotation_query import AnnotationQuery
 from .cohort_status import CohortStatus
 from .column_filter import ColumnFilter
+from .concept import Concept
+from .concept_list_response import ConceptListResponse
+from .domain import Domain
 from .field_set import FieldSet
 from .materialize_cohort_request import MaterializeCohortRequest
 from .materialize_cohort_response import MaterializeCohortResponse
 from .operator import Operator
 from .result_filters import ResultFilters
+from .search_concepts_request import SearchConceptsRequest
+from .standard_concept_filter import StandardConceptFilter
 from .table_query import TableQuery
