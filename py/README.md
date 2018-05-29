@@ -23,6 +23,92 @@ and then restarting your Python kernel.
 
 The modules you will use in your code are in the aou_workbench_client package.
 
+## Finding concepts
+
+Data about participants in the curated data repository (CDR) is stored in 
+[OMOP](https://www.ohdsi.org/data-standardization/the-common-data-model/) tables, with
+foreign keys to a Concept table indicating what type of observation, measurement, procedure, etc.
+is being recorded about the participant.
+
+When materializing a cohort and analyzing data, it is useful to be able to filter on the IDs of
+concepts of interest. The `aou_workbench_client.concepts` module provides functions for retrieving
+information about concepts.
+
+### `display_concepts_widget`
+
+`display_concepts_widget` shows an interactive widget for querying concepts. This is 
+the simplest way to find concepts of interest.
+
+When materializing a cohort, the IDs displayed in the "ID" column of the results
+can be used with a [column filter](#column-filters) on `value_number` to filter rows
+to those matching a specified concept.
+
+To display the widget, paste the following code into a cell in your notebook:
+
+```python
+from aou_workbench_client.concepts import display_concepts_widget
+
+display_concepts_widget()
+```
+
+### `display_concepts`
+
+`display_concepts` displays an HTML table containing concepts matching criteria
+specified in a [SearchConceptsRequest](swagger_docs/SearchConceptsRequest.md).
+
+Use this function if you want to write code to control what concepts are 
+returned in results, rather than using an interactive widget.
+
+Examples:
+
+```python
+from aou_workbench_client.concepts import display_concepts
+from aou_workbench_client.swagger_client.models.search_concepts_request import SearchConceptsRequest
+from aou_workbench_client.swagger_client.models.domain import Domain
+from aou_workbench_client.swagger_client.models.standard_concept_filter import StandardConceptFilter
+
+# Displays all concepts with "arthritis" in the name. 
+display_concepts(SearchConceptsRequest(query='Arthritis'))
+
+# Displays the top 3 concepts with "arthritis" in the name. 
+display_concepts(SearchConceptsRequest(query='Arthritis', max_results=3))
+
+# Displays only standard concepts with "arthritis" in the name.
+display_concepts(SearchConceptsRequest(query='Arthritis', 
+    standard_concept_filter=StandardConceptFilter.STANDARD_CONCEPTS))
+
+# Displays all concepts with "blood" in the name in the "LOINC" vocabulary.
+display_concepts(SearchConceptsRequest(query="Blood", vocabulary_ids=["LOINC"]))
+
+# Displays all concepts with "blood" in the name in the "Procedure" domain.
+display_concepts(SearchConceptsRequest(query="Blood", domain=Domain.PROCEDURE))
+
+# Displays 3 standard concepts with "blood" in the name in the "Measurement" domain
+# and the "LOINC" or "SNOMED" vocabulary.
+display_concepts(SearchConceptsRequest(query="Blood", domain=Domain.MEASUREMENT,
+    vocabulary_ids=["LOINC", "SNOMED"], 
+    standard_concept_filter=StandardConceptFilter.STANDARD_CONCEPTS,
+    max_results=3))
+```
+
+### `search_concepts`
+
+`search_concepts` is used to fetch a list of [Concept](swagger_docs/Concept.md) objects matching criteria
+specified in a [SearchConceptsRequest](swagger_docs/SearchConceptsRequest.md). Concepts are returned in descending
+count order; the concepts that occur for the most participants in the CDR are returned first.
+
+Use this function if you want access to the full [Concept](swagger_docs/Concept.md) data
+in your code.
+
+### `get_concepts_frame`
+
+`get_concepts_frame` returns a DataFrame from the constructed from the results of calling `search_concepts`,
+with columns for concept ID, name, code, domain, vocabulary, and count.
+
+Use this function if you want to get back a data frame but have control over its
+rendering.
+
+
 ## Using cohorts
 
 The `aou_workbench_client.cohorts` module provides functions for materializing cohorts.
@@ -207,6 +293,9 @@ If the `LIKE` operator is used, only `value` should be specified.
 If any other operator is used (or no operator is specified), 
 exactly one of `value`, `value_number`, `value_date`, and `value_null` must be specified,
 depending on the type of column being compared against.
+
+Note: it is often useful to filter rows on a concept ID column, assigning `value_number` to the value of
+a concept ID retrieved using (`display_concepts`)[#display-concepts].
  
 
 ##### `ColumnFilter` fields
