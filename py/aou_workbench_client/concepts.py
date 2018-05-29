@@ -67,4 +67,4 @@ def display_concepts_fn(query, domain, concepts):
 def display_concepts_widget():
   interact_manual(display_concepts_fn, query='', domain=_DOMAIN_DICT,
                   concepts=_STANDARD_CONCEPT_FILTER_DICT,
-                  button_name='Search')
+                  manual_name='Search')
