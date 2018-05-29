@@ -54,14 +54,13 @@ _VOCAB_IDS = [
     'VA Product'
   ]
 
-_RESULT_FIELDS = { 
-    'ID': 'concept_id',
-    'Name': 'concept_name',
-    'Code': 'concept_code',
-    'Domain': 'domain_id',
-    'Vocabulary': 'vocabulary_id',
-    'Count': 'count_value'
-}
+_RESULT_FIELDS = [
+    ('ID', 'concept_id'),
+    ('Name', 'concept_name'),
+    ('Code', 'concept_code'),
+    ('Domain', 'domain_id')
+    ('Vocabulary', 'vocabulary_id'),
+    ('Count', 'count_value')]
 
 _VOCAB_DICT = {id: id for id in _VOCAB_IDS}
 
@@ -74,12 +73,12 @@ def search_concepts(request):
   return response.items
 
 def get_concept_dict(concept):
-  return { key: getattr(concept, _RESULT_FIELDS[key]) for key in _RESULT_FIELDS } 
+  return { f[0]: getattr(concept, f[1]) for f in _RESULT_FIELDS } 
 
 def get_concepts_frame(request):
   concepts = search_concepts(request)
   return pd.DataFrame([get_concept_dict(concept) for concept in concepts],
-                      columns = _RESULT_FIELDS.keys())
+                      columns = [f[0] for f in _RESULT_FIELDS])
 
 def display_concepts(request):
   concepts_frame = get_concepts_frame(request)
