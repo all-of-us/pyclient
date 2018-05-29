@@ -2,7 +2,7 @@ from aou_workbench_client.auth import get_authenticated_swagger_client
 from aou_workbench_client.config import all_of_us_config
 from aou_workbench_client.swagger_client.apis.concepts_api import ConceptsApi
 from aou_workbench_client.swagger_client.models.domain import Domain
-from aou_workbench_client.swagger_client.models.search_concept_request import SearchConceptRequest
+from aou_workbench_client.swagger_client.models.search_concepts_request import SearchConceptsRequest
 from aou_workbench_client.swagger_client.models.standard_concepts_filter import StandardConceptsFilter
 from ipywidgets import interact_manual
 import pandas as pd
@@ -57,7 +57,7 @@ def display_concepts(request):
   display(HTML(s.render()))
 
 def display_concepts_fn(query, domain, standard_concepts_filter):
-  request = SearchConceptRequest(query=query)
+  request = SearchConceptsRequest(query=query)
   if domain:
     request.domain = domain
   if standard_concepts_filter:
