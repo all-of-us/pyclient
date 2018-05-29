@@ -25,7 +25,8 @@ The modules you will use in your code are in the aou_workbench_client package.
 
 ## Finding concepts
 
-Data about participants in the curated data repository (CDR) is stored in OMOP tables, with
+Data about participants in the curated data repository (CDR) is stored in 
+[OMOP](https://www.ohdsi.org/data-standardization/the-common-data-model/) tables, with
 foreign keys to a Concept table indicating what type of observation, measurement, procedure, etc.
 is being recorded about the participant.
 
@@ -33,24 +34,30 @@ When materializing a cohort and analyzing data, it is useful to be able to filte
 concepts of interest. The `aou_workbench_client.concepts` module provides functions for retrieving
 information about concepts.
 
-### `search_concepts`
+### `display_concepts_widget`
 
-`search_concepts` is used to fetch a list of [Concept](swagger_docs/Concept.md) objects matching criteria
-specified in a [SearchConceptsRequest](swagger_docs/SearchConceptsRequest.md). Concepts are returned in descending
-count order; the concepts that occur for the most participants in the CDR are returned first.
+`display_concepts_widget` shows an interactive widget for querying concepts. This is 
+the simplest way to find concepts of interest.
 
-### `get_concepts_frame`
+When materializing a cohort, the IDs displayed in the "ID" column of the results
+can be used with a [column filter](#column-filters) on `value_number` to filter rows
+to those matching a specified concept.
 
-`get_concepts_frame` returns a DataFrame from the constructed from the results of calling `search_concepts`,
-with columns for concept ID, name, domain, vocabulary, and count.
+To display the widget, paste the following code into a cell in your notebook:
+
+```python
+from aou_workbench_client.concepts import display_concepts_widget
+
+display_concepts_widget()
+```
 
 ### `display_concepts`
 
-`display_concepts` displays an HTML table based on the DataFrame returned from `get_concepts_frame`.
+`display_concepts` displays an HTML table containing concepts matching criteria
+specified in a [SearchConceptsRequest](swagger_docs/SearchConceptsRequest.md).
 
-When materializing a cohort, the ID displayed in a concept table can be used with a
-[column filter](#column-filters) on `value_number` to filter rows
-to those matching a specified concept.
+Use this function if you want to write code to control what concepts are 
+returned in results, rather than using an interactive widget.
 
 Examples:
 
@@ -84,11 +91,23 @@ display_concepts(SearchConceptsRequest(query="Blood", domain=Domain.MEASUREMENT,
     max_results=3))
 ```
 
-### `display_concepts_widget`
+### `search_concepts`
 
-`display_concepts_widget` shows an interactive widget for querying concepts.
+`search_concepts` is used to fetch a list of [Concept](swagger_docs/Concept.md) objects matching criteria
+specified in a [SearchConceptsRequest](swagger_docs/SearchConceptsRequest.md). Concepts are returned in descending
+count order; the concepts that occur for the most participants in the CDR are returned first.
 
-You can use it as an alternative to calling `display_concepts` directly.
+Use this function if you want access to the full [Concept](swagger_docs/Concept.md) data
+in your code.
+
+### `get_concepts_frame`
+
+`get_concepts_frame` returns a DataFrame from the constructed from the results of calling `search_concepts`,
+with columns for concept ID, name, code, domain, vocabulary, and count.
+
+Use this function if you want to get back a data frame but have control over its
+rendering.
+
 
 ## Using cohorts
 

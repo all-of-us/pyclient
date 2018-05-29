@@ -9,7 +9,8 @@ import pandas as pd
 
 from IPython.display import display, HTML
 
-_DOMAIN_DICT = { '': None,
+_DOMAIN_DICT = { 
+    '': None,
     'Observation': Domain.OBSERVATION,
     'Procedure': Domain.PROCEDURE,
     'Drug': Domain.DRUG,
@@ -21,14 +22,16 @@ _DOMAIN_DICT = { '': None,
     'Ethnicity': Domain.ETHNICITY 
 }
 
-_STANDARD_CONCEPT_FILTER_DICT = { '': StandardConceptFilter.ALL_CONCEPTS,
+_STANDARD_CONCEPT_FILTER_DICT = { 
+    '': StandardConceptFilter.ALL_CONCEPTS,
     'Standard concepts': StandardConceptFilter.STANDARD_CONCEPTS,
     'Non-standard concepts': StandardConceptFilter.NON_STANDARD_CONCEPTS
 }
 
 # Common vocabularies. (There are others in the data but they don't get much
 # use.)
-_VOCAB_IDS = [ '', 
+_VOCAB_IDS = [ 
+    '', 
     'ATC',    
     'CPT4',
     'DRG',
@@ -51,6 +54,15 @@ _VOCAB_IDS = [ '',
     'VA Product'
   ]
 
+_RESULT_FIELDS = { 
+    'ID': 'concept_id',
+    'Name': 'concept_name',
+    'Code': 'concept_code',
+    'Domain': 'domain_id',
+    'Vocabulary': 'vocabulary_id',
+    'Count': 'count_value'
+}
+
 _VOCAB_DICT = {id: id for id in _VOCAB_IDS}
 
 def search_concepts(request):
@@ -62,19 +74,12 @@ def search_concepts(request):
   return response.items
 
 def get_concept_dict(concept):
-  return { "ID": concept.concept_id,
-           "Name": concept.concept_name,
-           "Code": concept.concept_code,
-           "Domain": concept.domain_id,
-           "Vocabulary": concept.vocabulary_id,
-           "Count": concept.count_value
-         }
+  return { key: getattr(concept, _RESULT_FIELDS[key]) for key in _RESULT_FIELDS } 
 
 def get_concepts_frame(request):
   concepts = search_concepts(request)
   return pd.DataFrame([get_concept_dict(concept) for concept in concepts],
-                      columns = ["ID", "Name", "Code", "Domain", 
-                                 "Vocabulary", "Count"])
+                      columns = _RESULT_FIELDS.keys())
 
 def display_concepts(request):
   concepts_frame = get_concepts_frame(request)
