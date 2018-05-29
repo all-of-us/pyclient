@@ -13,25 +13,17 @@ def search_concepts(request):
                                           request=request)
   return response.items
 
+def get_concept_dict(concept):
+  return { "ID": concept.concept_id(),
+           "Name": concept.concept_name(),
+           "Domain": concept.domain_id(),
+           "Vocabulary": concept.vocabulary_id(),
+           "Count": concept.count_value()
+         }
+
 def get_concepts_frame(request):
   concepts = search_concepts(request)
-  concepts_frame = pd.DataFrame(concepts, columns=["concept_id",
-                                                   "concept_name",
-                                                   "domain_id",
-                                                   "vocabulary_id",
-                                                   "concept_code",
-                                                   "concept_class_id",
-                                                   "standard_concept",
-                                                   "count_value"])
-  concepts_frame.rename(columns={"concept_id": "ID",
-                                 "concept_name": "Name",
-                                 "domain_id": "Domain",
-                                 "vocabulary_id": "Vocabulary",
-                                 "concept_code": "Code",
-                                 "concept_class_id": "Class",
-                                 "standard_concept": "Standard?",
-                                 "count_value": "Count"})
-  return concepts_frame
+  return pd.DataFrame([get_concept_dict(concept) for concept in concepts])
 
 def display_concepts(request):
   concepts_frame = get_concepts_frame(request)
