@@ -52,6 +52,38 @@ When materializing a cohort, the ID displayed in a concept table can be used wit
 [column filter](#column-filters) on `value_number` to filter rows
 to those matching a specified concept.
 
+Examples:
+
+```python
+from aou_workbench_client.concepts import display_concepts
+from aou_workbench_client.swagger_client.models.search_concepts_request import SearchConceptsRequest
+from aou_workbench_client.swagger_client.models.domain import Domain
+from aou_workbench_client.swagger_client.models.standard_concept_filter import StandardConceptFilter
+
+# Displays all concepts with "arthritis" in the name. 
+display_concepts(SearchConceptsRequest(query='Arthritis'))
+
+# Displays the top 3 concepts with "arthritis" in the name. 
+display_concepts(SearchConceptsRequest(query='Arthritis', max_results=3))
+
+# Displays only standard concepts with "arthritis" in the name.
+display_concepts(SearchConceptsRequest(query='Arthritis', 
+    standard_concept_filter=StandardConceptFilter.STANDARD_CONCEPTS))
+
+# Displays all concepts with "blood" in the name in the "LOINC" vocabulary.
+display_concepts(SearchConceptsRequest(query="Blood", vocabulary_ids=["LOINC"]))
+
+# Displays all concepts with "blood" in the name in the "Procedure" domain.
+display_concepts(SearchConceptsRequest(query="Blood", domain=Domain.PROCEDURE))
+
+# Displays 3 standard concepts with "blood" in the name in the "Measurement" domain
+# and the "LOINC" or "SNOMED" vocabulary.
+display_concepts(SearchConceptsRequest(query="Blood", domain=Domain.MEASUREMENT,
+    vocabulary_ids=["LOINC", "SNOMED"], 
+    standard_concept_filter=StandardConceptFilter.STANDARD_CONCEPTS,
+    max_results=3))
+```
+
 ## Using cohorts
 
 The `aou_workbench_client.cohorts` module provides functions for materializing cohorts.
