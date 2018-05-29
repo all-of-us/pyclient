@@ -14,11 +14,11 @@ def search_concepts(request):
   return response.items
 
 def get_concept_dict(concept):
-  return { "ID": concept.concept_id(),
-           "Name": concept.concept_name(),
-           "Domain": concept.domain_id(),
-           "Vocabulary": concept.vocabulary_id(),
-           "Count": concept.count_value()
+  return { "ID": concept.concept_id,
+           "Name": concept.concept_name,
+           "Domain": concept.domain_id,
+           "Vocabulary": concept.vocabulary_id,
+           "Count": concept.count_value
          }
 
 def get_concepts_frame(request):
