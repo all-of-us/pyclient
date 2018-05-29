@@ -3,7 +3,7 @@ from aou_workbench_client.config import all_of_us_config
 from aou_workbench_client.swagger_client.apis.concepts_api import ConceptsApi
 import pandas as pd
 
-from IPython.display import display
+from IPython.display import display, HTML
 
 def search_concepts(request):
   client = get_authenticated_swagger_client()
@@ -28,5 +28,8 @@ def get_concepts_frame(request):
 
 def display_concepts(request):
   concepts_frame = get_concepts_frame(request)
-  display(concepts_frame)
+  s = frame.style.set_properties(**{'text-align': 'left'})
+  s = s.set_table_styles(
+      [{"selector": "th", "props": [("text-align", "left")]}])
+  display(HTML(s.render()))
   
