@@ -23,7 +23,8 @@ def get_concept_dict(concept):
 
 def get_concepts_frame(request):
   concepts = search_concepts(request)
-  return pd.DataFrame([get_concept_dict(concept) for concept in concepts])
+  return pd.DataFrame([get_concept_dict(concept) for concept in concepts],
+                      columns = ["ID", "Name", "Domain", "Vocabulary", "Count"])
 
 def display_concepts(request):
   concepts_frame = get_concepts_frame(request)
