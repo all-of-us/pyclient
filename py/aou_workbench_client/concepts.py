@@ -26,6 +26,32 @@ _STANDARD_CONCEPT_FILTER_DICT = { '': StandardConceptFilter.ALL_CONCEPTS,
     'Non-standard concepts': StandardConceptFilter.NON_STANDARD_CONCEPTS
 }
 
+# Common vocabularies. (There are others in the data but they don't get much
+# use.)
+_VOCAB_IDS = [ 'ATC',    
+    'CPT4',
+    'DRG',
+    'HCPCS',
+    'ICD10CM',
+    'ICD10PCS',
+    'ICD9CM',
+    'ICD9Proc',
+    'ISBT',
+    'ISBT Attribute',
+    'LOINC',
+    'Multum',
+    'NDC',
+    'NDFRT',
+    'PPI',
+    'RxNorm',
+    'RxNorm Extension',
+    'SNOMED',
+    'SPL',
+    'VA Product'
+  ]
+
+_VOCAB_DICT = {id: id for id in _VOCAB_IDS}
+
 def search_concepts(request):
   client = get_authenticated_swagger_client()
   concepts_api = ConceptsApi(api_client=client)
@@ -56,12 +82,14 @@ def display_concepts(request):
       [{"selector": "th", "props": [("text-align", "left")]}]).hide_index()
   display(HTML(s.render()))
 
-def display_concepts_fn(query, domain, concepts):
+def display_concepts_fn(query, domain, vocabulary, concepts):
   request = SearchConceptsRequest(query=query)
   if domain:
     request.domain = domain
   if concepts:
     request.standard_concept_filter = concepts
+  if vocabulary:
+    request.vocabulary_ids = [vocabulary]
   display_concepts(request)
   
 interact = interactive.factory()
@@ -70,4 +98,5 @@ interact_form = interact.options(manual=True, manual_name="Search")
 def display_concepts_widget():
   interact_form(display_concepts_fn, query='', domain=_DOMAIN_DICT,
                 concepts=_STANDARD_CONCEPT_FILTER_DICT,
+                vocabulary=_VOCAB_DICT,
                 manual_name='Search')
