@@ -1,6 +1,7 @@
 from aou_workbench_client.auth import get_authenticated_swagger_client
 from aou_workbench_client.config import all_of_us_config
 from aou_workbench_client.swagger_client.apis.concepts_api import ConceptsApi
+import pandas as pd
 
 from IPython.display import display
 
