@@ -21,7 +21,7 @@ _DOMAIN_DICT = { '': None,
     'Ethnicity': Domain.ETHNICITY 
 }
 
-_STANDARD_CONCEPTS_FILTER_DICT = { '': StandardConceptFilter.ALL_CONCEPTS,
+_STANDARD_CONCEPT_FILTER_DICT = { '': StandardConceptFilter.ALL_CONCEPTS,
     'Standard concepts': StandardConceptFilter.STANDARD_CONCEPTS,
     'Non-standard concepts': StandardConceptFilter.NON_STANDARD_CONCEPTS
 }
