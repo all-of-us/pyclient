@@ -23,6 +23,35 @@ and then restarting your Python kernel.
 
 The modules you will use in your code are in the aou_workbench_client package.
 
+## Finding concepts
+
+Data about participants in the curated data repository (CDR) is stored in OMOP tables, with
+foreign keys to a Concept table indicating what type of observation, measurement, procedure, etc.
+is being recorded about the participant.
+
+When materializing a cohort and analyzing data, it is useful to be able to filter on the IDs of
+concepts of interest. The `aou_workbench_client.concepts` module provides functions for retrieving
+information about concepts.
+
+### `search_concepts`
+
+`search_concepts` is used to fetch a list of [Concept](swagger_docs/Concept.md) objects matching criteria
+specified in a [SearchConceptsRequest](swagger_docs/SearchConceptsRequest.md). Concepts are returned in descending
+count order; the concepts that occur for the most participants in the CDR are returned first.
+
+### `get_concepts_frame`
+
+`get_concepts_frame` returns a DataFrame from the constructed from the results of calling `search_concepts`,
+with columns for concept ID, name, domain, vocabulary, and count.
+
+### `display_concepts`
+
+`display_concepts` displays an HTML table based on the DataFrame returned from `get_concepts_frame`.
+
+When materializing a cohort, the ID displayed in a concept table can be used with a
+[column filter](#column-filters) on `value_number` to filter rows
+to those matching a specified concept.
+
 ## Using cohorts
 
 The `aou_workbench_client.cohorts` module provides functions for materializing cohorts.
@@ -207,6 +236,9 @@ If the `LIKE` operator is used, only `value` should be specified.
 If any other operator is used (or no operator is specified), 
 exactly one of `value`, `value_number`, `value_date`, and `value_null` must be specified,
 depending on the type of column being compared against.
+
+Note: it is often useful to filter rows on a concept ID column, assigning `value_number` to the value of
+a concept ID retrieved using (`display_concepts`)[#display-concepts].
  
 
 ##### `ColumnFilter` fields
