@@ -97,8 +97,8 @@ def display_concepts_fn(query, domain, vocabulary, concepts):
         request.vocabulary_ids = [vocabulary]
     display_concepts(request)
   
-    interact = interactive.factory()
-    interact_form = interact.options(manual=True, manual_name="Search")  
+interact = interactive.factory()
+interact_form = interact.options(manual=True, manual_name="Search")  
   
 def display_concepts_widget():
     interact_form(display_concepts_fn, query='', domain=_DOMAIN_DICT,
