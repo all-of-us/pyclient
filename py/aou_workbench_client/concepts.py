@@ -58,7 +58,7 @@ _RESULT_FIELDS = [
     ('ID', 'concept_id'),
     ('Name', 'concept_name'),
     ('Code', 'concept_code'),
-    ('Domain', 'domain_id')
+    ('Domain', 'domain_id'),
     ('Vocabulary', 'vocabulary_id'),
     ('Count', 'count_value')]
 
