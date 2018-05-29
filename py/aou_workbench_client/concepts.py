@@ -1,9 +1,30 @@
 from aou_workbench_client.auth import get_authenticated_swagger_client
 from aou_workbench_client.config import all_of_us_config
 from aou_workbench_client.swagger_client.apis.concepts_api import ConceptsApi
+from aou_workbench_client.swagger_client.models.domain import Domain
+from aou_workbench_client.swagger_client.models.search_concept_request import SearchConceptRequest
+from aou_workbench_client.swagger_client.models.standard_concepts_filter import StandardConceptsFilter
+from ipywidgets import interact_manual
 import pandas as pd
 
 from IPython.display import display, HTML
+
+_DOMAIN_DICT = { '': None,
+    'Observation': Domain.OBSERVATION,
+    'Procedure': Domain.PROCEDURE,
+    'Drug': Domain.DRUG,
+    'Condition': Domain.CONDITION,
+    'Measurement': Domain.MEASUREMENT,
+    'Device': Domain.DEVICE,
+    'Race': Domain.RACE,
+    'Gender': Domain.GENDER,
+    'Ethnicity': Domain.ETHNICITY 
+}
+
+_STANDARD_CONCEPTS_FILTER_DICT = { '': ALL_CONCEPTS,
+    'Standard concepts': StandardConceptsFilter.STANDARD_CONCEPTS,
+    'Non-standard concepts': StandardConceptsFilter.NON_STANDARD_CONCEPTS
+}
 
 def search_concepts(request):
   client = get_authenticated_swagger_client()
@@ -34,3 +55,16 @@ def display_concepts(request):
   s = s.set_table_styles(
       [{"selector": "th", "props": [("text-align", "left")]}]).hide_index()
   display(HTML(s.render()))
+
+def display_concepts_fn(query, domain, standard_concepts_filter):
+  request = SearchConceptRequest(query=query)
+  if domain:
+    request.domain = domain
+  if standard_concepts_filter:
+    request.standard_concepts_filter = standard_concepts_filter
+  display_concepts(request)
+  
+def display_concepts_widget():
+  interact_manual(display_concepts_fn, query='', domain=_DOMAIN_DICT,
+                  standard_concepts_filter=_STANDARD_CONCEPTS_FILTER_DICT,
+                  manual_name='Search')
