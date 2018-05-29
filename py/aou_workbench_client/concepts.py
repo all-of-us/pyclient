@@ -28,7 +28,7 @@ def get_concepts_frame(request):
 
 def display_concepts(request):
   concepts_frame = get_concepts_frame(request)
-  s = frame.style.set_properties(**{'text-align': 'left'})
+  s = concepts_frame.style.set_properties(**{'text-align': 'left'})
   s = s.set_table_styles(
       [{"selector": "th", "props": [("text-align", "left")]}])
   display(HTML(s.render()))
