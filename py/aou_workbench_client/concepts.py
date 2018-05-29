@@ -3,7 +3,7 @@ from aou_workbench_client.config import all_of_us_config
 from aou_workbench_client.swagger_client.apis.concepts_api import ConceptsApi
 from aou_workbench_client.swagger_client.models.domain import Domain
 from aou_workbench_client.swagger_client.models.search_concepts_request import SearchConceptsRequest
-from aou_workbench_client.swagger_client.models.standard_concepts_filter import StandardConceptsFilter
+from aou_workbench_client.swagger_client.models.standard_concept_filter import StandardConceptFilter
 from ipywidgets import interact_manual
 import pandas as pd
 
@@ -56,15 +56,15 @@ def display_concepts(request):
       [{"selector": "th", "props": [("text-align", "left")]}]).hide_index()
   display(HTML(s.render()))
 
-def display_concepts_fn(query, domain, standard_concepts_filter):
+def display_concepts_fn(query, domain, standard_concept_filter):
   request = SearchConceptsRequest(query=query)
   if domain:
     request.domain = domain
   if standard_concepts_filter:
-    request.standard_concepts_filter = standard_concepts_filter
+    request.standard_concept_filter = standard_concept_filter
   display_concepts(request)
   
 def display_concepts_widget():
   interact_manual(display_concepts_fn, query='', domain=_DOMAIN_DICT,
-                  standard_concepts_filter=_STANDARD_CONCEPTS_FILTER_DICT,
+                  standard_concept_filter=_STANDARD_CONCEPT_FILTER_DICT,
                   manual_name='Search')
