@@ -33,6 +33,8 @@ def display_concepts(request):
   s = concepts_frame.style.set_properties(**{'text-align': 'left'})
   s = s.set_table_styles(
       [{"selector": "th", "props": [("text-align", "left")]},
+       {'selector': '.row_heading',
+          'props': [('display', 'none')]},
        {"selector": ".blank.level0",
         "props": [("display", "none")]}])
   display(HTML(s.render()))
