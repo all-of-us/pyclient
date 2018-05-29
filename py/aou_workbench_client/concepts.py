@@ -32,8 +32,5 @@ def display_concepts(request):
   concepts_frame = get_concepts_frame(request)
   s = concepts_frame.style.set_properties(**{'text-align': 'left'})
   s = s.set_table_styles(
-      [{"selector": "th", "props": [("text-align", "left")]},
-       {"selector": ".col0", props = [('display', 'none')]},
-       {"selector": ".blank.level0",
-        "props": [("display", "none")]}])
+      [{"selector": "th", "props": [("text-align", "left")]}]).hide_index()
   display(HTML(s.render()))
