@@ -28,7 +28,8 @@ _STANDARD_CONCEPT_FILTER_DICT = { '': StandardConceptFilter.ALL_CONCEPTS,
 
 # Common vocabularies. (There are others in the data but they don't get much
 # use.)
-_VOCAB_IDS = [ 'ATC',    
+_VOCAB_IDS = [ '', 
+    'ATC',    
     'CPT4',
     'DRG',
     'HCPCS',
