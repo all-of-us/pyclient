@@ -5,7 +5,7 @@ from aou_workbench_client.swagger_client.apis.concepts_api import ConceptsApi
 from IPython.display import display
 
 def search_concepts(request):
-  client = get_authenticated_swagger_client(debug=True)
+  client = get_authenticated_swagger_client()
   concepts_api = ConceptsApi(api_client=client)
   response = concepts_api.search_concepts(all_of_us_config.workspace_namespace,
                                           all_of_us_config.workspace_id,
