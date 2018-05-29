@@ -4,7 +4,7 @@ from aou_workbench_client.swagger_client.apis.concepts_api import ConceptsApi
 from aou_workbench_client.swagger_client.models.domain import Domain
 from aou_workbench_client.swagger_client.models.search_concepts_request import SearchConceptsRequest
 from aou_workbench_client.swagger_client.models.standard_concept_filter import StandardConceptFilter
-from ipywidgets import interact_manual
+from ipywidgets import interactive
 import pandas as pd
 
 from IPython.display import display, HTML
@@ -64,7 +64,10 @@ def display_concepts_fn(query, domain, concepts):
     request.standard_concept_filter = concepts
   display_concepts(request)
   
+interact = interactive.factory()
+interact_form = interact.options(manual=True, manual_name="Search")  
+  
 def display_concepts_widget():
-  interact_manual(display_concepts_fn, query='', domain=_DOMAIN_DICT,
-                  concepts=_STANDARD_CONCEPT_FILTER_DICT,
-                  manual_name='Search')
+  interact_form(display_concepts_fn, query='', domain=_DOMAIN_DICT,
+                concepts=_STANDARD_CONCEPT_FILTER_DICT,
+                manual_name='Search')
