@@ -56,15 +56,15 @@ def display_concepts(request):
       [{"selector": "th", "props": [("text-align", "left")]}]).hide_index()
   display(HTML(s.render()))
 
-def display_concepts_fn(query, domain, standard_concept_filter):
+def display_concepts_fn(query, domain, concepts):
   request = SearchConceptsRequest(query=query)
   if domain:
     request.domain = domain
-  if standard_concepts_filter:
-    request.standard_concept_filter = standard_concept_filter
+  if concepts:
+    request.standard_concept_filter = concepts
   display_concepts(request)
   
 def display_concepts_widget():
   interact_manual(display_concepts_fn, query='', domain=_DOMAIN_DICT,
-                  standard_concept_filter=_STANDARD_CONCEPT_FILTER_DICT,
-                  manual_name='Search')
+                  concepts=_STANDARD_CONCEPT_FILTER_DICT,
+                  button_name='Search')
