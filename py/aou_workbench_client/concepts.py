@@ -21,9 +21,9 @@ _DOMAIN_DICT = { '': None,
     'Ethnicity': Domain.ETHNICITY 
 }
 
-_STANDARD_CONCEPTS_FILTER_DICT = { '': ALL_CONCEPTS,
-    'Standard concepts': StandardConceptsFilter.STANDARD_CONCEPTS,
-    'Non-standard concepts': StandardConceptsFilter.NON_STANDARD_CONCEPTS
+_STANDARD_CONCEPTS_FILTER_DICT = { '': StandardConceptFilter.ALL_CONCEPTS,
+    'Standard concepts': StandardConceptFilter.STANDARD_CONCEPTS,
+    'Non-standard concepts': StandardConceptFilter.NON_STANDARD_CONCEPTS
 }
 
 def search_concepts(request):
