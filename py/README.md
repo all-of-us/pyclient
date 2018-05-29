@@ -84,6 +84,12 @@ display_concepts(SearchConceptsRequest(query="Blood", domain=Domain.MEASUREMENT,
     max_results=3))
 ```
 
+### `display_concepts_widget`
+
+`display_concepts_widget` shows an interactive widget for querying concepts.
+
+You can use it as an alternative to calling `display_concepts` directly.
+
 ## Using cohorts
 
 The `aou_workbench_client.cohorts` module provides functions for materializing cohorts.
