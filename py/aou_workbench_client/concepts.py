@@ -141,6 +141,9 @@ _CONCEPT_ROW_HTML_TEMPLATE = """
 
 _VOCAB_DICT = {id: id for id in _VOCAB_IDS}
 
+def escape_for_js(str):
+
+
 def search_concepts(request):
     client = get_authenticated_swagger_client()
     concepts_api = ConceptsApi(api_client=client)
@@ -161,6 +164,7 @@ def display_concepts(request):
     concepts = search_concepts(request)
     row_html = ''
     for concept in concepts:
+      print json.dumps(concept.domain_id)
       row_html += _CONCEPT_ROW_HTML_TEMPLATE.format(id=concept.concept_id,
                                                     name=html.escape(concept.concept_name),
                                                     code=html.escape(concept.concept_code),
