@@ -64,6 +64,9 @@ _RESULT_FIELDS = [
 
 _CONCEPT_TABLE_HTML_TEMPLATE = """
 <script language="javascript">
+  var selected_row_id = null;
+  var old_selected_color = null;
+  
   function select_concept(id, domain) {
     max_results = document.getElementById('max_results');
     variable_prefix = document.getElementById('variable_prefix');
@@ -73,6 +76,12 @@ _CONCEPT_TABLE_HTML_TEMPLATE = """
     variable_prefix.disabled = false;
     variable_prefix.style.color = '';
     generate_code.disabled = false;
+    if (selected_row_id) {
+      document.getElementById(selected_row_id).style.backgroundColor = old_selected_color;
+    }
+    new_selected_row = document.getElementById('row_' + id);
+    old_selected_color = new_selected_row.style.backgroundColor;
+    new_selected_row.style.backgroundColor = '#3333FF';
   }
 </script>
 
@@ -106,7 +115,7 @@ _CONCEPT_TABLE_HTML_TEMPLATE = """
 """
 
 _CONCEPT_ROW_HTML_TEMPLATE = """
-  <tr onclick="select_concept('{id}', '{domain}')">
+  <tr id="row_{id}" onclick="select_concept('{id}', '{domain}')">
     <td>{id}</td>
     <td style="text-align: left">{name}</td>
     <td style="text-align: left">{code}</td>
