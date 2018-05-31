@@ -1,3 +1,8 @@
+import json
+
+import html
+import pandas as pd
+from IPython.display import display, HTML
 from aou_workbench_client.auth import get_authenticated_swagger_client
 from aou_workbench_client.config import all_of_us_config
 from aou_workbench_client.swagger_client.apis.concepts_api import ConceptsApi
@@ -5,11 +10,6 @@ from aou_workbench_client.swagger_client.models.domain import Domain
 from aou_workbench_client.swagger_client.models.search_concepts_request import SearchConceptsRequest
 from aou_workbench_client.swagger_client.models.standard_concept_filter import StandardConceptFilter
 from ipywidgets import interactive
-import html
-import json
-import pandas as pd
-
-from IPython.display import display, HTML
 
 _DOMAIN_DICT = { 
     '': None,
@@ -140,9 +140,6 @@ _CONCEPT_ROW_HTML_TEMPLATE = """
 """
 
 _VOCAB_DICT = {id: id for id in _VOCAB_IDS}
-
-def escape_for_js(str):
-
 
 def search_concepts(request):
     client = get_authenticated_swagger_client()
