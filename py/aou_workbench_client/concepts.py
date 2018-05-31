@@ -118,19 +118,18 @@ _CONCEPT_TABLE_HTML_TEMPLATE = """
       column = table_data[2];
     }
     materialization_code = `
-      from aou_workbench_client.swagger_client.models import ResultFilters, MaterializeCohortRequest
-      from aou_workbench_client.swagger_client.models import TableQuery, ColumnFilter, FieldSet
-      from aou_workbench_client.cohorts import materialize_cohort
-      from aou_workbench_client.cdr.model import ${table}
-      import pandas as pd
+from aou_workbench_client.swagger_client.models import ResultFilters, MaterializeCohortRequest
+from aou_workbench_client.swagger_client.models import TableQuery, ColumnFilter, FieldSet
+from aou_workbench_client.cohorts import materialize_cohort
+from aou_workbench_client.cdr.model import ${table}
+import pandas as pd
     
-      # Filter on "${selected_data['name']}" (vocabulary = ${selected_data['vocabulary']}, concept ID = ${selected_row_id})
-      ${prefix}_filter = ColumnFilter(${table}.${column}, value_number=${selected_row_id})
-      ${prefix}_query = TableQuery(table=${table}, filters=ResultFilters(column_filter=${prefix}_filter))
-      ${prefix}_request = MaterializeCohortRequest(cohort_name="COHORT NAME HERE", field_set=FieldSet(table_query=${prefix}_query))
-      ${prefix}_response = materialize_cohort(${prefix}_request, max_results=${max_results})
-      ${prefix}_frame = pd.DataFrame(list(${prefix}_response))
-    `;
+# Filter on "${selected_data['name']}" (vocabulary = ${selected_data['vocabulary']}, concept ID = ${selected_row_id})
+${prefix}_filter = ColumnFilter(${table}.${column}, value_number=${selected_row_id})
+${prefix}_query = TableQuery(table=${table}, filters=ResultFilters(column_filter=${prefix}_filter))
+${prefix}_request = MaterializeCohortRequest(cohort_name="COHORT NAME HERE", field_set=FieldSet(table_query=${prefix}_query))
+${prefix}_response = materialize_cohort(${prefix}_request, max_results=${max_results})
+${prefix}_frame = pd.DataFrame(list(${prefix}_response))`;
     new_cell = IPython.notebook.insert_cell_below('code');
     new_cell.set_text(materialization_code);
   }
@@ -155,7 +154,7 @@ _CONCEPT_TABLE_HTML_TEMPLATE = """
    </tr>
    <tr style="background: white">
      <td style="background: white">Variable prefix:</td>
-     <td style="background: white"><input type="text" value="prefix" id="variable_prefix" maxlength="20" 
+     <td style="background: white"><input type="text" value="results_" id="variable_prefix" maxlength="20" 
        style="color: #999999" disabled="true"/>
    </tr>
    <tr style="background: white">
