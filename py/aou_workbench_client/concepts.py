@@ -64,7 +64,6 @@ _RESULT_FIELDS = [
     ('Vocabulary', 'vocabulary_id'),
     ('Count', 'count_value')]
 
-# TODO: add cohort picker
 _CONCEPT_TABLE_HTML_TEMPLATE = """
 <script language="javascript">
   var selected_row_id = null;
@@ -75,11 +74,14 @@ _CONCEPT_TABLE_HTML_TEMPLATE = """
   function select_concept(id, name, domain, vocabulary, standard) {
     max_results = document.getElementById('max_results');
     variable_prefix = document.getElementById('variable_prefix');
+    cohort_name = document.getElementById('cohort_name');
     generate_code = document.getElementById('generate_code');
     max_results.disabled = false;
     max_results.style.color = '';
     variable_prefix.disabled = false;
     variable_prefix.style.color = '';
+    cohort_name.disabled = false;
+    cohort_name.style.color = '';
     generate_code.disabled = false;
     if (selected_row_id) {
       document.getElementById('row_' + selected_row_id).style.backgroundColor = old_selected_color;
@@ -106,6 +108,7 @@ _CONCEPT_TABLE_HTML_TEMPLATE = """
   function generate_python_code() {
     max_results = document.getElementById('max_results').value;
     prefix = document.getElementById('variable_prefix').value;
+    cohort_name = json.dumps(document.getElementById('cohort_name').value);
     domain = selected_data['domain'];
     table_data = domain_to_table_map[domain];
     if (!table_data) {
@@ -122,14 +125,16 @@ from aou_workbench_client.swagger_client.models import ResultFilters, Materializ
 from aou_workbench_client.swagger_client.models import TableQuery, ColumnFilter, FieldSet
 from aou_workbench_client.cohorts import materialize_cohort
 from aou_workbench_client.cdr.model import ${table}
+from IPython.display import display
 import pandas as pd
     
 # Filter on "${selected_data['name']}" (vocabulary = ${selected_data['vocabulary']}, concept ID = ${selected_row_id})
 ${prefix}_filter = ColumnFilter(${table}.${column}, value_number=${selected_row_id})
 ${prefix}_query = TableQuery(table=${table}, filters=ResultFilters(column_filter=${prefix}_filter))
-${prefix}_request = MaterializeCohortRequest(cohort_name="COHORT NAME HERE", field_set=FieldSet(table_query=${prefix}_query))
+${prefix}_request = MaterializeCohortRequest(cohort_name=${cohort_name}, field_set=FieldSet(table_query=${prefix}_query))
 ${prefix}_response = materialize_cohort(${prefix}_request, max_results=${max_results})
-${prefix}_frame = pd.DataFrame(list(${prefix}_response))`;
+${prefix}_frame = pd.DataFrame(list(${prefix}_response))
+display(${prefix}_frame)`;
     new_cell = IPython.notebook.insert_cell_below('code');
     new_cell.set_text(materialization_code);
   }
@@ -148,13 +153,19 @@ ${prefix}_frame = pd.DataFrame(list(${prefix}_response))`;
 </table>
 <table style="background: white">
    <tr style="background: white">
+     <td style="background: white">Cohort:</td>
+     <!-- TODO: make this a dropdown based on cohorts in the workspace -->
+     <td style="background: white"><input type="text" value="Old Men" id="cohort_name" maxlength="80"
+       style="color: #999999" disabled="true"/></td>
+   </tr>
+   <tr style="background: white">
      <td style="background: white">Max results:</td>
      <td style="background: white"><input type="number" value="10" id="max_results" maxlength="5" 
        style="color: #999999" disabled="true"/></td>
    </tr>
    <tr style="background: white">
      <td style="background: white">Variable prefix:</td>
-     <td style="background: white"><input type="text" value="results_" id="variable_prefix" maxlength="20" 
+     <td style="background: white"><input type="text" value="results" id="variable_prefix" maxlength="20" 
        style="color: #999999" disabled="true"/>
    </tr>
    <tr style="background: white">
