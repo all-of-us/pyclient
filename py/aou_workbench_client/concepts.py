@@ -108,7 +108,7 @@ _CONCEPT_TABLE_HTML_TEMPLATE = """
   function generate_python_code() {
     max_results = document.getElementById('max_results').value;
     prefix = document.getElementById('variable_prefix').value;
-    cohort_name = json.dumps(document.getElementById('cohort_name').value);
+    cohort_name = JSON.stringify(document.getElementById('cohort_name').value);
     domain = selected_data['domain'];
     table_data = domain_to_table_map[domain];
     if (!table_data) {
