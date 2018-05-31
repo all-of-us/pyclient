@@ -94,7 +94,7 @@ _CONCEPT_TABLE_HTML_TEMPLATE = """
   domain_to_table_map = {
     'Condition': ['ConditionOccurrence', 'condition_concept_id', 'condition_source_concept_id'],
     'Device': ['DeviceExposure', 'device_concept_id', 'device_source_concept_id'],
-    'Drug': ['DrugExposure' 'drug_concept_id', 'drug_source_concept_id'],
+    'Drug': ['DrugExposure', 'drug_concept_id', 'drug_source_concept_id'],
     'Ethnicity': ['Person', 'ethnicity_concept_id', 'ethnicity_source_concept_id'],
     'Gender': ['Person', 'gender_concept_id', 'gender_source_concept_id'],
     'Measurement': ['Measurement', 'measurement_concept_id', 'measurement_source_concept_id'],
