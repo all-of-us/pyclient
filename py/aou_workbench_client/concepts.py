@@ -208,7 +208,7 @@ def display_concepts(request):
                                                     vocabulary=html.escape(concept.vocabulary_id),
                                                     js_escaped_vocabulary=json.dumps(concept.vocabulary_id),
                                                     count=concept.count_value,
-                                                    standard=concept.standard_concept)
+                                                    standard='true' if concept.standard_concept else 'false')
     table_html = _CONCEPT_TABLE_HTML_TEMPLATE % row_html
     display(HTML(table_html))
 
