@@ -63,13 +63,17 @@ _RESULT_FIELDS = [
     ('Count', 'count_value')]
 
 _CONCEPT_TABLE_HTML_TEMPLATE = """
+function select_concept(id, domain) {
+  alert('id = ' + id + ', domain = ' + domain)
+}
+
 <table>
   <tr>
     <th>ID</th>
     <th style="text-align: left">Name</th>
-    <th>Code</th>
-    <th>Domain</th>
-    <th>Vocabulary</th>
+    <th style="text-align: left">Code</th>
+    <th style="text-align: left">Domain</th>
+    <th style="text-align: left">Vocabulary</th>
     <th align=right>Count</th>
   </tr>
   %s
@@ -77,13 +81,13 @@ _CONCEPT_TABLE_HTML_TEMPLATE = """
 """
 
 _CONCEPT_ROW_HTML_TEMPLATE = """
-  <tr>
-    <td>%d</td>
-    <td style="text-align: left">%s</td>
-    <td>%s</td>
-    <td>%s</td>
-    <td>%s</td>
-    <td>%d</td>
+  <tr onclick="select_concept('{id}', '{domain}')">
+    <td>{id}</td>
+    <td style="text-align: left">{name}</td>
+    <td style="text-align: left">{code}</td>
+    <td style="text-align: left">{domain}</td>
+    <td style="text-align: left">{vocabulary}</td>
+    <td>{count}</td>
   </tr>
 """
 
@@ -109,9 +113,12 @@ def display_concepts(request):
     concepts = search_concepts(request)
     row_html = ''
     for concept in concepts:
-      row_html += _CONCEPT_ROW_HTML_TEMPLATE % (concept.concept_id, concept.concept_name,
-                                                concept.concept_code, concept.domain_id,
-                                                concept.vocabulary_id, concept.count_value)
+      row_html += _CONCEPT_ROW_HTML_TEMPLATE.format(id=concept.concept_id,
+                                                    name=concept.concept_name,
+                                                    code=concept.concept_code,
+                                                    domain=concept.domain_id,
+                                                    vocabulary=concept.vocabulary_id,
+                                                    count=concept.count_value)
     table_html = _CONCEPT_TABLE_HTML_TEMPLATE % row_html
     display(HTML(table_html))
 
