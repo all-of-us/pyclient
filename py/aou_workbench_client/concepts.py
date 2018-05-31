@@ -167,7 +167,7 @@ _CONCEPT_TABLE_HTML_TEMPLATE = """
 """
 
 _CONCEPT_ROW_HTML_TEMPLATE = """
-  <tr id="row_{id}" onclick='select_concept("{id}", {js_escaped_domain})'>
+  <tr id="row_{id}" onclick='select_concept("{id}", {js_escaped_name}, {js_escaped_domain}, {js_escaped_vocabulary}, {standard})'>
     <td>{id}</td>
     <td style="text-align: left">{name}</td>
     <td style="text-align: left">{code}</td>
@@ -201,11 +201,14 @@ def display_concepts(request):
     for concept in concepts:
       row_html += _CONCEPT_ROW_HTML_TEMPLATE.format(id=concept.concept_id,
                                                     name=html.escape(concept.concept_name),
+                                                    js_escaped_name=json.dumps(concept.concept_name),
                                                     code=html.escape(concept.concept_code),
                                                     domain=html.escape(concept.domain_id),
                                                     js_escaped_domain=json.dumps(concept.domain_id),
                                                     vocabulary=html.escape(concept.vocabulary_id),
-                                                    count=concept.count_value)
+                                                    js_escaped_vocabulary=json.dumps(concept.vocabulary_id),
+                                                    count=concept.count_value,
+                                                    standard=concept.standard_concept)
     table_html = _CONCEPT_TABLE_HTML_TEMPLATE % row_html
     display(HTML(table_html))
 
