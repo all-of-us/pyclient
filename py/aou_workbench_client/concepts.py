@@ -65,9 +65,19 @@ _RESULT_FIELDS = [
 _CONCEPT_TABLE_HTML_TEMPLATE = """
 <script language="javascript">
   function select_concept(id, domain) {
-    alert('id = ' + id + ', domain = ' + domain)
+    max_results = document.getElementById('max_results');
+    variable_prefix = document.getElementById('variable_prefix');
+    generate_code = document.getElementById('generate_code');
+    max_results.disabled = false
+    variable_prefix.disabled = false
+    generate_code.disabled = false
   }
 </script>
+
+<style>
+  .form {
+  }
+</style>
 
 <table>
   <tr>
@@ -79,6 +89,19 @@ _CONCEPT_TABLE_HTML_TEMPLATE = """
     <th align=right>Count</th>
   </tr>
   %s
+</table>
+<table class="form">
+   <tr>
+     <td>Max results:</td>
+     <td><input type="number" value="10" id="max_results" maxlength="5" disabled="true"/></td>
+   </tr>
+   <tr>
+     <td>Variable prefix:</td>
+     <td><input type="text" value="results" id="variable_prefix" maxlength="20" disabled="true"/>
+   </tr>
+   <tr>
+     <td><input type="button" value="Generate code" id="generate_code" disabled="true"/>
+   </tr>
 </table>
 """
 
@@ -125,7 +148,7 @@ def display_concepts(request):
     display(HTML(table_html))
 
 def display_concepts_fn(query, domain, vocabulary, concepts):
-    request = SearchConceptsRequest(query=query)
+    request = SearchConceptsRequest(query=query, max_results=10)
     if domain:
         request.domain = domain
     if concepts:
