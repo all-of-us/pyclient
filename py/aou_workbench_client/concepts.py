@@ -91,11 +91,8 @@ _CONCEPT_TABLE_HTML_TEMPLATE = """
   }
   
   function generate_python_code() {
-    var kernel = IPython.notebook.kernel;
-    cell_text = 'from nbformat import v4 as nbf\\n';
-    cell_text += 'nbf.new_code_cell("print \\'foo\\'")';
-    alert(cell_text);
-    kernel.execute(cell_text);
+    new_cell = IPython.notebook.insert_cell_below('code')
+    new_cell.set_text('print "foo"')
   }
 </script>
 
