@@ -68,11 +68,11 @@ _CONCEPT_TABLE_HTML_TEMPLATE = """
     max_results = document.getElementById('max_results');
     variable_prefix = document.getElementById('variable_prefix');
     generate_code = document.getElementById('generate_code');
-    max_results.disabled = false
-    max_results.style.color = '#FFFFFF'
-    variable_prefix.disabled = false
-    variable_prefix.style.color = '#FFFFFF'    
-    generate_code.disabled = false
+    max_results.disabled = false;
+    max_results.style.color = '#FFFFFF';
+    variable_prefix.disabled = false;
+    variable_prefix.style.color = '#FFFFFF';
+    generate_code.disabled = false;
   }
 </script>
 
