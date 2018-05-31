@@ -66,7 +66,7 @@ _CONCEPT_TABLE_HTML_TEMPLATE = """
 <table>
   <tr>
     <th>ID</th>
-    <th align=left>Name</th>
+    <th style="text-align: left">Name</th>
     <th>Code</th>
     <th>Domain</th>
     <th>Vocabulary</th>
@@ -79,7 +79,7 @@ _CONCEPT_TABLE_HTML_TEMPLATE = """
 _CONCEPT_ROW_HTML_TEMPLATE = """
   <tr>
     <td>%d</td>
-    <td align=left>%s</td>
+    <td style="text-align: left">%s</td>
     <td>%s</td>
     <td>%s</td>
     <td>%s</td>
