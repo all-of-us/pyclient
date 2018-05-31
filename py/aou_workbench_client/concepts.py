@@ -63,9 +63,11 @@ _RESULT_FIELDS = [
     ('Count', 'count_value')]
 
 _CONCEPT_TABLE_HTML_TEMPLATE = """
-function select_concept(id, domain) {
-  alert('id = ' + id + ', domain = ' + domain)
-}
+<script language="javascript">
+  function select_concept(id, domain) {
+    alert('id = ' + id + ', domain = ' + domain)
+  }
+</script>
 
 <table>
   <tr>
