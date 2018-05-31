@@ -85,17 +85,17 @@ _CONCEPT_TABLE_HTML_TEMPLATE = """
   </tr>
   %s
 </table>
-<table style="all: revert">
-   <tr>
-     <td>Max results:</td>
-     <td><input type="number" value="10" id="max_results" maxlength="5" disabled="true"/></td>
+<table style="background: white">
+   <tr style="background: white">
+     <td style="background: white">Max results:</td>
+     <td style="background: white"><input type="number" value="10" id="max_results" maxlength="5" disabled="true"/></td>
    </tr>
-   <tr>
-     <td>Variable prefix:</td>
-     <td><input type="text" value="results" id="variable_prefix" maxlength="20" disabled="true"/>
+   <tr style="background: white">
+     <td style="background: white">Variable prefix:</td>
+     <td style="background: white"><input type="text" value="results" id="variable_prefix" maxlength="20" disabled="true"/>
    </tr>
-   <tr>
-     <td><input type="button" value="Generate code" id="generate_code" disabled="true"/>
+   <tr style="background: white">
+     <td style="background: white"><input type="button" value="Generate code" id="generate_code" disabled="true"/>
    </tr>
 </table>
 """
