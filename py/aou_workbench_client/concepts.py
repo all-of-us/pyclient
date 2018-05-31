@@ -123,7 +123,7 @@ _CONCEPT_TABLE_HTML_TEMPLATE = """
    <tr style="background: white">
      <td style="background: white"><input type="button" value="Generate code" id="generate_code" 
        class="p-Widget jupyter-widgets jupyter-button widget-button" disabled="true"
-       onclick="generate_code()/>
+       onclick="generate_code()"/>
    </tr>
 </table>
 """
