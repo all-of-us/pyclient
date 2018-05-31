@@ -90,7 +90,7 @@ _CONCEPT_TABLE_HTML_TEMPLATE = """
     new_selected_row.style.backgroundColor = '#BBBBFF';    
   }
   
-  function generate_code() {
+  function generate_python_code() {
     var kernel = IPython.notebook.kernel;
     cell_text = 'id = ' + selected_row_id;
     command = 'get_ipython().set_next_input("' + cell_text + '")';
@@ -123,7 +123,7 @@ _CONCEPT_TABLE_HTML_TEMPLATE = """
    <tr style="background: white">
      <td style="background: white"><input type="button" value="Generate code" id="generate_code" 
        class="p-Widget jupyter-widgets jupyter-button widget-button" disabled="true"
-       onclick="generate_code()"/>
+       onclick="generate_python_code()"/>
    </tr>
 </table>
 """
