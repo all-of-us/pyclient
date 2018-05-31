@@ -94,9 +94,8 @@ _CONCEPT_TABLE_HTML_TEMPLATE = """
     var kernel = IPython.notebook.kernel;
     cell_text = 'from nbformat import v4 as nbf\\n';
     cell_text += 'nbf.new_code_cell("print \\'foo\\'")';
-    command = 'get_ipython().set_next_input("' + cell_text + '")';
-    alert(command);
-    kernel.execute(command);
+    alert(cell_text);
+    kernel.execute(cell_text);
   }
 </script>
 
