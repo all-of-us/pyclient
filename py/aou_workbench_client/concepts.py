@@ -69,9 +69,9 @@ _CONCEPT_TABLE_HTML_TEMPLATE = """
     variable_prefix = document.getElementById('variable_prefix');
     generate_code = document.getElementById('generate_code');
     max_results.disabled = false;
-    max_results.style.color = '#FFFFFF';
+    max_results.style.backgroundColor = '#FFFFFF';
     variable_prefix.disabled = false;
-    variable_prefix.style.color = '#FFFFFF';
+    variable_prefix.style.backgroundColor = '#FFFFFF';
     generate_code.disabled = false;
   }
 </script>
@@ -91,12 +91,12 @@ _CONCEPT_TABLE_HTML_TEMPLATE = """
    <tr style="background: white">
      <td style="background: white">Max results:</td>
      <td style="background: white"><input type="number" value="10" id="max_results" maxlength="5" 
-       style="color: #DDDDDD" disabled="true"/></td>
+       style="background-color: #DDDDDD" disabled="true"/></td>
    </tr>
    <tr style="background: white">
      <td style="background: white">Variable prefix:</td>
      <td style="background: white"><input type="text" value="results" id="variable_prefix" maxlength="20" 
-       style="color: #DDDDDD" disabled="true"/>
+       style="background-color: #DDDDDD" disabled="true"/>
    </tr>
    <tr style="background: white">
      <td style="background: white"><input type="button" value="Generate code" id="generate_code" 
