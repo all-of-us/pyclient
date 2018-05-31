@@ -5,6 +5,8 @@ from aou_workbench_client.swagger_client.models.domain import Domain
 from aou_workbench_client.swagger_client.models.search_concepts_request import SearchConceptsRequest
 from aou_workbench_client.swagger_client.models.standard_concept_filter import StandardConceptFilter
 from ipywidgets import interactive
+import html
+import json
 import pandas as pd
 
 from IPython.display import display, HTML
@@ -62,9 +64,11 @@ _RESULT_FIELDS = [
     ('Vocabulary', 'vocabulary_id'),
     ('Count', 'count_value')]
 
+# TODO: add cohort picker
 _CONCEPT_TABLE_HTML_TEMPLATE = """
 <script language="javascript">
   var selected_row_id = null;
+  var selected_row_domain = null;
   var old_selected_color = null;
   
   function select_concept(id, domain) {
@@ -80,10 +84,17 @@ _CONCEPT_TABLE_HTML_TEMPLATE = """
       document.getElementById('row_' + selected_row_id).style.backgroundColor = old_selected_color;
     }
     selected_row_id = id
+    selected_row_domain = domain
     new_selected_row = document.getElementById('row_' + id);
     old_selected_color = new_selected_row.style.backgroundColor;
-    new_selected_row.style.backgroundColor = '#BBBBFF';
-    
+    new_selected_row.style.backgroundColor = '#BBBBFF';    
+  }
+  
+  function generate_code() {
+    var kernel = IPython.notebook.kernel;
+    cell_text = 'id = ' + selected_row_id + ', domain = ' + selected_row_domain;    
+    command = 'get_ipython().set_next_input(' + cell_text + ')';
+    kernel.execute(command);
   }
 </script>
 
@@ -111,13 +122,14 @@ _CONCEPT_TABLE_HTML_TEMPLATE = """
    </tr>
    <tr style="background: white">
      <td style="background: white"><input type="button" value="Generate code" id="generate_code" 
-       class="p-Widget jupyter-widgets jupyter-button widget-button" disabled="true"/>
+       class="p-Widget jupyter-widgets jupyter-button widget-button" disabled="true"
+       onclick="generate_code()/>
    </tr>
 </table>
 """
 
 _CONCEPT_ROW_HTML_TEMPLATE = """
-  <tr id="row_{id}" onclick="select_concept('{id}', '{domain}')">
+  <tr id="row_{id}" onclick="select_concept('{id}', '{js_escaped_domain}')">
     <td>{id}</td>
     <td style="text-align: left">{name}</td>
     <td style="text-align: left">{code}</td>
@@ -150,10 +162,11 @@ def display_concepts(request):
     row_html = ''
     for concept in concepts:
       row_html += _CONCEPT_ROW_HTML_TEMPLATE.format(id=concept.concept_id,
-                                                    name=concept.concept_name,
-                                                    code=concept.concept_code,
-                                                    domain=concept.domain_id,
-                                                    vocabulary=concept.vocabulary_id,
+                                                    name=html.escape(concept.concept_name),
+                                                    code=html.escape(concept.concept_code),
+                                                    domain=html.escape(concept.domain_id),
+                                                    js_escaped_domain=json.dumps(concept.domain_id),
+                                                    vocabulary=html.escape(concept.vocabulary_id),
                                                     count=concept.count_value)
     table_html = _CONCEPT_TABLE_HTML_TEMPLATE % row_html
     display(HTML(table_html))
