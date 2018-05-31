@@ -92,8 +92,8 @@ _CONCEPT_TABLE_HTML_TEMPLATE = """
   
   function generate_code() {
     var kernel = IPython.notebook.kernel;
-    cell_text = 'id = ' + selected_row_id + ', domain = ' + selected_row_domain;    
-    command = 'get_ipython().set_next_input(' + cell_text + ')';
+    cell_text = 'id = ' + selected_row_id;
+    command = 'get_ipython().set_next_input("' + cell_text + '")';
     kernel.execute(command);
   }
 </script>
