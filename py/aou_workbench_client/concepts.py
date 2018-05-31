@@ -62,6 +62,31 @@ _RESULT_FIELDS = [
     ('Vocabulary', 'vocabulary_id'),
     ('Count', 'count_value')]
 
+_CONCEPT_TABLE_HTML_TEMPLATE = """
+<table>
+  <tr>
+    <th>ID</th>
+    <th>Name</th>
+    <th>Code</th>
+    <th>Domain</th>
+    <th>Vocabulary</th>
+    <th align=right>Count</th>
+  </tr>
+  %s
+</table>
+"""
+
+_CONCEPT_ROW_HTML_TEMPLATE = """
+  <tr>
+    <td>%d</td>
+    <td>%s</td>
+    <td>%s</td>
+    <td>%s</td>
+    <td>%s</td>
+    <td align=right>%d</td>
+  </tr>
+"""
+
 _VOCAB_DICT = {id: id for id in _VOCAB_IDS}
 
 def search_concepts(request):
@@ -81,11 +106,14 @@ def get_concepts_frame(request):
                         columns = [f[0] for f in _RESULT_FIELDS])
 
 def display_concepts(request):
-    concepts_frame = get_concepts_frame(request)
-    s = concepts_frame.style.set_properties(**{'text-align': 'left'})
-    s = s.set_table_styles(
-        [{"selector": "th", "props": [("text-align", "left")]}]).hide_index()
-    display(HTML(s.render()))
+    concepts = search_concepts(request)
+    row_html = ''
+    for concept in concepts:
+      row_html += _CONCEPT_ROW_HTML_TEMPLATE % (concept.concept_id, concept.concept_name,
+                                                concept.concept_code, concept.domain_id,
+                                                concept.vocabulary_id, concept.count_value)
+    table_html = _CONCEPT_TABLE_HTML_TEMPLATE % row_html
+    display(HTML(table_html))
 
 def display_concepts_fn(query, domain, vocabulary, concepts):
     request = SearchConceptsRequest(query=query)
