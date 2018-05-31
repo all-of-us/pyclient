@@ -77,11 +77,13 @@ _CONCEPT_TABLE_HTML_TEMPLATE = """
     variable_prefix.style.color = '';
     generate_code.disabled = false;
     if (selected_row_id) {
-      document.getElementById(selected_row_id).style.backgroundColor = old_selected_color;
+      document.getElementById('row_' + selected_row_id).style.backgroundColor = old_selected_color;
     }
+    selected_row_id = id
     new_selected_row = document.getElementById('row_' + id);
     old_selected_color = new_selected_row.style.backgroundColor;
-    new_selected_row.style.backgroundColor = '#3333FF';
+    new_selected_row.style.backgroundColor = '#BBBBFF';
+    
   }
 </script>
 
