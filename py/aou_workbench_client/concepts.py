@@ -130,9 +130,9 @@ _CONCEPT_TABLE_HTML_TEMPLATE = """
       ${prefix}_request = MaterializeCohortRequest(cohort_name="COHORT NAME HERE", field_set=FieldSet(table_query=${prefix}_query))
       ${prefix}_response = materialize_cohort(${prefix}_request, max_results=${max_results})
       ${prefix}_frame = pd.DataFrame(list(${prefix}_response))
-    `
-    new_cell = IPython.notebook.insert_cell_below('code')    
-    new_cell.set_text(materialization_code)  
+    `;
+    new_cell = IPython.notebook.insert_cell_below('code');
+    new_cell.set_text(materialization_code);
   }
 </script>
 
