@@ -74,8 +74,9 @@ _CONCEPT_TABLE_HTML_TEMPLATE = """
   }
 </script>
 
-<style>
+<style type="text/css">
   .form {
+    all: revert;
   }
 </style>
 
