@@ -94,6 +94,7 @@ _CONCEPT_TABLE_HTML_TEMPLATE = """
     var kernel = IPython.notebook.kernel;
     cell_text = 'id = ' + selected_row_id;
     command = 'get_ipython().set_next_input("' + cell_text + '")';
+    alert(command);
     kernel.execute(command);
   }
 </script>
