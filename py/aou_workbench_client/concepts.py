@@ -66,7 +66,7 @@ _CONCEPT_TABLE_HTML_TEMPLATE = """
 <table>
   <tr>
     <th>ID</th>
-    <th>Name</th>
+    <th align=left>Name</th>
     <th>Code</th>
     <th>Domain</th>
     <th>Vocabulary</th>
@@ -79,11 +79,11 @@ _CONCEPT_TABLE_HTML_TEMPLATE = """
 _CONCEPT_ROW_HTML_TEMPLATE = """
   <tr>
     <td>%d</td>
+    <td align=left>%s</td>
     <td>%s</td>
     <td>%s</td>
     <td>%s</td>
-    <td>%s</td>
-    <td align=right>%d</td>
+    <td>%d</td>
   </tr>
 """
 
@@ -98,7 +98,7 @@ def search_concepts(request):
     return response.items
 
 def get_concept_dict(concept):
-    return {f[0]: getattr(concept, f[1]) for f in _RESULT_FIELDS} 
+    return {f[0]: getattr(concept, f[1]) for f in _RESULT_FIELDS}
 
 def get_concepts_frame(request):
     concepts = search_concepts(request)
