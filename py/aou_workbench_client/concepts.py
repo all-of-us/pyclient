@@ -74,12 +74,6 @@ _CONCEPT_TABLE_HTML_TEMPLATE = """
   }
 </script>
 
-<style type="text/css">
-  .form {
-    all: revert;
-  }
-</style>
-
 <table>
   <tr>
     <th>ID</th>
@@ -91,7 +85,7 @@ _CONCEPT_TABLE_HTML_TEMPLATE = """
   </tr>
   %s
 </table>
-<table class="form">
+<table style="all: revert">
    <tr>
      <td>Max results:</td>
      <td><input type="number" value="10" id="max_results" maxlength="5" disabled="true"/></td>
