@@ -129,11 +129,11 @@ from aou_workbench_client.cdr.model import ${table}
 from IPython.display import display
 import pandas as pd
     
-# Filter on "${selected_data['name']}" (vocabulary = ${selected_data['vocabulary']}, concept ID = ${selected_row_id})
-${prefix}_filter = ColumnFilter(${table}.${column}, value_number=${selected_row_id})
+# Filter on "${selectedData['name']}" (vocabulary = ${selectedData['vocabulary']}, concept ID = ${selectedRowId})
+${prefix}_filter = ColumnFilter(${table}.${column}, value_number=${selectedRowId})
 ${prefix}_query = TableQuery(table=${table}, filters=ResultFilters(column_filter=${prefix}_filter))
-${prefix}_request = MaterializeCohortRequest(cohort_name=${cohort_name}, field_set=FieldSet(table_query=${prefix}_query))
-${prefix}_response = materialize_cohort(${prefix}_request, max_results=${max_results})
+${prefix}_request = MaterializeCohortRequest(cohort_name=${cohortName}, field_set=FieldSet(table_query=${prefix}_query))
+${prefix}_response = materialize_cohort(${prefix}_request, max_results=${maxResults})
 ${prefix}_frame = pd.DataFrame(list(${prefix}_response))
 display(${prefix}_frame)`;
     newCell = IPython.notebook.insert_cell_below('code');
