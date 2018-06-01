@@ -64,15 +64,13 @@ _RESULT_FIELDS = [
     ('Vocabulary', 'vocabulary_id'),
     ('Count', 'count_value')]
 
-# TODO: prefix IDs with a unique ID, use them in click handler if we keep
-# this as a standalone widget (RW-796)
+# TODO: prefix IDs, global vars with a unique ID, use them in click handler if 
+# we keep this as a standalone widget (RW-796)
 _CONCEPT_TABLE_HTML_TEMPLATE = """
 <script language="javascript">
-  () => {
-    let selectedRowId = null;
-    let selectedData = null;
-    let oldSelectedColor = null;
-  }();
+  var selectedRowId = null;
+  var selectedData = null;
+  var oldSelectedColor = null;  
   
   function selectConcept(id, name, domain, vocabulary, standard) {
     maxResults = document.getElementById('max_results');
@@ -180,7 +178,7 @@ display(${prefix}_frame)`;
 """
 
 _CONCEPT_ROW_HTML_TEMPLATE = """
-  <tr id="row_{id}" onclick='selectConcpet("{id}", {js_escaped_name}, {js_escaped_domain}, {js_escaped_vocabulary}, {standard})'>
+  <tr id="row_{id}" onclick='selectConcept("{id}", {js_escaped_name}, {js_escaped_domain}, {js_escaped_vocabulary}, {standard})'>
     <td>{id}</td>
     <td style="text-align: left">{name}</td>
     <td style="text-align: left">{code}</td>
