@@ -64,36 +64,39 @@ _RESULT_FIELDS = [
     ('Vocabulary', 'vocabulary_id'),
     ('Count', 'count_value')]
 
+# TODO: prefix IDs with a unique ID, use them in click handler if we keep
+# this as a standalone widget (RW-796)
 _CONCEPT_TABLE_HTML_TEMPLATE = """
 <script language="javascript">
-  var selected_row_id = null;
-  var selected_data = null;
+  () => {
+    let selectedRowId = null;
+    let selectedData = null;
+    let oldSelectedColor = null;
+  }();
   
-  var old_selected_color = null;
-  
-  function select_concept(id, name, domain, vocabulary, standard) {
-    max_results = document.getElementById('max_results');
-    variable_prefix = document.getElementById('variable_prefix');
-    cohort_name = document.getElementById('cohort_name');
-    generate_code = document.getElementById('generate_code');
-    max_results.disabled = false;
-    max_results.style.color = '';
-    variable_prefix.disabled = false;
-    variable_prefix.style.color = '';
-    cohort_name.disabled = false;
-    cohort_name.style.color = '';
-    generate_code.disabled = false;
-    if (selected_row_id) {
-      document.getElementById('row_' + selected_row_id).style.backgroundColor = old_selected_color;
+  function selectConcept(id, name, domain, vocabulary, standard) {
+    maxResults = document.getElementById('max_results');
+    variablePrefix = document.getElementById('variable_prefix');
+    cohortName = document.getElementById('cohort_name');
+    generateCode = document.getElementById('generate_code');
+    maxResults.disabled = false;
+    maxResults.style.color = '';
+    variablePrefix.disabled = false;
+    variablePrefix.style.color = '';
+    cohortName.disabled = false;
+    cohortName.style.color = '';
+    generateCode.disabled = false;
+    if (selectedRowId) {
+      document.getElementById('row_' + selectedRowId).style.backgroundColor = oldSelectedColor;
     }
-    selected_row_id = id;
-    selected_data = { 'name': name, 'domain': domain, 'vocabulary': vocabulary, 'standard': standard };
-    new_selected_row = document.getElementById('row_' + id);
-    old_selected_color = new_selected_row.style.backgroundColor;
-    new_selected_row.style.backgroundColor = '#BBBBFF';    
+    selectedRowId = id;
+    selectedData = { 'name': name, 'domain': domain, 'vocabulary': vocabulary, 'standard': standard };
+    newSelectedRow = document.getElementById('row_' + id);
+    oldSelectedColor = newSelectedRow.style.backgroundColor;
+    newSelectedRow.style.backgroundColor = '#BBBBFF';    
   }
   
-  domain_to_table_map = {
+  domainToTableMap = {
     'Condition': ['ConditionOccurrence', 'condition_concept_id', 'condition_source_concept_id'],
     'Device': ['DeviceExposure', 'device_concept_id', 'device_source_concept_id'],
     'Drug': ['DrugExposure', 'drug_concept_id', 'drug_source_concept_id'],
@@ -103,24 +106,24 @@ _CONCEPT_TABLE_HTML_TEMPLATE = """
     'Observation': ['Observation', 'observation_concept_id', 'observation_source_concept_id'],
     'Procedure': ['ProcedureOccurrence', 'procedure_concept_id', 'procedure_source_concept_id'],
     'Race': ['Person', 'race_concept_id', 'race_source_concept_id']
-  };
+  };  
   
-  function generate_python_code() {
-    max_results = document.getElementById('max_results').value;
+  function generatePythonCode() {
+    maxResults = document.getElementById('max_results').value;
     prefix = document.getElementById('variable_prefix').value;
-    cohort_name = JSON.stringify(document.getElementById('cohort_name').value);
-    domain = selected_data['domain'];
-    table_data = domain_to_table_map[domain];
-    if (!table_data) {
-      return;
+    cohortName = JSON.stringify(document.getElementById('cohort_name').value);
+    domain = selectedData['domain'];
+    tableData = domainToTableMap[domain];
+    if (!tableData) {
+      throw 'Unsupported domain: ' + domain;
     }
-    table = table_data[0];
-    if (selected_data['standard']) {
-      column = table_data[1];
+    table = tableData[0];
+    if (selectedData['standard']) {
+      column = tableData[1];
     } else {
-      column = table_data[2];
+      column = tableData[2];
     }
-    materialization_code = `
+    materializationCode = `
 from aou_workbench_client.swagger_client.models import ResultFilters, MaterializeCohortRequest
 from aou_workbench_client.swagger_client.models import TableQuery, ColumnFilter, FieldSet
 from aou_workbench_client.cohorts import materialize_cohort
@@ -135,8 +138,8 @@ ${prefix}_request = MaterializeCohortRequest(cohort_name=${cohort_name}, field_s
 ${prefix}_response = materialize_cohort(${prefix}_request, max_results=${max_results})
 ${prefix}_frame = pd.DataFrame(list(${prefix}_response))
 display(${prefix}_frame)`;
-    new_cell = IPython.notebook.insert_cell_below('code');
-    new_cell.set_text(materialization_code);
+    newCell = IPython.notebook.insert_cell_below('code');
+    newCell.set_text(materializationCode);
   }
 </script>
 
@@ -155,7 +158,7 @@ display(${prefix}_frame)`;
    <tr style="background: white">
      <td style="background: white">Cohort:</td>
      <!-- TODO: make this a dropdown based on cohorts in the workspace -->
-     <td style="background: white"><input type="text" value="Old Men" id="cohort_name" maxlength="80"
+     <td style="background: white"><input type="text" value="" id="cohort_name" maxlength="80"
        style="color: #999999" disabled="true"/></td>
    </tr>
    <tr style="background: white">
@@ -171,13 +174,13 @@ display(${prefix}_frame)`;
    <tr style="background: white">
      <td style="background: white"><input type="button" value="Generate code" id="generate_code" 
        class="p-Widget jupyter-widgets jupyter-button widget-button" disabled="true"
-       onclick="generate_python_code()"/>
+       onclick="generatePythonCode()"/>
    </tr>
 </table>
 """
 
 _CONCEPT_ROW_HTML_TEMPLATE = """
-  <tr id="row_{id}" onclick='select_concept("{id}", {js_escaped_name}, {js_escaped_domain}, {js_escaped_vocabulary}, {standard})'>
+  <tr id="row_{id}" onclick='selectConcpet("{id}", {js_escaped_name}, {js_escaped_domain}, {js_escaped_vocabulary}, {standard})'>
     <td>{id}</td>
     <td style="text-align: left">{name}</td>
     <td style="text-align: left">{code}</td>
