@@ -214,6 +214,7 @@ def install_py_requirements()
   common = Common.new
   common.run_inline %W{
       pip install --requirement #{File.join(py_root, "requirements.txt")}
+      --requirement #{File.join(py_root, "test", "test-requirements.txt")}
       --requirement #{File.join(py_root, "swagger-requirements.txt")}}
 end
 
