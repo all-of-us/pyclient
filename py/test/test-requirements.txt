@@ -1,0 +1,5 @@
+# We don't install these in requirements.txt so that we don't try to clobber
+# the version of Jupyter installed on a notebook cluster; see
+# https://github.com/DataBiosphere/leonardo/issues/417.
+ipython>=5.7.0
+ipywidgets>=7.2
