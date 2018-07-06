@@ -13,7 +13,7 @@ def materialize_cohort_page(request):
                                           all_of_us_config.workspace_id,
                                           request=request)
 
-def materialize_cohort(request, max_results=None):
+def materialize_cohort(request, max_results=None, debug=False):
     """Materializes a cohort in the workspace containing this notebook, based
     on the provided MateralizeCohortRequest. Returns a generator of
     dictionaries containing the results.
@@ -24,7 +24,7 @@ def materialize_cohort(request, max_results=None):
     Multiple server requests may be made to retrieve all the results,
     using the page_size specified in the request for each request.
     """
-    client = get_authenticated_swagger_client()
+    client = get_authenticated_swagger_client(debug=debug)
     cohorts_api = CohortsApi(api_client=client)
 
     num_results = 0
