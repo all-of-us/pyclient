@@ -11,7 +11,7 @@ require_relative "../aou-utils/swagger"
 API_TAG = "api_v1_7"
 
 SWAGGER_SPEC = "https://raw.githubusercontent.com/all-of-us/workbench/#{API_TAG}/api/src/main/resources/client_api.yaml"
-CDM_SPEC = "https://raw.githubusercontent.com/all-of-us/workbench/master/api/config/cdm/cdm_5_2.json"
+CDM_SPEC = "https://raw.githubusercontent.com/all-of-us/workbench/1db7fc6df81c22a1d0c80e1c6862830f171239ea/api/config/cdm/cdm_5_2.json"
 TEST_PROJECT = "all-of-us-workbench-test"
 TABLE_QUERY_FILE_NAME = "py/aou_workbench_client/swagger_client/models/table_query.py"
 OPERATOR_FILE_NAME = "py/aou_workbench_client/swagger_client/models/operator.py"
@@ -92,8 +92,16 @@ def write_tables_python(f, tables, add_to_cohort_tables)
     f.puts('class ' + capitalize(table_name) + '(object):')    
     table_columns.each do |column|
       column_name = column['name']
-      f.puts('  ' + column_name + ' = "' + column_name + '"')           
-    end            
+      f.puts('  ' + column_name + ' = "' + column_name + '"')
+      domain_concept = column['domainConcept']
+      if domain_concept then
+         if domain_concept == 'standard' then
+           f.puts('  standard_concept_id_column = "' + column_name + '"')
+         else
+           f.puts('  source_concept_id_column = "' + column_name + '"')
+         end
+      end
+    end               
     f.puts('  table_name = "' + table_name + '"')
     f.puts('  columns = pd.DataFrame([' + 
         table_columns.map {|x| column_dict(x)}.join(',') + '],

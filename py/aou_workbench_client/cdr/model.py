@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """ Model objects containing metadata on the tables and columns in the 
 curated data repository. These were automatically generated from the schema 
-found at https://raw.githubusercontent.com/all-of-us/workbench/master/api/config/cdm/cdm_5_2.json.
+found at https://raw.githubusercontent.com/all-of-us/workbench/1db7fc6df81c22a1d0c80e1c6862830f171239ea/api/config/cdm/cdm_5_2.json.
 """
 
 from .wrapper import RelatedTableWrapper
@@ -103,6 +103,7 @@ class ConditionOccurrence(object):
   condition_occurrence_id = "condition_occurrence_id"
   person_id = "person_id"
   condition_concept_id = "condition_concept_id"
+  standard_concept_id_column = "condition_concept_id"
   condition_start_date = "condition_start_date"
   condition_start_datetime = "condition_start_datetime"
   condition_end_date = "condition_end_date"
@@ -113,6 +114,7 @@ class ConditionOccurrence(object):
   visit_occurrence_id = "visit_occurrence_id"
   condition_source_value = "condition_source_value"
   condition_source_concept_id = "condition_source_concept_id"
+  source_concept_id_column = "condition_source_concept_id"
   condition_status_source_value = "condition_status_source_value"
   condition_status_concept_id = "condition_status_concept_id"
   table_name = "condition_occurrence"
@@ -128,8 +130,10 @@ class Death(object):
   death_datetime = "death_datetime"
   death_type_concept_id = "death_type_concept_id"
   cause_concept_id = "cause_concept_id"
+  standard_concept_id_column = "cause_concept_id"
   cause_source_value = "cause_source_value"
   cause_source_concept_id = "cause_source_concept_id"
+  source_concept_id_column = "cause_source_concept_id"
   table_name = "death"
   columns = pd.DataFrame([{"Name": "person_id", "Type": "integer", "Description": "A foreign key identifier to the deceased person. The demographic details of that person are stored in the person table."},{"Name": "death_date", "Type": "date", "Description": "The date the person was deceased. If the precise date including day or month is not known or not allowed, December is used as the default month, and the last day of the month the default day."},{"Name": "death_datetime", "Type": "timestamp", "Description": "The date and time the person was deceased. If the precise date including day or month is not known or not allowed, December is used as the default month, and the last day of the month the default day."},{"Name": "death_type_concept_id", "Type": "integer", "Description": "A foreign key referring to the predefined concept identifier in the Standardized Vocabularies reflecting how the death was represented in the source data."},{"Name": "cause_concept_id", "Type": "integer", "Description": "A foreign key referring to a standard concept identifier in the Standardized Vocabularies for conditions."},{"Name": "cause_source_value", "Type": "string", "Description": "The source code for the cause of death as it appears in the source data. This code is mapped to a standard concept in the Standardized Vocabularies and the original code is, stored here for reference."},{"Name": "cause_source_concept_id", "Type": "integer", "Description": "A foreign key to the concept that refers to the code used in the source. Note, this variable name is abbreviated to ensure it will be allowable across database platforms."}],
         columns=["Name", "Type", "Description"])
@@ -141,6 +145,7 @@ class DeviceExposure(object):
   device_exposure_id = "device_exposure_id"
   person_id = "person_id"
   device_concept_id = "device_concept_id"
+  standard_concept_id_column = "device_concept_id"
   device_exposure_start_date = "device_exposure_start_date"
   device_exposure_start_datetime = "device_exposure_start_datetime"
   device_exposure_end_date = "device_exposure_end_date"
@@ -152,6 +157,7 @@ class DeviceExposure(object):
   visit_occurrence_id = "visit_occurrence_id"
   device_source_value = "device_source_value"
   device_source_concept_id = "device_source_concept_id"
+  source_concept_id_column = "device_source_concept_id"
   table_name = "device_exposure"
   columns = pd.DataFrame([{"Name": "device_exposure_id", "Type": "integer", "Description": "A system-generated unique identifier for each Device Exposure."},{"Name": "person_id", "Type": "integer", "Description": "A foreign key identifier to the Person who is subjected to the Device. The demographic details of that person are stored in the Person table."},{"Name": "device_concept_id", "Type": "integer", "Description": "A foreign key that refers to a Standard Concept identifier in the Standardized Vocabularies for the Device concept."},{"Name": "device_exposure_start_date", "Type": "date", "Description": "The date the Device or supply was applied or used."},{"Name": "device_exposure_start_datetime", "Type": "timestamp", "Description": "The date and time the Device or supply was applied or used."},{"Name": "device_exposure_end_date", "Type": "date", "Description": "The date the Device or supply was removed from use."},{"Name": "device_exposure_end_datetime", "Type": "timestamp", "Description": "The date and time the Device or supply was removed from use."},{"Name": "device_type_concept_id", "Type": "integer", "Description": "A foreign key to the predefined Concept identifier in the Standardized Vocabularies reflecting the type of Device Exposure recorded. It indicates how the Device Exposure was represented in the source data."},{"Name": "unique_device_id", "Type": "string", "Description": "A UDI or equivalent identifying the instance of the Device used in the Person."},{"Name": "quantity", "Type": "integer", "Description": "The number of individual Devices used for the exposure."},{"Name": "provider_id", "Type": "integer", "Description": "A foreign key to the provider in the PROVIDER table who initiated of administered the Device."},{"Name": "visit_occurrence_id", "Type": "integer", "Description": "A foreign key to the visit in the VISIT_OCCURRENCE table during which the device was used."},{"Name": "device_source_value", "Type": "string", "Description": "The source code for the Device as it appears in the source data. This code is mapped to a standard Device Concept in the Standardized Vocabularies and the original code is stored here for reference."},{"Name": "device_source_concept_id", "Type": "integer", "Description": ""}],
         columns=["Name", "Type", "Description"])
@@ -163,6 +169,7 @@ class DrugExposure(object):
   drug_exposure_id = "drug_exposure_id"
   person_id = "person_id"
   drug_concept_id = "drug_concept_id"
+  standard_concept_id_column = "drug_concept_id"
   drug_exposure_start_date = "drug_exposure_start_date"
   drug_exposure_start_datetime = "drug_exposure_start_datetime"
   drug_exposure_end_date = "drug_exposure_end_date"
@@ -180,6 +187,7 @@ class DrugExposure(object):
   visit_occurrence_id = "visit_occurrence_id"
   drug_source_value = "drug_source_value"
   drug_source_concept_id = "drug_source_concept_id"
+  source_concept_id_column = "drug_source_concept_id"
   route_source_value = "route_source_value"
   dose_unit_source_value = "dose_unit_source_value"
   table_name = "drug_exposure"
@@ -193,6 +201,7 @@ class Measurement(object):
   measurement_id = "measurement_id"
   person_id = "person_id"
   measurement_concept_id = "measurement_concept_id"
+  standard_concept_id_column = "measurement_concept_id"
   measurement_date = "measurement_date"
   measurement_datetime = "measurement_datetime"
   measurement_type_concept_id = "measurement_type_concept_id"
@@ -206,6 +215,7 @@ class Measurement(object):
   visit_occurrence_id = "visit_occurrence_id"
   measurement_source_value = "measurement_source_value"
   measurement_source_concept_id = "measurement_source_concept_id"
+  source_concept_id_column = "measurement_source_concept_id"
   unit_source_value = "unit_source_value"
   value_source_value = "value_source_value"
   table_name = "measurement"
@@ -219,6 +229,7 @@ class Observation(object):
   observation_id = "observation_id"
   person_id = "person_id"
   observation_concept_id = "observation_concept_id"
+  standard_concept_id_column = "observation_concept_id"
   observation_date = "observation_date"
   observation_datetime = "observation_datetime"
   observation_type_concept_id = "observation_type_concept_id"
@@ -234,6 +245,7 @@ class Observation(object):
   unit_source_value = "unit_source_value"
   qualifier_source_value = "qualifier_source_value"
   value_source_concept_id = "value_source_concept_id"
+  source_concept_id_column = "value_source_concept_id"
   value_source_value = "value_source_value"
   questionnaire_response_id = "questionnaire_response_id"
   table_name = "observation"
@@ -273,6 +285,7 @@ class ProcedureOccurrence(object):
   procedure_occurrence_id = "procedure_occurrence_id"
   person_id = "person_id"
   procedure_concept_id = "procedure_concept_id"
+  standard_concept_id_column = "procedure_concept_id"
   procedure_date = "procedure_date"
   procedure_datetime = "procedure_datetime"
   procedure_type_concept_id = "procedure_type_concept_id"
@@ -282,6 +295,7 @@ class ProcedureOccurrence(object):
   visit_occurrence_id = "visit_occurrence_id"
   procedure_source_value = "procedure_source_value"
   procedure_source_concept_id = "procedure_source_concept_id"
+  source_concept_id_column = "procedure_source_concept_id"
   qualifier_source_value = "qualifier_source_value"
   table_name = "procedure_occurrence"
   columns = pd.DataFrame([{"Name": "procedure_occurrence_id", "Type": "integer", "Description": "A system-generated unique identifier for each Procedure Occurrence."},{"Name": "person_id", "Type": "integer", "Description": "A foreign key identifier to the Person who is subjected to the Procedure. The demographic details of that Person are stored in the PERSON table."},{"Name": "procedure_concept_id", "Type": "integer", "Description": "A foreign key that refers to a standard procedure Concept identifier in the Standardized Vocabularies."},{"Name": "procedure_date", "Type": "date", "Description": "The date on which the Procedure was performed."},{"Name": "procedure_datetime", "Type": "timestamp", "Description": "The date and time on which the Procedure was performed."},{"Name": "procedure_type_concept_id", "Type": "integer", "Description": "A foreign key to the predefined Concept identifier in the Standardized Vocabularies reflecting the type of source data from which the procedure record is derived."},{"Name": "modifier_concept_id", "Type": "integer", "Description": "A foreign key to a Standard Concept identifier for a modifier to the Procedure (e.g. bilateral)"},{"Name": "quantity", "Type": "integer", "Description": "The quantity of procedures ordered or administered."},{"Name": "provider_id", "Type": "integer", "Description": "A foreign key to the provider in the PROVIDER table who was responsible for carrying out the procedure."},{"Name": "visit_occurrence_id", "Type": "integer", "Description": "A foreign key to the Visit in the VISIT_OCCURRENCE table during which the Procedure was carried out."},{"Name": "procedure_source_value", "Type": "string", "Description": "The source code for the Procedure as it appears in the source data. This code is mapped to a standard procedure Concept in the Standardized Vocabularies and the original code is, stored here for reference. Procedure source codes are typically ICD-9-Proc, CPT-4, HCPCS or OPCS-4 codes."},{"Name": "procedure_source_concept_id", "Type": "integer", "Description": "A foreign key to a Procedure Concept that refers to the code used in the source."},{"Name": "qualifier_source_value", "Type": "string", "Description": ""}],
@@ -294,6 +308,7 @@ class VisitOccurrence(object):
   visit_occurrence_id = "visit_occurrence_id"
   person_id = "person_id"
   visit_concept_id = "visit_concept_id"
+  standard_concept_id_column = "visit_concept_id"
   visit_start_date = "visit_start_date"
   visit_start_datetime = "visit_start_datetime"
   visit_end_date = "visit_end_date"
@@ -303,6 +318,7 @@ class VisitOccurrence(object):
   care_site_id = "care_site_id"
   visit_source_value = "visit_source_value"
   visit_source_concept_id = "visit_source_concept_id"
+  source_concept_id_column = "visit_source_concept_id"
   admitting_source_concept_id = "admitting_source_concept_id"
   admitting_source_value = "admitting_source_value"
   discharge_to_concept_id = "discharge_to_concept_id"
