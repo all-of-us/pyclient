@@ -40,6 +40,12 @@ class CohortsApiTest(unittest.TestCase):
     def test_materialize_cohort(self):
         request = MaterializeCohortRequest(cohort_name='Old Men', page_size=10)
         results = list(materialize_cohort(request, max_results=20))
-        self.assertEqual(20, len(results))      
+        self.assertEqual(20, len(results))   
+        
+    def test_load_data_table(self):
+        response = load_data_table(cohort_name='Old Men', table=Person,
+                                   columns=[Person.person_id],
+                                   page_size=10, max_results=10)
+        self.assertEqual(10, len(list(response)))
       
       
