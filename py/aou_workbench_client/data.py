@@ -9,7 +9,7 @@ from aou_workbench_client.cohorts import materialize_cohort
 def load_data_table(cohort_name, table, columns=None, concept_ids=None,
                     source_concept_ids=None, filters=None,
                     cohort_statuses=None, max_results=None,
-                    order_by=None, page_size=None):
+                    order_by=None, page_size=None, debug=False):
   all_filters = filters
   concept_filters = []
   if concept_ids:
@@ -49,5 +49,5 @@ def load_data_table(cohort_name, table, columns=None, concept_ids=None,
   request = MaterializeCohortRequest(cohort_name=cohort_name, 
                                      field_set=field_set,
                                      page_size=page_size)
-  return materialize_cohort(request, max_results=max_results)
+  return materialize_cohort(request, max_results=max_results, debug=debug)
   

@@ -17,7 +17,7 @@ class CohortsApiTest(unittest.TestCase):
       
         # Grab the next page
         request.page_token = response.next_page_token
-        response_2 = materialize_cohort_page(request)
+        response_2 = materialize_cohort_page(request, debug=True)
         self.assertEqual(10, len(response_2.results))
         self.assertIsNotNone(response_2.next_page_token)
         self.assertNotEqual(response_2.results, response.results)
@@ -40,7 +40,7 @@ class CohortsApiTest(unittest.TestCase):
       
     def test_materialize_cohort(self):
         request = MaterializeCohortRequest(cohort_name='Old Men', page_size=10)
-        results = list(materialize_cohort(request, max_results=20))
+        results = list(materialize_cohort(request, max_results=20, debug=True))
         self.assertEqual(20, len(results))   
         
     def test_load_data_table(self):
