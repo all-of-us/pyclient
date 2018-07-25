@@ -47,7 +47,7 @@ def load_data_table(cohort_name, table, columns=None, concept_ids=None,
                            order_by=order_by)
   field_set = FieldSet(table_query)
   request = MaterializeCohortRequest(cohort_name=cohort_name, 
-                                     table_query=table_query,
+                                     field_set=field_set,
                                      page_size=page_size)
   return materialize_cohort(request, max_results=max_results)
   
