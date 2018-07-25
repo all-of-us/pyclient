@@ -3,7 +3,7 @@ from aou_workbench_client.swagger_client.models.table_query import TableQuery
 from aou_workbench_client.swagger_client.models.field_set import FieldSet
 from aou_workbench_client.swagger_client.models.column_filter import ColumnFilter
 from aou_workbench_client.swagger_client.models.operator import Operator
-from aou_workbench_client.swagger_client.models.result_filters import ResultFilter
+from aou_workbench_client.swagger_client.models.result_filters import ResultFilters
 from aou_workbench_client.swagger_client.models.annotation_query import AnnotationQuery
 from aou_workbench_client.swagger_client.cohorts import materialize_cohort
 
