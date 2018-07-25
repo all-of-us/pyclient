@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """ Model objects containing metadata on the tables and columns in the 
 curated data repository. These were automatically generated from the schema 
-found at https://raw.githubusercontent.com/all-of-us/workbench/1db7fc6df81c22a1d0c80e1c6862830f171239ea/api/config/cdm/cdm_5_2.json.
+found at https://raw.githubusercontent.com/all-of-us/workbench/master/api/config/cdm/cdm_5_2.json.
 """
 
 from .wrapper import RelatedTableWrapper
