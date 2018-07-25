@@ -17,7 +17,7 @@ class CohortsApiTest(unittest.TestCase):
       
         # Grab the next page
         request.page_token = response.next_page_token
-        response_2 = materialize_cohort_page(request, debug=True)
+        response_2 = materialize_cohort_page(request)
         self.assertEqual(10, len(response_2.results))
         self.assertIsNotNone(response_2.next_page_token)
         self.assertNotEqual(response_2.results, response.results)
