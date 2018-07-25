@@ -4,8 +4,7 @@ from aou_workbench_client.swagger_client.models.field_set import FieldSet
 from aou_workbench_client.swagger_client.models.column_filter import ColumnFilter
 from aou_workbench_client.swagger_client.models.operator import Operator
 from aou_workbench_client.swagger_client.models.result_filters import ResultFilters
-from aou_workbench_client.swagger_client.models.annotation_query import AnnotationQuery
-from aou_workbench_client.swagger_client.cohorts import materialize_cohort
+from aou_workbench_client.cohorts import materialize_cohort
 
 def load_data_table(cohort_name, table, columns=None, concept_ids=None,
                     source_concept_ids=None, filters=None,
