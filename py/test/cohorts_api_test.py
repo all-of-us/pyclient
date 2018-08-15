@@ -5,7 +5,7 @@ from aou_workbench_client.cohorts import materialize_cohort_page, materialize_co
 from aou_workbench_client.swagger_client.models import MaterializeCohortRequest
 from aou_workbench_client.swagger_client.models import TableQuery, FieldSet
 from aou_workbench_client.cdr.model import Person
-from aou_workbench_client.data import load_data_table, ResultType
+from aou_workbench_client.data import load_data_table, ResultTypes
 
 class CohortsApiTest(unittest.TestCase):
 
@@ -47,7 +47,7 @@ class CohortsApiTest(unittest.TestCase):
         response = load_data_table(cohort_name='Old Men', table=Person,
                                    columns=[Person.person_id],
                                    page_size=10, max_results=10,
-                                   result_type=ResultType.LIST)
+                                   result_type=ResultTypes.LIST)
         self.assertEqual(10, len(response))
       
       
