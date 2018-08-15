@@ -136,7 +136,8 @@ from aou_workbench_client.data import load_data_table
 from IPython.display import display
 import pandas as pd
     
-# Load data where ${concept_adjective} concept = ${selectedRowId})
+# Load data for "${selectedData['name']}" 
+# (vocabulary = ${selectedData['vocabulary']}, ${concept_adjective} concept ID = ${selectedRowId})
 ${prefix}_frame = load_data_table(cohort_name=${cohortName}, table=${table},                           
                            ${concept_id_field}=[${selectedRowId}],
                            ${id_column_assignment}max_results=${maxResults})
