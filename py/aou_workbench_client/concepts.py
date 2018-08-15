@@ -97,7 +97,7 @@ _CONCEPT_TABLE_HTML_TEMPLATE = """
     'Drug': ['DrugExposure'],
     'Measurement': ['Measurement'],
     'Observation': ['Observation'],
-    'Procedure': ['ProcedureOccurrence']]
+    'Procedure': ['ProcedureOccurrence']
   };  
     
   function generatePythonCode() {
