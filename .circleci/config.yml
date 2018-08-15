@@ -11,7 +11,7 @@ jobs:
      steps:
       - checkout
       - run:
-          command: cat py/requirements.txt py/swagger-requirements.txt > all_requirements.txt
+          command: cat py/requirements.txt py/test/test-requirements.txt py/swagger-requirements.txt > all_requirements.txt
       - restore_cache:
           key: deps-{{ .Branch }}-{{ checksum "all_requirements.txt" }}
       - run:

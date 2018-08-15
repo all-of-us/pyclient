@@ -92,8 +92,16 @@ def write_tables_python(f, tables, add_to_cohort_tables)
     f.puts('class ' + capitalize(table_name) + '(object):')    
     table_columns.each do |column|
       column_name = column['name']
-      f.puts('  ' + column_name + ' = "' + column_name + '"')           
-    end            
+      f.puts('  ' + column_name + ' = "' + column_name + '"')
+      domain_concept = column['domainConcept']
+      if domain_concept then
+         if domain_concept == 'standard' then
+           f.puts('  standard_concept_id_column = "' + column_name + '"')
+         else
+           f.puts('  source_concept_id_column = "' + column_name + '"')
+         end
+      end
+    end               
     f.puts('  table_name = "' + table_name + '"')
     f.puts('  columns = pd.DataFrame([' + 
         table_columns.map {|x| column_dict(x)}.join(',') + '],
@@ -214,6 +222,7 @@ def install_py_requirements()
   common = Common.new
   common.run_inline %W{
       pip install --requirement #{File.join(py_root, "requirements.txt")}
+      --requirement #{File.join(py_root, "test", "test-requirements.txt")}
       --requirement #{File.join(py_root, "swagger-requirements.txt")}}
 end
 

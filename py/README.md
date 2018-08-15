@@ -226,6 +226,7 @@ has:
 * a `foreign_keys` field containing a list of zero or more names of fields for foreign keys to related tables
 * fields for the names of columns on the table itself, which can be referenced in column filters (e.g. `Person.person_id`)
 * zero or more fields for referencing columns on related tables (e.g. `Person.gender_concept`)
+* for cohort tables, `standard_concept_id_column` and `source_concept_id_column` fields storing the names of columns for the standard and source concepts for the domain
 
 You can use foreign keys to reference fields on related tables many levels deep;
 for example, `Person.care_site.location.city'.
