@@ -118,7 +118,7 @@ _CONCEPT_TABLE_HTML_TEMPLATE = """
       concept_adjective = 'source'
     }
     materializationCode = `
-from aou_workbench_client.cdr.model import Observation
+from aou_workbench_client.cdr.model import ${table}
 from aou_workbench_client.data import load_data_table
 from IPython.display import display
 import pandas as pd
