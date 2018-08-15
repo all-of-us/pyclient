@@ -93,47 +93,29 @@ _CONCEPT_TABLE_HTML_TEMPLATE = """
     oldSelectedColor = newSelectedRow.style.backgroundColor;
     newSelectedRow.style.backgroundColor = '#BBBBFF';    
   }
-  
-  domainToTableMap = {
-    'Condition': ['ConditionOccurrence', 'condition_concept_id', 'condition_source_concept_id'],
-    'Device': ['DeviceExposure', 'device_concept_id', 'device_source_concept_id'],
-    'Drug': ['DrugExposure', 'drug_concept_id', 'drug_source_concept_id'],
-    'Ethnicity': ['Person', 'ethnicity_concept_id', 'ethnicity_source_concept_id'],
-    'Gender': ['Person', 'gender_concept_id', 'gender_source_concept_id'],
-    'Measurement': ['Measurement', 'measurement_concept_id', 'measurement_source_concept_id'],
-    'Observation': ['Observation', 'observation_concept_id', 'observation_source_concept_id'],
-    'Procedure': ['ProcedureOccurrence', 'procedure_concept_id', 'procedure_source_concept_id'],
-    'Race': ['Person', 'race_concept_id', 'race_source_concept_id']
-  };  
-  
+    
   function generatePythonCode() {
     maxResults = document.getElementById('max_results').value;
     prefix = document.getElementById('variable_prefix').value;
     cohortName = JSON.stringify(document.getElementById('cohort_name').value);
     domain = selectedData['domain'];
-    tableData = domainToTableMap[domain];
-    if (!tableData) {
-      throw 'Unsupported domain: ' + domain;
-    }
-    table = tableData[0];
     if (selectedData['standard']) {
-      column = tableData[1];
+      concept_id_field = 'concept_ids'
+      concept_adjective = 'standard'
     } else {
-      column = tableData[2];
+      concept_id_field = 'source_concept_ids'
+      concept_adjective = 'source'
     }
     materializationCode = `
-from aou_workbench_client.swagger_client.models import ResultFilters, MaterializeCohortRequest
-from aou_workbench_client.swagger_client.models import TableQuery, ColumnFilter, FieldSet
-from aou_workbench_client.cohorts import materialize_cohort
-from aou_workbench_client.cdr.model import ${table}
+from aou_workbench_client.cdr.model import Observation
+from aou_workbench_client.data import load_data_table
 from IPython.display import display
 import pandas as pd
     
-# Filter on "${selectedData['name']}" (vocabulary = ${selectedData['vocabulary']}, concept ID = ${selectedRowId})
-${prefix}_filter = ColumnFilter(${table}.${column}, value_number=${selectedRowId})
-${prefix}_query = TableQuery(table=${table}, filters=ResultFilters(column_filter=${prefix}_filter))
-${prefix}_request = MaterializeCohortRequest(cohort_name=${cohortName}, field_set=FieldSet(table_query=${prefix}_query))
-${prefix}_response = materialize_cohort(${prefix}_request, max_results=${maxResults})
+# Load data where ${concept_adjective} concept = ${selectedRowId})
+${prefix}_response = load_data_table(cohort_name=${cohortName}, table=${table},                           
+                           ${concept_id_field}=[${selectedRowId}],
+                           max_results=${maxResults})
 ${prefix}_frame = pd.DataFrame(list(${prefix}_response))
 display(${prefix}_frame)`;
     newCell = IPython.notebook.insert_cell_below('code');
