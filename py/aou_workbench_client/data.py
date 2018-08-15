@@ -118,5 +118,5 @@ def load_data_table(cohort_name, table, columns=None, concept_ids=None,
     if result_type == ResultTypes.LIST:
         return list(generator)
     if result_type == ResultTypes.DATA_FRAME:
-        return pd.DataFrame(list(results_response))
+        return pd.DataFrame(list(generator))
     raise "Invalid result type: %s" % result_type
