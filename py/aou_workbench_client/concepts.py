@@ -18,7 +18,10 @@ _DOMAIN_DICT = {
     'Drug': Domain.DRUG,
     'Condition': Domain.CONDITION,
     'Measurement': Domain.MEASUREMENT,
-    'Device': Domain.DEVICE
+    'Device': Domain.DEVICE,
+    'Race': Domain.RACE,
+    'Gender': Domain.GENDER,
+    'Ethnicity': Domain.ETHNICITY
 }
 
 _STANDARD_CONCEPT_FILTER_DICT = { 
@@ -97,7 +100,10 @@ _CONCEPT_TABLE_HTML_TEMPLATE = """
     'Drug': ['DrugExposure'],
     'Measurement': ['Measurement'],
     'Observation': ['Observation'],
-    'Procedure': ['ProcedureOccurrence']
+    'Procedure': ['ProcedureOccurrence'],
+    'Ethnicity': ['Person', 'ethnicity_concept_id', 'ethnicity_source_concept_id'],
+    'Gender': ['Person', 'gender_concept_id', 'gender_source_concept_id'],
+    'Race': ['Person', 'race_concept_id', 'race_source_concept_id']
   };  
     
   function generatePythonCode() {
@@ -109,13 +115,20 @@ _CONCEPT_TABLE_HTML_TEMPLATE = """
     if (!tableData) {
       throw 'Unsupported domain: ' + domain;
     }
-    table = tableData[0];    
+    table = tableData[0];
+    id_column_assignment = ''            
     if (selectedData['standard']) {
       concept_id_field = 'concept_ids'
       concept_adjective = 'standard'
+      if (tableData.length > 1) {
+        id_column_assignment = 'concept_id_column=' + tableData[1] + ', '
+      }         
     } else {
       concept_id_field = 'source_concept_ids'
       concept_adjective = 'source'
+      if (tableData.length > 2) {
+        id_column_assignment = 'source_concept_id_column=' + tableData[2] + ', '
+      }
     }
     materializationCode = `
 from aou_workbench_client.cdr.model import ${table}
@@ -126,7 +139,7 @@ import pandas as pd
 # Load data where ${concept_adjective} concept = ${selectedRowId})
 ${prefix}_response = load_data_table(cohort_name=${cohortName}, table=${table},                           
                            ${concept_id_field}=[${selectedRowId}],
-                           max_results=${maxResults})
+                           ${id_column_assignment}max_results=${maxResults})
 ${prefix}_frame = pd.DataFrame(list(${prefix}_response))
 display(${prefix}_frame)`;
     newCell = IPython.notebook.insert_cell_below('code');
