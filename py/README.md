@@ -117,8 +117,8 @@ in a cohort using a cohort materialization request object constructed in your co
 The `aou_workbench_client.data` module provides a `load_data_table` function that offers a simpler
 API for materializing cohorts; we recommend using it instead of the methods in 
 `aou_workbench_client.cohorts` in most cases. (At present, `load_data_table` does not support 
-loading annotation data about cohorts, but otherwise should provide the same functionality as
-[`materialize_cohort`](#aou_workbench_clientcohortsmaterialize_cohort).)
+loading annotation data about cohorts, but otherwise should provide full cohort materialization 
+functionality.)
 
 ### `aou_workbench_client.data.load_data_table`
 
