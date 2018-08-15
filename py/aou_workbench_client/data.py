@@ -110,7 +110,7 @@ def load_data_table(cohort_name, table, columns=None, concept_ids=None,
     field_set = FieldSet(table_query)
     request = MaterializeCohortRequest(cohort_name=cohort_name,
                                        field_set=field_set,
-                                       cohort_statuses=cohort_statuses,
+                                       status_filter=cohort_statuses,
                                        page_size=page_size)
     generator = materialize_cohort(request, max_results=max_results, debug=debug)
     if result_type == ResultTypes.GENERATOR:
