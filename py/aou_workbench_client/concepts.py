@@ -137,10 +137,9 @@ from IPython.display import display
 import pandas as pd
     
 # Load data where ${concept_adjective} concept = ${selectedRowId})
-${prefix}_response = load_data_table(cohort_name=${cohortName}, table=${table},                           
+${prefix}_frame = load_data_table(cohort_name=${cohortName}, table=${table},                           
                            ${concept_id_field}=[${selectedRowId}],
                            ${id_column_assignment}max_results=${maxResults})
-${prefix}_frame = pd.DataFrame(list(${prefix}_response))
 display(${prefix}_frame)`;
     newCell = IPython.notebook.insert_cell_below('code');
     newCell.set_text(materializationCode);
