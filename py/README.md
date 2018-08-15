@@ -118,7 +118,7 @@ The `aou_workbench_client.data` module provides a `load_data_table` function tha
 API for materializing cohorts; we recommend using it instead of the methods in 
 `aou_workbench_client.cohorts` in most cases. (At present, `load_data_table` does not support 
 loading annotation data about cohorts, but otherwise should provide the same functionality as
-[`materialize_cohort`](#materialize-cohort).)
+[`materialize_cohort`](#aou_workbench_clientcohortsmaterialize_cohort).)
 
 ### `aou_workbench_client.data.load_data_table`
 
@@ -184,7 +184,7 @@ Name | Required? | Description
 `materialize_cohort_page` is used to fetch a single page of results from cohort
 materialization, as a [MaterializeCohortResponse](swagger_docs/MaterializeCohortResponse.md).
 
-Normally you should be able to call [`materialize_cohort`](#materialize_cohort) instead
+Normally you should be able to call [`materialize_cohort`](#aou_workbench_clientcohortsmaterialize_cohort) instead
 of this function, but you may use this function to get better control over
 when requests to retrieve results from the server are executed.
 
@@ -200,9 +200,9 @@ Name | Required? | Description
 When you want to materialize data about a cohort you've defined in workbench, you construct
 a [MaterializeCohortRequest object](swagger_docs/MaterializeCohortRequest.md). 
 
-You will later pass this request to [materialize_cohort](#materialize_cohort) if you wish
+You will later pass this request to [materialize_cohort](#aou_workbench_clientcohortsmaterialize_cohort) if you wish
 to retrieve all the results as a generator of dictionaries, or you can pass it to 
-[`materialize_cohort_page`](#materialize_cohort_page) if you wish to make server calls
+[`materialize_cohort_page`](#aou_workbench_clientcohortsmaterialize_cohort_page) if you wish to make server calls
 to retrieve paginated responses containing results, one page at a time.
 
 #### `MaterializeCohortRequest` fields
@@ -213,7 +213,7 @@ Name | Required? | Description
 `field_set`|Yes|A [FieldSet](#field-sets) indicating what data you want to retrieve about the cohort.
 `status_filter`|No|A list of [CohortStatus](swagger_docs/CohortStatus.md) values indicating cohort review statuses to filter the participants whose data is returned. By default, `[INCLUDED, NEEDS_FURTHER_REVIEW, NOT_REVIEWED]` will be used -- everything except `EXCLUDED` (participants that have been explicitly excluded.) There is no need to set this for cohorts which have not been reviewed. 
 `page_size`|No|The number of results to return in a single request to the server. Defaults to 1000. Depending on the size of data returned, you may try increasing or decreasing this to improve performance, but you generally should not have to set this.
-`page_token`|No|A pagination token used to retrieve additional results from the server after the first request. You will only need to set this if you use the [materialize_cohort_page][#materialize_cohort_page] function repeatedly to retrieve multiple pages of data explicitly.
+`page_token`|No|A pagination token used to retrieve additional results from the server after the first request. You will only need to set this if you use the [materialize_cohort_page][#aou_workbench_clientcohortsmaterialize_cohort_page] function repeatedly to retrieve multiple pages of data explicitly.
 
 #### Field sets
 
@@ -498,7 +498,7 @@ annotation_query = AnnotationQuery(order_by=['is_obese', 'DESCENDING(review_stat
 #### Putting it all together
 
 Here's an example of materializing a cohort to retrieve a data frame containing 1000 measurement 
-values where the source value is 'Temper' for a cohort named 'Flu':
+values where the source value is 'Temper' for a cohort named 'Flu', using [`load_data_table`](#aou_workbench_clientdataload_data_table):
 
 ```python
 from aou_workbench_client.swagger_client.models import ColumnFilter, ResultFilters
@@ -520,7 +520,7 @@ measure_df = load_data_table(cohort_name='Flu', table=Measurement,
                              max_results=1000)
 ```
 
-Here is the more complicated but equivalent Python using [`materialize_cohort`](#materialize-cohort):
+Here is the more complicated but equivalent Python using [`materialize_cohort`](#aou_workbench_clientcohortsmaterialize_cohort):
 
 ```python
 from aou_workbench_client.swagger_client.models import ResultFilters, MaterializeCohortRequest, CohortStatus
