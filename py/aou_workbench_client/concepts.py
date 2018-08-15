@@ -18,10 +18,7 @@ _DOMAIN_DICT = {
     'Drug': Domain.DRUG,
     'Condition': Domain.CONDITION,
     'Measurement': Domain.MEASUREMENT,
-    'Device': Domain.DEVICE,
-    'Race': Domain.RACE,
-    'Gender': Domain.GENDER,
-    'Ethnicity': Domain.ETHNICITY 
+    'Device': Domain.DEVICE
 }
 
 _STANDARD_CONCEPT_FILTER_DICT = { 
@@ -93,12 +90,26 @@ _CONCEPT_TABLE_HTML_TEMPLATE = """
     oldSelectedColor = newSelectedRow.style.backgroundColor;
     newSelectedRow.style.backgroundColor = '#BBBBFF';    
   }
+  
+  domainToTableMap = {
+    'Condition': ['ConditionOccurrence'],
+    'Device': ['DeviceExposure'],
+    'Drug': ['DrugExposure'],
+    'Measurement': ['Measurement'],
+    'Observation': ['Observation'],
+    'Procedure': ['ProcedureOccurrence']]
+  };  
     
   function generatePythonCode() {
     maxResults = document.getElementById('max_results').value;
     prefix = document.getElementById('variable_prefix').value;
     cohortName = JSON.stringify(document.getElementById('cohort_name').value);
     domain = selectedData['domain'];
+    tableData = domainToTableMap[domain];
+    if (!tableData) {
+      throw 'Unsupported domain: ' + domain;
+    }
+    table = tableData[0];    
     if (selectedData['standard']) {
       concept_id_field = 'concept_ids'
       concept_adjective = 'standard'
