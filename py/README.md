@@ -114,23 +114,32 @@ rendering.
 The `aou_workbench_client.cohorts` module provides functions for retrieving data about participants
 in a cohort using a cohort materialization request object constructed in your code.
 
-The `aou_workbench_client.data` module provides a `load_data_table` function that offers a simpler
-API for materializing cohorts; we recommend using it instead of the methods in 
-`aou_workbench_client.cohorts` in most cases. (At present, `load_data_table` does not support 
+The `aou_workbench_client.data` module provides `load_data_table` and `load_data_frame` functions that offer a simpler
+API for materializing cohorts; we recommend using them instead of the methods in
+`aou_workbench_client.cohorts` in most cases. (At present, these methods do not support
 loading annotation data about cohorts, but otherwise should provide full cohort materialization 
 functionality.)
 
 ### `aou_workbench_client.data.load_data_table`
 
-`load_data_table` is the simplest way to extract data from an OMOP table for the participants in a
+`load_data_table` allows you to extract data from an OMOP table for the participants in a
 cohort. Results are returned matching the specified concept IDs, filters, and cohort statuses, in 
 the order specified. 
 
-Depending on the value provided for the `result_type` parameter, it returns a generator of results,
-a list of all results loaded into memory, or a Pandas DataFrame containing all the results in memory.
-(The default is a Pandas DataFrame.)
+Results from this method are returned as a Python generator of dictionaries, with keys matching the columns
+requested. API calls are issued as needed as you iterate over the results in the generator. (No API calls will be
+performed until you start iterating.)
 
-#### `load_data_table` parameters
+To instead return all the results as an in-memory Pandas DataFrame, use the convenience method
+[load_data_frame](#aou_workbench_clientdataload_data_frame).
+
+### `aou_workbench_client.data.load_data_frame`
+
+`load_data_frame` executes [load_data_table](#aou_workbench_clientdataload_data_table) and returns all the results
+as an in-memory Pandas DataFrame. Note that many API calls may need to be performed in order to retrieve all the results;
+for large cohorts this may take a while.
+
+#### `load_data_table` and `load_data_frame` parameters
 
 Name | Required? | Description
 ---- | --------- | -----------  
@@ -146,8 +155,8 @@ cohort_statuses | No | a list of [CohortStatus](swagger_docs/CohortStatus.md) in
 max_results | No | the maximum number of rows to return in the resulting data table; defaults to no limit (all matching rows will be returned.) Note that for large cohorts, it may take a long time to get all results; it is advisable to set `max_results` to something initially during development to ensure the results are what you are looking for.
 order_by | No | a list of column names from the table or related tables to order the results by; defaults to order by `person_id` and primary key of the specified table. (Example: `[Person.gender_concept_id, Person.person_id]`)
 page_size | No | the maximum number of result rows to fetch in a single API response when retrieving results; defaults to 1000.
-result_type | No | a string indicating the type of results to return; options are in the `aou_workbench_client.data.ResultTypes` class: `ResultTypes.GENERATOR` (a generator of results that makes API calls as needed), `ResultTypes.LIST` (all of the results loaded into memory), and `ResultTypes.DATA_FRAME` (a Pandas data frame containing all of the results in memory.) Defaults to `ResultTypes.DATA_FRAME`.    
-debug | No |  True if you want to see debugging output for the API requests used to materialize the cohort; defaults to False. 
+debug | No |  True if you want to see debugging output for the API requests used to materialize the cohort; defaults to False.
+
 
 ### `aou_workbench_client.cohorts.materialize_cohort`
 
@@ -498,19 +507,19 @@ annotation_query = AnnotationQuery(order_by=['is_obese', 'DESCENDING(review_stat
 #### Putting it all together
 
 Here's an example of materializing a cohort to retrieve a data frame containing 1000 measurement 
-values where the source value is 'Temper' for a cohort named 'Flu', using [`load_data_table`](#aou_workbench_clientdataload_data_table):
+values where the source value is 'Temper' for a cohort named 'Flu', using [`load_data_frame`](#aou_workbench_clientdataload_data_frame):
 
 ```python
 from aou_workbench_client.swagger_client.models import ColumnFilter, ResultFilters
 from aou_workbench_client.cdr.model import Measurement
 
-from aou_workbench_client.data import load_data_table
+from aou_workbench_client.data import load_data_frame
 
 import pandas as pd
 
 temp_filter = ResultFilters(column_filter=ColumnFilter(Measurement.measurement_source_value, 
                                                        value='Temper'))
-measure_df = load_data_table(cohort_name='Flu', table=Measurement,
+measure_df = load_data_frame(cohort_name='Flu', table=Measurement,
                              columns=[Measurement.person_id, 
                                       Measurement.measurement_id, 
                                       Measurement.measurement_date, 

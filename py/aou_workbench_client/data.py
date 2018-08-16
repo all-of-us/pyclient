@@ -9,11 +9,6 @@ from aou_workbench_client.cohorts import materialize_cohort
 
 import pandas as pd
 
-class ResultTypes(object):
-  GENERATOR = "generator"
-  LIST = "list"
-  DATA_FRAME = "dataframe"
-
 """
 Loads a data table for participants in a specified cohort, 
 represented as a generator of dictionaries. API calls are made to retrieve
