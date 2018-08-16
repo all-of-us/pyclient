@@ -7,8 +7,12 @@ from aou_workbench_client.swagger_client.models.operator import Operator
 from aou_workbench_client.swagger_client.models.result_filters import ResultFilters
 from aou_workbench_client.cohorts import materialize_cohort
 
+import pandas as pd
+
 """
-Loads a data table for participants in a specified cohort.
+Loads a data table for participants in a specified cohort, 
+represented as a generator of dictionaries. API calls are made to retrieve
+the results in pages as you iterate over the generator. 
 
   :param cohort_name: the name of a cohort in the workspace that contains the calling notebook
   :param table: the class corresponding to the table that the data table should be extracted 
@@ -21,14 +25,23 @@ Loads a data table for participants in a specified cohort.
     table class; defaults to no standard concept filtering. 
     If both concept_ids and source_concept_ids are specified, rows that match either will be 
     returned.
+  :param concept_id_column: the name of the column to filter against with the values in concept_ids; 
+    defaults to the standard concept ID column for the table (if applicable); this must be specified
+    in tables that lack a standard concept ID column when concept_ids is specified; 
+    e.g. Person.gender_concept_id  
   :param source_concept_ids: a list of integer IDs of source concepts to include in the results
     from the table; only use with tables that have a source_concept_id_column field on the provided
     table class; defaults to no standard concept filtering.
     If both concept_ids and source_concept_ids are specified, rows that match either will be 
     returned.
-  :param filters: other column filters to use to select rows returned from the table; defaults to
-    no additional filtering. If both filters and concept_ids / source_concept_ids are specified,
-    rows returned will match both.
+  :param source_concept_id_column: the name of the column to filter against with the values in 
+    source_concept_ids; defaults to the source concept ID column for the table (if applicable); 
+    this must be specified in tables that lack a source concept ID column when 
+    source_concept_ids is specified; e.g. Person.gender_source_concept_id  
+  :param filters: ResultFilters representing other filters to use to select rows 
+    returned from the table; defaults to no additional filtering. If both 
+    filters and concept_ids / source_concept_ids are specified,
+    rows returned must match both.
   :param cohort_statuses: a list of CohortStatus indicating a filter on the review status of 
     participants to be returned in the resulting data table; defaults to no filtering (all 
     participants are returned.
@@ -42,19 +55,21 @@ Loads a data table for participants in a specified cohort.
     retrieving results; defaults to 1000.
   :param debug: true if debug request and response information should be displayed; defaults to 
     false.  
+  :return a generator of dictionaries representing the results to the query
 """
-
-
 def load_data_table(cohort_name, table, columns=None, concept_ids=None,
-                    source_concept_ids=None, filters=None,
+                    concept_id_column=None, source_concept_ids=None, filters=None,
                     cohort_statuses=None, max_results=None,
                     order_by=None, page_size=None, debug=False):
     all_filters = filters
     concept_filters = []
     if concept_ids:
-        standard_concept_id_column = getattr(table, 'standard_concept_id_column')
-        if not standard_concept_id_column:
-            raise "Could not find standard concept id column for table " + table.table_name
+        if concept_id_column:
+            standard_concept_id_column = concept_id_column
+        else:
+            standard_concept_id_column = getattr(table, 'standard_concept_id_column')
+            if not standard_concept_id_column:
+                raise "Could not find standard concept id column for table " + table.table_name
         column_filter = ColumnFilter(column_name=standard_concept_id_column,
                                      value_numbers=concept_ids,
                                      operator=Operator.IN)
@@ -87,5 +102,18 @@ def load_data_table(cohort_name, table, columns=None, concept_ids=None,
     field_set = FieldSet(table_query)
     request = MaterializeCohortRequest(cohort_name=cohort_name,
                                        field_set=field_set,
+                                       status_filter=cohort_statuses,
                                        page_size=page_size)
     return materialize_cohort(request, max_results=max_results, debug=debug)
+
+
+"""
+Loads a data table for participants in a specified cohort,
+represented as a Pandas data frame. API calls are made to retrieve all the
+requested results and load them into a data frame before this function returns.
+Note: for large cohorts, this may take a while.
+
+For the list of parameters to use, see load_data_table.
+"""
+def load_data_frame(**kwargs):
+  return pd.DataFrame(list(load_data_table(**kwargs)))
