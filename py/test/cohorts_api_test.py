@@ -46,8 +46,14 @@ class CohortsApiTest(unittest.TestCase):
     def test_load_data_table(self):
         response = load_data_table(cohort_name='Old Men', table=Person,
                                    columns=[Person.person_id],
-                                   page_size=10, max_results=10,
-                                   result_type=ResultTypes.LIST)
-        self.assertEqual(10, len(response))
+                                   page_size=10, max_results=10)
+        self.assertEqual(10, len(list(response)))
+
+    def test_load_data_frame(self):
+        response = load_data_frame(cohort_name='Old Men', table=Person,
+                                   columns=[Person.person_id],
+                                   page_size=10, max_results=10)
+        self.assertEqual(10, len(response.index))
+
       
       

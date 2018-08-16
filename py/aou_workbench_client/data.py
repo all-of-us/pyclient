@@ -15,7 +15,9 @@ class ResultTypes(object):
   DATA_FRAME = "dataframe"
 
 """
-Loads a data table for participants in a specified cohort.
+Loads a data table for participants in a specified cohort, 
+represented as a generator of dictionaries. API calls are made to retrieve
+the results in pages as you iterate over the generator. 
 
   :param cohort_name: the name of a cohort in the workspace that contains the calling notebook
   :param table: the class corresponding to the table that the data table should be extracted 
@@ -56,19 +58,14 @@ Loads a data table for participants in a specified cohort.
     [Person.gender_concept_id, Person.person_id]
   :param page_size: the maximum number of result rows to fetch in a single API request when 
     retrieving results; defaults to 1000.
-  :param result_type: a string indicating the type of results to return; options are
-    ResultTypes.GENERATOR (a generator of results that makes API calls as needed), 
-    ResultTypes.LIST (all of the results loaded into memory), 
-    and ResultTypes.DATA_FRAME (a Pandas data frame containing all of the results 
-    in memory.) Defaults to ResultTypes.DATA_FRAME.    
   :param debug: true if debug request and response information should be displayed; defaults to 
     false.  
+  :return a generator of dictionaries representing the results to the query
 """
 def load_data_table(cohort_name, table, columns=None, concept_ids=None,
                     concept_id_column=None, source_concept_ids=None, filters=None,
                     cohort_statuses=None, max_results=None,
-                    order_by=None, page_size=None, result_type=ResultTypes.DATA_FRAME,
-                    debug=False):
+                    order_by=None, page_size=None, debug=False):
     all_filters = filters
     concept_filters = []
     if concept_ids:
@@ -112,11 +109,16 @@ def load_data_table(cohort_name, table, columns=None, concept_ids=None,
                                        field_set=field_set,
                                        status_filter=cohort_statuses,
                                        page_size=page_size)
-    generator = materialize_cohort(request, max_results=max_results, debug=debug)
-    if result_type == ResultTypes.GENERATOR:
-        return generator
-    if result_type == ResultTypes.LIST:
-        return list(generator)
-    if result_type == ResultTypes.DATA_FRAME:
-        return pd.DataFrame(list(generator))
-    raise "Invalid result type: %s" % result_type
+    return materialize_cohort(request, max_results=max_results, debug=debug)
+
+
+"""
+Loads a data table for participants in a specified cohort,
+represented as a Pandas data frame. API calls are made to retrieve all the
+requested results and load them into a data frame before this function returns.
+Note: for large cohorts, this may take a while.
+
+For the list of parameters to use, see load_data_table.
+"""
+def load_data_frame(**kwargs):
+  return pd.DataFrame(list(load_data_table(**kwargs)))
