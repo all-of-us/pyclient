@@ -5,7 +5,7 @@ from aou_workbench_client.cohorts import materialize_cohort_page, materialize_co
 from aou_workbench_client.swagger_client.models import MaterializeCohortRequest
 from aou_workbench_client.swagger_client.models import TableQuery, FieldSet
 from aou_workbench_client.cdr.model import Person
-from aou_workbench_client.data import load_data_table, ResultTypes
+from aou_workbench_client.data import load_data_table, load_data_frame, ResultTypes
 
 class CohortsApiTest(unittest.TestCase):
 
