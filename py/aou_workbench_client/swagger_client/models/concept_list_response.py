@@ -31,22 +31,32 @@ class ConceptListResponse(object):
                             and the value is json key in definition.
     """
     swagger_types = {
-        'items': 'list[Concept]'
+        'items': 'list[Concept]',
+        'match_type': 'MatchType',
+        'standard_concepts': 'list[Concept]'
     }
 
     attribute_map = {
-        'items': 'items'
+        'items': 'items',
+        'match_type': 'matchType',
+        'standard_concepts': 'standardConcepts'
     }
 
-    def __init__(self, items=None):
+    def __init__(self, items=None, match_type=None, standard_concepts=None):
         """
         ConceptListResponse - a model defined in Swagger
         """
 
         self._items = None
+        self._match_type = None
+        self._standard_concepts = None
         self.discriminator = None
 
         self.items = items
+        if match_type is not None:
+          self.match_type = match_type
+        if standard_concepts is not None:
+          self.standard_concepts = standard_concepts
 
     @property
     def items(self):
@@ -70,6 +80,52 @@ class ConceptListResponse(object):
             raise ValueError("Invalid value for `items`, must not be `None`")
 
         self._items = items
+
+    @property
+    def match_type(self):
+        """
+        Gets the match_type of this ConceptListResponse.
+        match column type on which concept search was successful
+
+        :return: The match_type of this ConceptListResponse.
+        :rtype: MatchType
+        """
+        return self._match_type
+
+    @match_type.setter
+    def match_type(self, match_type):
+        """
+        Sets the match_type of this ConceptListResponse.
+        match column type on which concept search was successful
+
+        :param match_type: The match_type of this ConceptListResponse.
+        :type: MatchType
+        """
+
+        self._match_type = match_type
+
+    @property
+    def standard_concepts(self):
+        """
+        Gets the standard_concepts of this ConceptListResponse.
+        standard concepts associated with the matched concept
+
+        :return: The standard_concepts of this ConceptListResponse.
+        :rtype: list[Concept]
+        """
+        return self._standard_concepts
+
+    @standard_concepts.setter
+    def standard_concepts(self, standard_concepts):
+        """
+        Sets the standard_concepts of this ConceptListResponse.
+        standard concepts associated with the matched concept
+
+        :param standard_concepts: The standard_concepts of this ConceptListResponse.
+        :type: list[Concept]
+        """
+
+        self._standard_concepts = standard_concepts
 
     def to_dict(self):
         """
