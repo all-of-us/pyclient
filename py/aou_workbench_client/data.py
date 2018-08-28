@@ -20,6 +20,13 @@ the results in pages as you iterate over the generator.
   :param columns: a list of column names from the table or related tables to return in the data table; 
     defaults to all columns in the table (and no columns in related tables); 
     e.g. [Person.person_id, Person.gender_concept_id]
+  :param concept_set_name: the name of a concept set in the workspace that contains the 
+    calling notebook to use when filtering results from the table; only use with tables 
+    that have standard_concept_id_column and source_concept_id_column fields on the provided
+    table class; use this method instead of concept_ids or source_concept_ids 
+    when there is already a named concept set for the concepts to be extracted.
+    If both filters and concept_set_name are specified, rows returned must match 
+    both.     
   :param concept_ids: a list of integer IDs of standard concepts to include in the results from
     the table; only use with tables that have a standard_concept_id_column field on the provided
     table class; defaults to no standard concept filtering. 
@@ -40,7 +47,7 @@ the results in pages as you iterate over the generator.
     source_concept_ids is specified; e.g. Person.gender_source_concept_id  
   :param filters: ResultFilters representing other filters to use to select rows 
     returned from the table; defaults to no additional filtering. If both 
-    filters and concept_ids / source_concept_ids are specified,
+    filters and concept_set_name / concept_ids / source_concept_ids are specified,
     rows returned must match both.
   :param cohort_statuses: a list of CohortStatus indicating a filter on the review status of 
     participants to be returned in the resulting data table; defaults to no filtering (all 
@@ -57,7 +64,7 @@ the results in pages as you iterate over the generator.
     false.  
   :return a generator of dictionaries representing the results to the query
 """
-def load_data_table(cohort_name, table, columns=None, concept_ids=None,
+def load_data_table(cohort_name, table, columns=None, concept_set_name=None, concept_ids=None,
                     concept_id_column=None, source_concept_ids=None, filters=None,
                     cohort_statuses=None, max_results=None,
                     order_by=None, page_size=None, debug=False):
@@ -97,8 +104,8 @@ def load_data_table(cohort_name, table, columns=None, concept_ids=None,
             # If concept ids and other filters are provided, match both.
             all_filters = concept_result_filters
 
-    table_query = TableQuery(table=table, columns=columns, filters=all_filters,
-                             order_by=order_by)
+    table_query = TableQuery(table=table, columns=columns, concept_set_name=concept_set_name,
+                             filters=all_filters, order_by=order_by)
     field_set = FieldSet(table_query)
     request = MaterializeCohortRequest(cohort_name=cohort_name,
                                        field_set=field_set,

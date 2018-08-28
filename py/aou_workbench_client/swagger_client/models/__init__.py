@@ -21,6 +21,7 @@ from .concept import Concept
 from .concept_list_response import ConceptListResponse
 from .domain import Domain
 from .field_set import FieldSet
+from .match_type import MatchType
 from .materialize_cohort_request import MaterializeCohortRequest
 from .materialize_cohort_response import MaterializeCohortResponse
 from .operator import Operator

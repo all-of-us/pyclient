@@ -35,7 +35,8 @@ class SearchConceptsRequest(object):
         'standard_concept_filter': 'StandardConceptFilter',
         'vocabulary_ids': 'list[str]',
         'domain': 'Domain',
-        'max_results': 'int'
+        'max_results': 'int',
+        'min_count': 'int'
     }
 
     attribute_map = {
@@ -43,10 +44,11 @@ class SearchConceptsRequest(object):
         'standard_concept_filter': 'standardConceptFilter',
         'vocabulary_ids': 'vocabularyIds',
         'domain': 'domain',
-        'max_results': 'maxResults'
+        'max_results': 'maxResults',
+        'min_count': 'minCount'
     }
 
-    def __init__(self, query=None, standard_concept_filter=None, vocabulary_ids=None, domain=None, max_results=None):
+    def __init__(self, query=None, standard_concept_filter=None, vocabulary_ids=None, domain=None, max_results=None, min_count=None):
         """
         SearchConceptsRequest - a model defined in Swagger
         """
@@ -56,6 +58,7 @@ class SearchConceptsRequest(object):
         self._vocabulary_ids = None
         self._domain = None
         self._max_results = None
+        self._min_count = None
         self.discriminator = None
 
         self.query = query
@@ -67,6 +70,8 @@ class SearchConceptsRequest(object):
           self.domain = domain
         if max_results is not None:
           self.max_results = max_results
+        if min_count is not None:
+          self.min_count = min_count
 
     @property
     def query(self):
@@ -184,6 +189,29 @@ class SearchConceptsRequest(object):
         """
 
         self._max_results = max_results
+
+    @property
+    def min_count(self):
+        """
+        Gets the min_count of this SearchConceptsRequest.
+        Determines the concepts to be fetched. Gets all the concepts if 0 or gets concepts with counts if 1.
+
+        :return: The min_count of this SearchConceptsRequest.
+        :rtype: int
+        """
+        return self._min_count
+
+    @min_count.setter
+    def min_count(self, min_count):
+        """
+        Sets the min_count of this SearchConceptsRequest.
+        Determines the concepts to be fetched. Gets all the concepts if 0 or gets concepts with counts if 1.
+
+        :param min_count: The min_count of this SearchConceptsRequest.
+        :type: int
+        """
+
+        self._min_count = min_count
 
     def to_dict(self):
         """

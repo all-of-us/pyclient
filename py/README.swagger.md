@@ -86,6 +86,7 @@ Class | Method | HTTP request | Description
  - [ConceptListResponse](docs/ConceptListResponse.md)
  - [Domain](docs/Domain.md)
  - [FieldSet](docs/FieldSet.md)
+ - [MatchType](docs/MatchType.md)
  - [MaterializeCohortRequest](docs/MaterializeCohortRequest.md)
  - [MaterializeCohortResponse](docs/MaterializeCohortResponse.md)
  - [Operator](docs/Operator.md)

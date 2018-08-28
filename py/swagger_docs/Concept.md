@@ -12,6 +12,7 @@ Name | Type | Description | Notes
 **standard_concept** | **bool** | True if this is a standard concept, false otherwise | 
 **count_value** | **int** | Count of participants matching this concept in the CDR | 
 **prevalence** | **float** | Prevalence among participants in the CDR (a percentage of the total) | 
+**concept_synonyms** | **list[str]** | concept synonym names | [optional] 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

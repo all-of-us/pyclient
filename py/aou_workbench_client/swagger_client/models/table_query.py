@@ -34,6 +34,7 @@ class TableQuery(object):
         'table_name': 'str',
         'columns': 'list[str]',
         'filters': 'ResultFilters',
+        'concept_set_name': 'str',
         'order_by': 'list[str]'
     }
 
@@ -41,10 +42,11 @@ class TableQuery(object):
         'table_name': 'tableName',
         'columns': 'columns',
         'filters': 'filters',
+        'concept_set_name': 'conceptSetName',
         'order_by': 'orderBy'
     }
 
-    def __init__(self, table=None, table_name=None, columns=None, filters=None, order_by=None):
+    def __init__(self, table=None, table_name=None, columns=None, filters=None, concept_set_name=None, order_by=None):
         """
         TableQuery - a model defined in Swagger
         """
@@ -52,6 +54,7 @@ class TableQuery(object):
         self._table_name = None
         self._columns = None
         self._filters = None
+        self._concept_set_name = None
         self._order_by = None
         self.discriminator = None
 
@@ -60,6 +63,8 @@ class TableQuery(object):
           self.columns = columns
         if filters is not None:
           self.filters = filters
+        if concept_set_name is not None:
+          self.concept_set_name = concept_set_name
         if order_by is not None:
           self.order_by = order_by
 
@@ -115,7 +120,7 @@ class TableQuery(object):
     def filters(self):
         """
         Gets the filters of this TableQuery.
-        Filters on the results. Only results matching the criteria specified in the filters will be returned 
+        Filters on the results. Only results matching the criteria specified in the filters will be returned. If both filters and conceptSetName are specified, results must match both. 
 
         :return: The filters of this TableQuery.
         :rtype: ResultFilters
@@ -126,13 +131,36 @@ class TableQuery(object):
     def filters(self, filters):
         """
         Sets the filters of this TableQuery.
-        Filters on the results. Only results matching the criteria specified in the filters will be returned 
+        Filters on the results. Only results matching the criteria specified in the filters will be returned. If both filters and conceptSetName are specified, results must match both. 
 
         :param filters: The filters of this TableQuery.
         :type: ResultFilters
         """
 
         self._filters = filters
+
+    @property
+    def concept_set_name(self):
+        """
+        Gets the concept_set_name of this TableQuery.
+        A name of a concept set in the workspace used to filter results; results must match one of the concepts in the named concept set. If both filters and conceptSetName are specified, results must match both. 
+
+        :return: The concept_set_name of this TableQuery.
+        :rtype: str
+        """
+        return self._concept_set_name
+
+    @concept_set_name.setter
+    def concept_set_name(self, concept_set_name):
+        """
+        Sets the concept_set_name of this TableQuery.
+        A name of a concept set in the workspace used to filter results; results must match one of the concepts in the named concept set. If both filters and conceptSetName are specified, results must match both. 
+
+        :param concept_set_name: The concept_set_name of this TableQuery.
+        :type: str
+        """
+
+        self._concept_set_name = concept_set_name
 
     @property
     def order_by(self):
