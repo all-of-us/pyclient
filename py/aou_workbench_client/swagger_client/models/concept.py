@@ -39,7 +39,8 @@ class Concept(object):
         'concept_class_id': 'str',
         'standard_concept': 'bool',
         'count_value': 'int',
-        'prevalence': 'float'
+        'prevalence': 'float',
+        'concept_synonyms': 'list[str]'
     }
 
     attribute_map = {
@@ -51,10 +52,11 @@ class Concept(object):
         'concept_class_id': 'conceptClassId',
         'standard_concept': 'standardConcept',
         'count_value': 'countValue',
-        'prevalence': 'prevalence'
+        'prevalence': 'prevalence',
+        'concept_synonyms': 'conceptSynonyms'
     }
 
-    def __init__(self, concept_id=None, concept_name=None, domain_id=None, vocabulary_id=None, concept_code=None, concept_class_id=None, standard_concept=None, count_value=None, prevalence=None):
+    def __init__(self, concept_id=None, concept_name=None, domain_id=None, vocabulary_id=None, concept_code=None, concept_class_id=None, standard_concept=None, count_value=None, prevalence=None, concept_synonyms=None):
         """
         Concept - a model defined in Swagger
         """
@@ -68,6 +70,7 @@ class Concept(object):
         self._standard_concept = None
         self._count_value = None
         self._prevalence = None
+        self._concept_synonyms = None
         self.discriminator = None
 
         self.concept_id = concept_id
@@ -79,6 +82,8 @@ class Concept(object):
         self.standard_concept = standard_concept
         self.count_value = count_value
         self.prevalence = prevalence
+        if concept_synonyms is not None:
+          self.concept_synonyms = concept_synonyms
 
     @property
     def concept_id(self):
@@ -304,6 +309,29 @@ class Concept(object):
             raise ValueError("Invalid value for `prevalence`, must not be `None`")
 
         self._prevalence = prevalence
+
+    @property
+    def concept_synonyms(self):
+        """
+        Gets the concept_synonyms of this Concept.
+        concept synonym names
+
+        :return: The concept_synonyms of this Concept.
+        :rtype: list[str]
+        """
+        return self._concept_synonyms
+
+    @concept_synonyms.setter
+    def concept_synonyms(self, concept_synonyms):
+        """
+        Sets the concept_synonyms of this Concept.
+        concept synonym names
+
+        :param concept_synonyms: The concept_synonyms of this Concept.
+        :type: list[str]
+        """
+
+        self._concept_synonyms = concept_synonyms
 
     def to_dict(self):
         """

@@ -31,6 +31,8 @@ class Domain(object):
     CONDITION = "CONDITION"
     MEASUREMENT = "MEASUREMENT"
     DEVICE = "DEVICE"
+    DEATH = "DEATH"
+    VISIT = "VISIT"
     RACE = "RACE"
     GENDER = "GENDER"
     ETHNICITY = "ETHNICITY"
