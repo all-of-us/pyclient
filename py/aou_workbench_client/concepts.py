@@ -204,14 +204,6 @@ def search_concepts(request):
                                             request=request)
     return response.items
 
-def get_concept_dict(concept):
-    return {f[0]: getattr(concept, f[1]) for f in _RESULT_FIELDS}
-
-def get_concepts_frame(request):
-    concepts = search_concepts(request)
-    return pd.DataFrame([get_concept_dict(concept) for concept in concepts],
-                        columns = [f[0] for f in _RESULT_FIELDS])
-
 def display_concepts(request):
     concepts = search_concepts(request)
     row_html = ''
