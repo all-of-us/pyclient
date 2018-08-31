@@ -100,15 +100,6 @@ count order; the concepts that occur for the most participants in the CDR are re
 Use this function if you want access to the full [Concept](swagger_docs/Concept.md) data
 in your code.
 
-### `aou_workbench_client.concepts.get_concepts_frame`
-
-`get_concepts_frame` returns a DataFrame from the constructed from the results of calling `search_concepts`,
-with columns for concept ID, name, code, domain, vocabulary, and count.
-
-Use this function if you want to get back a data frame but have control over its
-rendering.
-
-
 ## Using cohorts
 
 The `aou_workbench_client.cohorts` module provides functions for retrieving data about participants
