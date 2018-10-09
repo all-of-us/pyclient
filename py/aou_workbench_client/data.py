@@ -1,11 +1,10 @@
-from aou_workbench_client.swagger_client.models.materialize_cohort_request import \
-    MaterializeCohortRequest
+from aou_workbench_client.cohorts import get_data_table_query
+from aou_workbench_client.swagger_client.models.data_table_specification import \
+    DataTableSpecification
 from aou_workbench_client.swagger_client.models.table_query import TableQuery
-from aou_workbench_client.swagger_client.models.field_set import FieldSet
 from aou_workbench_client.swagger_client.models.column_filter import ColumnFilter
 from aou_workbench_client.swagger_client.models.operator import Operator
 from aou_workbench_client.swagger_client.models.result_filters import ResultFilters
-from aou_workbench_client.cohorts import materialize_cohort
 
 import pandas as pd
 
@@ -58,16 +57,14 @@ the results in pages as you iterate over the generator.
   :param order_by: a list of column names from the table or related tables to order the results by; 
     defaults to order by person_id and primary key of the specified table; e.g. 
     [Person.gender_concept_id, Person.person_id]
-  :param page_size: the maximum number of result rows to fetch in a single API request when 
-    retrieving results; defaults to 1000.
   :param debug: true if debug request and response information should be displayed; defaults to 
     false.  
-  :return a generator of dictionaries representing the results to the query
+  :return a Pandas data frame representing the results of the query
 """
-def load_data_table(cohort_name, table, columns=None, concept_set_name=None, concept_ids=None,
+def load_data_frame(cohort_name, table, columns=None, concept_set_name=None, concept_ids=None,
                     concept_id_column=None, source_concept_ids=None, filters=None,
                     cohort_statuses=None, max_results=None,
-                    order_by=None, page_size=None, debug=False):
+                    order_by=None, debug=False):
     all_filters = filters
     concept_filters = []
     if concept_ids:
@@ -106,21 +103,17 @@ def load_data_table(cohort_name, table, columns=None, concept_set_name=None, con
 
     table_query = TableQuery(table=table, columns=columns, concept_set_name=concept_set_name,
                              filters=all_filters, order_by=order_by)
-    field_set = FieldSet(table_query)
-    request = MaterializeCohortRequest(cohort_name=cohort_name,
-                                       field_set=field_set,
-                                       status_filter=cohort_statuses,
-                                       page_size=page_size)
-    return materialize_cohort(request, max_results=max_results, debug=debug)
+    data_table_specification = DataTableSpecification(cohort_name=cohort_name,
+                                                      table_query=table_query,
+                                                      status_filter=cohort_statuses,
+                                                      max_results=max_results)
 
-
-"""
-Loads a data table for participants in a specified cohort,
-represented as a Pandas data frame. API calls are made to retrieve all the
-requested results and load them into a data frame before this function returns.
-Note: for large cohorts, this may take a while.
-
-For the list of parameters to use, see load_data_table.
-"""
-def load_data_frame(**kwargs):
-  return pd.DataFrame(list(load_data_table(**kwargs)))
+    cdr_query = get_data_table_query(data_table_specification, debug=debug)
+    if not cdr_query.sql:
+      return pd.DataFrame()
+    df = pd.read_gbq(query=cdr_query.sql, project_id=cdr_query.bigquery_project,
+                       configuration=cdr_query.configuration)
+    # Replace __ with '.' in column names, so that we use dot notation for
+    # columns on related tables.
+    df.columns = [column.replace('__', '.') for column in df.columns]
+    return df
