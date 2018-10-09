@@ -15,20 +15,23 @@ from __future__ import absolute_import
 
 # import models into sdk package
 from .models.annotation_query import AnnotationQuery
+from .models.cdr_query import CdrQuery
+from .models.cohort_annotations_request import CohortAnnotationsRequest
+from .models.cohort_annotations_response import CohortAnnotationsResponse
 from .models.cohort_status import CohortStatus
 from .models.column_filter import ColumnFilter
 from .models.concept import Concept
 from .models.concept_list_response import ConceptListResponse
-from .models.domain import Domain
-from .models.field_set import FieldSet
+from .models.concept_synonym import ConceptSynonym
+from .models.data_table_specification import DataTableSpecification
+from .models.domain_count import DomainCount
 from .models.match_type import MatchType
-from .models.materialize_cohort_request import MaterializeCohortRequest
-from .models.materialize_cohort_response import MaterializeCohortResponse
 from .models.operator import Operator
 from .models.result_filters import ResultFilters
 from .models.search_concepts_request import SearchConceptsRequest
 from .models.standard_concept_filter import StandardConceptFilter
 from .models.table_query import TableQuery
+from .models.vocabulary_count import VocabularyCount
 
 # import apis into sdk package
 from .apis.cohorts_api import CohortsApi
