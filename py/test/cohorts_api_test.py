@@ -1,6 +1,7 @@
 import unittest
 from aou_workbench_client.cdr.model import Person
 from aou_workbench_client.data import load_annotations, load_data_frame
+from aou_workbench_client.swagger_client.models.cohort_status import CohortStatus
 import pandas as pd
 
 class CohortsApiTest(unittest.TestCase):
@@ -17,8 +18,18 @@ class CohortsApiTest(unittest.TestCase):
         pd.testing.assert_frame_equal(expected, df)
 
     def test_load_annotations(self):
-        df = load_annotations(cohort_name='Old Men')
-        expected = pd.DataFrame([])
+        df = load_annotations(cohort_name='Old Men',
+                              cohort_statuses=[CohortStatus.INCLUDED, CohortStatus.NEEDS_FURTHER_REVIEW])
+        expected = pd.DataFrame({'person_id': [17, 269],
+                                 'review_status': ['INCLUDED', 'NEEDS_FURTHER_REVIEW'],
+                                 'boolean annotation': [1, 1],
+                                 'date annotation': ['2018-10-09', None],
+                                 'enum annotation': ['A', None],
+                                 'integer annotation': [123, 789],
+                                 'text annotation': ['blah blah', 'Needs further review!']},
+                                columns=['person_id', 'review_status', 'boolean annotation',
+                                         'date annotation', 'enum annotation', 'integer annotation',
+                                         'text annotation'])
         pd.testing.assert_frame_equal(expected, df)
       
       
