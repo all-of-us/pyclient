@@ -32,6 +32,7 @@ class CdrQuery(object):
     """
     swagger_types = {
         'sql': 'str',
+        'columns': 'list[str]',
         'configuration': 'object',
         'bigquery_project': 'str',
         'bigquery_dataset': 'str'
@@ -39,17 +40,19 @@ class CdrQuery(object):
 
     attribute_map = {
         'sql': 'sql',
+        'columns': 'columns',
         'configuration': 'configuration',
         'bigquery_project': 'bigqueryProject',
         'bigquery_dataset': 'bigqueryDataset'
     }
 
-    def __init__(self, sql=None, configuration=None, bigquery_project=None, bigquery_dataset=None):
+    def __init__(self, sql=None, columns=None, configuration=None, bigquery_project=None, bigquery_dataset=None):
         """
         CdrQuery - a model defined in Swagger
         """
 
         self._sql = None
+        self._columns = None
         self._configuration = None
         self._bigquery_project = None
         self._bigquery_dataset = None
@@ -57,6 +60,7 @@ class CdrQuery(object):
 
         if sql is not None:
           self.sql = sql
+        self.columns = columns
         if configuration is not None:
           self.configuration = configuration
         self.bigquery_project = bigquery_project
@@ -84,6 +88,31 @@ class CdrQuery(object):
         """
 
         self._sql = sql
+
+    @property
+    def columns(self):
+        """
+        Gets the columns of this CdrQuery.
+        An array of names to be used for the columns being returned by the query. (Note that related table aliases will be returned with '.' as a separator, whereas '__' is used in the SQL.) This will be populated even if sql is empty (i.e. there are no results.) 
+
+        :return: The columns of this CdrQuery.
+        :rtype: list[str]
+        """
+        return self._columns
+
+    @columns.setter
+    def columns(self, columns):
+        """
+        Sets the columns of this CdrQuery.
+        An array of names to be used for the columns being returned by the query. (Note that related table aliases will be returned with '.' as a separator, whereas '__' is used in the SQL.) This will be populated even if sql is empty (i.e. there are no results.) 
+
+        :param columns: The columns of this CdrQuery.
+        :type: list[str]
+        """
+        if columns is None:
+            raise ValueError("Invalid value for `columns`, must not be `None`")
+
+        self._columns = columns
 
     @property
     def configuration(self):

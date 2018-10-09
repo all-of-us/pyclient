@@ -115,12 +115,10 @@ def load_data_frame(cohort_name, table, columns=None, concept_set_name=None, con
 
     cdr_query = get_data_table_query(data_table_specification, debug=debug)
     if not cdr_query.sql:
-      return pd.DataFrame()
+      return pd.DataFrame(columns=cdr_query.columns)
     df = pd.read_gbq(query=cdr_query.sql, project_id=cdr_query.bigquery_project,
                        configuration=cdr_query.configuration)
-    # Replace __ with '.' in column names, so that we use dot notation for
-    # columns on related tables.
-    df.columns = [column.replace('__', '.') for column in df.columns]
+    df.columns = cdr_query.columns
     return df
 
 
@@ -147,5 +145,5 @@ def load_annotations(cohort_name, columns=None, cohort_statuses=None,
     request = CohortAnnotationsRequest(cohort_name=cohort_name,
                                      status_filter=cohort_statuses,
                                      annotation_query=annotation_query)
-    return pd.DataFrame(get_cohort_annotations(request, debug=debug),
-                        columns=columns)
+    response = get_cohort_annotations(request, debug=debug)
+    return pd.DataFrame(response.results, columns=response.columns)

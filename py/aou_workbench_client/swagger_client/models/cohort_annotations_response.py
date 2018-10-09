@@ -31,22 +31,50 @@ class CohortAnnotationsResponse(object):
                             and the value is json key in definition.
     """
     swagger_types = {
+        'columns': 'list[str]',
         'results': 'list[object]'
     }
 
     attribute_map = {
+        'columns': 'columns',
         'results': 'results'
     }
 
-    def __init__(self, results=None):
+    def __init__(self, columns=None, results=None):
         """
         CohortAnnotationsResponse - a model defined in Swagger
         """
 
+        self._columns = None
         self._results = None
         self.discriminator = None
 
+        if columns is not None:
+          self.columns = columns
         self.results = results
+
+    @property
+    def columns(self):
+        """
+        Gets the columns of this CohortAnnotationsResponse.
+        An array of columns for the annotations being returned. 
+
+        :return: The columns of this CohortAnnotationsResponse.
+        :rtype: list[str]
+        """
+        return self._columns
+
+    @columns.setter
+    def columns(self, columns):
+        """
+        Sets the columns of this CohortAnnotationsResponse.
+        An array of columns for the annotations being returned. 
+
+        :param columns: The columns of this CohortAnnotationsResponse.
+        :type: list[str]
+        """
+
+        self._columns = columns
 
     @property
     def results(self):

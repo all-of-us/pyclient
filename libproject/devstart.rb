@@ -8,7 +8,7 @@ require_relative "../aou-utils/workbench"
 require_relative "../aou-utils/swagger"
 
 # Update this whenever we want to generate libraries for the latest version of the workbench API.
-API_TAG = "api_v1_9"
+API_TAG = "api_v1_10"
 
 SWAGGER_SPEC = "https://raw.githubusercontent.com/all-of-us/workbench/#{API_TAG}/api/src/main/resources/client_api.yaml"
 CDM_SPEC = "https://raw.githubusercontent.com/all-of-us/workbench/master/api/config/cdm/cdm_5_2.json"
