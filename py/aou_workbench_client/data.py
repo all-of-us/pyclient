@@ -1,4 +1,8 @@
-from aou_workbench_client.cohorts import get_data_table_query
+from aou_workbench_client.cohorts import get_cohort_annotations, get_data_table_query
+from aou_workbench_client.swagger_client.models.annotation_query import \
+    AnnotationQuery
+from aou_workbench_client.swagger_client.models.cohort_annotations_request import \
+    CohortAnnotationsRequest
 from aou_workbench_client.swagger_client.models.data_table_specification import \
     DataTableSpecification
 from aou_workbench_client.swagger_client.models.table_query import TableQuery
@@ -49,12 +53,13 @@ the results in pages as you iterate over the generator.
     filters and concept_set_name / concept_ids / source_concept_ids are specified,
     rows returned must match both.
   :param cohort_statuses: a list of CohortStatus indicating a filter on the review status of 
-    participants to be returned in the resulting data table; defaults to no filtering (all 
-    participants are returned.
+    participants to be returned in the resulting data table; defaults to all non-excluded participants
+    being returned.
   :param max_results: the maximum number of rows to return in the resulting data table; defaults
     to no limit (all matching rows will be returned.) Note that for large cohorts, it may take a 
     long time to get all results.
-  :param order_by: a list of column names from the table or related tables to order the results by; 
+  :param order_by: a list of column names from the table or related tables to order the results by,
+    any of which can be optionally wrapped in `DESCENDING()` to request descending sort order; 
     defaults to order by person_id and primary key of the specified table; e.g. 
     [Person.gender_concept_id, Person.person_id]
   :param debug: true if debug request and response information should be displayed; defaults to 
@@ -117,3 +122,30 @@ def load_data_frame(cohort_name, table, columns=None, concept_set_name=None, con
     # columns on related tables.
     df.columns = [column.replace('__', '.') for column in df.columns]
     return df
+
+
+"""
+Loads annotations for reviewed participants for the specified cohort. 
+:param cohort_name: the name of a cohort in the workspace that contains the calling notebook
+:param columns: list of `'person_id'`, `'review_status'`, or names of annotations 
+    defined on the cohort. Defaults to `['person_id', 'review_status', <all defined annotation names>]`.
+:param cohort_statuses: a list of CohortStatus indicating a filter on the review status of 
+    participants to be returned in the resulting data table; defaults to all non-excluded participants
+    being returned.
+:param order_by: A list of `'person_id'`, `'review_status'`, or names of annotations 
+    defined on the cohort, any of which can optionally be wrapped in `DESCENDING()` 
+    to request descending sort order. Defaults to `['person_id']`. 
+    Any annotations in `order_by` must also be present in `columns` (if `columns` is specified.)
+:param debug: true if debug request and response information should be displayed; defaults to 
+    false.  
+:return a Pandas data frame representing the annotations. If no review exists or no
+    participants match the statuses above, an empty data frame is returned.    
+"""
+def load_annotations(cohort_name, columns=None, cohort_statuses=None,
+                     order_by=None, debug=False):
+    annotation_query = AnnotationQuery(columns=columns, order_by=order_by)
+    request = CohortAnnotationsRequest(cohort_name=cohort_name,
+                                     status_filter=cohort_statuses,
+                                     annotation_query=annotation_query)
+    return pd.DataFrame(get_cohort_annotations(request, debug=debug),
+                        columns=columns)
