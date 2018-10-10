@@ -10,7 +10,7 @@
 # For permission to push, request to be added to the DockerHub repository.
 # Include your changes to circle.yml in the PR that uses the build image.
 
-FROM circleci/python:3.6.1
+FROM circleci/python:3.7.0
 
 USER circleci
 
@@ -22,9 +22,7 @@ RUN cd && \
 
 RUN sudo apt-get update
 RUN sudo apt-get install gettext ruby python-pip
+RUN sudo pip install --upgrade pip
 RUN sudo pip install --upgrade pylint
-RUN sudo pip install --upgrade virtualenv
-RUN sudo easy_install pip
-RUN sudo easy_install setuptools
 
 ENV PATH=/home/circleci/node/bin:/home/circleci/google-cloud-sdk/bin:$PATH
