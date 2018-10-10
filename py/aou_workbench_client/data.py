@@ -9,6 +9,7 @@ from aou_workbench_client.swagger_client.models.table_query import TableQuery
 from aou_workbench_client.swagger_client.models.column_filter import ColumnFilter
 from aou_workbench_client.swagger_client.models.operator import Operator
 from aou_workbench_client.swagger_client.models.result_filters import ResultFilters
+from aou_workbench_client.config import all_of_us_config
 
 import pandas as pd
 
@@ -116,8 +117,9 @@ def load_data(cohort_name, table, columns=None, concept_set_name=None, concept_i
     cdr_query = get_data_table_query(data_table_specification, debug=debug)
     if not cdr_query.sql:
       return pd.DataFrame(columns=cdr_query.columns)
-    df = pd.read_gbq(query=cdr_query.sql, project_id=cdr_query.bigquery_project,
-                       configuration=cdr_query.configuration)
+    df = pd.read_gbq(query=cdr_query.sql,
+                     project_id=all_of_us_config.workspace_namespace,
+                     configuration=cdr_query.configuration)
     df.columns = cdr_query.columns
     return df
 
