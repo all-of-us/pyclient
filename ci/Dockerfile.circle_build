@@ -24,5 +24,6 @@ RUN sudo apt-get update
 RUN sudo apt-get install gettext ruby python-pip
 RUN sudo pip install --upgrade pip
 RUN sudo pip install --upgrade pylint
+RUN sudo pip install --upgrade virtualenv
 
 ENV PATH=/home/circleci/node/bin:/home/circleci/google-cloud-sdk/bin:$PATH
