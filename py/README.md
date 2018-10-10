@@ -32,7 +32,8 @@ is being recorded about the participant.
 
 When materializing a cohort and analyzing data, it is useful to be able to filter on the IDs of
 concepts of interest. The `aou_workbench_client.concepts` module provides functions for retrieving
-information about concepts.
+information about concepts. Use this if you have not already defined a named concept set in workbench
+for the concepts you are interested in.
 
 ### `aou_workbench_client.concepts.display_concepts_widget`
 
@@ -100,158 +101,44 @@ count order; the concepts that occur for the most participants in the CDR are re
 Use this function if you want access to the full [Concept](swagger_docs/Concept.md) data
 in your code.
 
-## Using cohorts
+## Retrieving data about cohorts
 
-The `aou_workbench_client.cohorts` module provides functions for retrieving data about participants
-in a cohort using a cohort materialization request object constructed in your code.
+The `aou_workbench_client.data` module provides `load_data` and `load_annotations` functions that 
+allow you to retrieve data from the CDR and annotations created during cohort review for a 
+specified cohort.
 
-The `aou_workbench_client.data` module provides `load_data_table` and `load_data_frame` functions that offer a simpler
-API for materializing cohorts; we recommend using them instead of the methods in
-`aou_workbench_client.cohorts` in most cases. (At present, these methods do not support
-loading annotation data about cohorts, but otherwise should provide full cohort materialization 
-functionality.)
+### `aou_workbench_client.data.load_data`
 
-### `aou_workbench_client.data.load_data_table`
-
-`load_data_table` allows you to extract data from an OMOP table for the participants in a
+`load_data` allows you to extract data from an OMOP table for the participants in a
 cohort. Results are returned matching the specified concept IDs, filters, and cohort statuses, in 
 the order specified. 
 
-Results from this method are returned as a Python generator of dictionaries, with keys matching the columns
-requested. API calls are issued as needed as you iterate over the results in the generator. (No API calls will be
-performed until you start iterating.)
+Results from this method are returned as Pandas DataFrame with the columns requested. All results
+will be loaded into memory. The results returned at present must be smaller than 128 MB compressed
+due to BigQuery maximum response size limits; see https://cloud.google.com/bigquery/quotas for 
+more information.
 
-To instead return all the results as an in-memory Pandas DataFrame, use the convenience method
-[load_data_frame](#aou_workbench_clientdataload_data_frame).
-
-### `aou_workbench_client.data.load_data_frame`
-
-`load_data_frame` executes [load_data_table](#aou_workbench_clientdataload_data_table) and returns all the results
-as an in-memory Pandas DataFrame. Note that many API calls may need to be performed in order to retrieve all the results;
-for large cohorts this may take a while.
-
-#### `load_data_table` and `load_data_frame` parameters
+#### `load_data` parameters
 
 Name | Required? | Description
 ---- | --------- | -----------  
 cohort_name | Yes | The name of a cohort in the workspace that contains the calling notebook; only participants in this cohort will be returned. (Example: 'My Cohort')
 table | Yes | The class representing the primary / starting table to retrieve data from, taken from the `aou_workbench_client.cdr.model` package. The table class must have a person_id column. (Example: `aou_workbench_client.cdr.model.Person`)
-columns | No | A list of column names from the starting table or related tables to return in the data table; defaults to all columns in the starting table (and no columns in related tables). (Example: `[Person.person_id, Person.gender_concept_id]`)
+columns | No | A list of column names from the starting table or related tables to return in the data table; defaults to all columns in the starting table (and no columns in related tables). Use fields defined on the class specified for the `table` parameter when specifying columns. (Example: `[Person.person_id, Person.gender_concept_id]`)
+concept_set_name | No | The name of a concept set in the workspace that contains the calling notebook to use when filtering results from the table; only use with tables that have standard_concept_id_column and source_concept_id_column fields on the provided table class. Use this method instead of concept_ids or source_concept_ids when there is already a named concept set for the concepts to be extracted. If both filters and concept_set_name are specified, rows returned must match both.    
 concept_ids | No | A list of integer IDs of standard concepts to include in the results from the table; only use with tables that have a standard_concept_id_column field on the provided table class; defaults to no standard concept filtering. If both `concept_ids` and `source_concept_ids` are specified, rows that match either will be returned.
 concept_id_column | No | The name of the column to filter against with the values in `concept_ids`; defaults to the standard concept ID column for the table (if applicable); this must be specified with tables that lack a standard concept ID column when `concept_ids` is specified. (Example: `Person.gender_concept_id`)  
-source_concept_ids | No | A list of integer IDs of source concepts to include in the results from the table; only use with tables that have a `source_concept_id_column` field on the provided table class; defaults to no standard concept filtering. If both `concept_ids` and `source_concept_ids` are specified, rows that match either will be returned.
-source_concept_id_column | No | The name of the column to filter against with the values in `source_concept_ids`; defaults to the source concept ID column for the table (if applicable); this must be specified with tables that lack a source concept ID column when `source_concept_ids` is specified. (Example: `Person.gender_source_concept_id`_  
-filters | No | [ResultFilters](#result-filters) representing other filters to use to select rows returned from the table; defaults to no additional filtering. If both `filters` and `concept_ids` / `source_concept_ids` are specified, rows returned must match both. 
-cohort_statuses | No | a list of [CohortStatus](swagger_docs/CohortStatus.md) indicating a filter on the review status of participants to be returned in the resulting data table; defaults to no filtering (all participants are returned.)
-max_results | No | the maximum number of rows to return in the resulting data table; defaults to no limit (all matching rows will be returned.) Note that for large cohorts, it may take a long time to get all results; it is advisable to set `max_results` to something initially during development to ensure the results are what you are looking for.
-order_by | No | a list of column names from the table or related tables to order the results by; defaults to order by `person_id` and primary key of the specified table. (Example: `[Person.gender_concept_id, Person.person_id]`)
-page_size | No | the maximum number of result rows to fetch in a single API response when retrieving results; defaults to 1000.
+source_concept_ids | No | A list of integer IDs of source concepts to include in the results from the table; only use with tables that have a `source_concept_id_column` field on the provided table class; defaults to no standard concept filtering. If both `concept_ids` and `source_concept_ids` are specified, rows that match either will be returned.  
+filters | No | [ResultFilters](#result-filters) representing other filters to use to select rows returned from the table; defaults to no additional filtering. If both `filters` and `concept_ids` / `source_concept_ids` are specified, rows returned must match both.  Use fields defined on the class specified for the `table` parameter when specifying columns in filters. 
+cohort_statuses | No | a list of [CohortStatus](swagger_docs/CohortStatus.md) indicating a filter on the review status of participants to be returned in the resulting data table; defaults to `['INCLUDED', 'NEEDS_FURTHER_REVIEW', 'NOT_REVIEWED']` (not excluded).
+max_results | No | the maximum number of rows to return in the resulting data frame; defaults to no limit (all matching rows will be returned.) Note that for large cohorts, it may take longer to get all results; it is advisable to set `max_results` to something initially during development to ensure the results are what you are looking for.
+order_by | No | a list of column names from the table or related tables to order the results by; defaults to order by `person_id` and primary key of the specified table. Use fields defined on the class specified for the `table` parameter when specifying columns here. (Example: `[Person.gender_concept_id, Person.person_id]`)
 debug | No |  True if you want to see debugging output for the API requests used to materialize the cohort; defaults to False.
 
+Columns referenced in the `columns`, `concept_id_column`, `filters`, and `order_by` parameters to 
+`load_data` can be specified using fields from the [CDR model](#cdr-model).
 
-### `aou_workbench_client.cohorts.materialize_cohort`
-
-`materialize_cohort` is used to fetch some or all results of cohort materialization,
-and return a generator of dictionaries representing the results.
-
-This can be used to retrieve information about some or all of the participants in a
-cohort you defined in the AllOfUs workbench.
-
-No server call takes place to retrieve the data until you start iterating over
-the generator.
-
-For not-too-large result sets, it is reasonable to wrap the results in a call to `list()`
-to bring all the results from the generator into memory at once. (You can then optionally pass that
-list to the constructor of a Pandas `DataFrame`.)
-
-If the result sets are very large, you may need to stream the results to disk as you 
-use them to avoid running into out of memory errors.
-
-Note that for large cohorts, a single call to materialize_cohort may run for 
-a very long time.
-
-Full examples of calling `materialize_cohort` can be found [below](#putting-it-all-together).
-
-#### `materialize_cohort` parameters
-Name | Required? | Description
----- | --------- | -----------  
-`request` | Yes | A [MaterializeCohortRequest](#materializecohortrequest) indicating what cohort to materialize, what filtering and ordering criteria to apply, and what fields to retrieve.
-`max_results` | No | The maximum number of results to retrieve in the generator. Defaults to returning all results matching the cohort and filtering criteria in the specified request, making as many server calls as needed. This may require multiple server calls -- request.page_size specifies the maximum number retrieved per call.
-`debug` | No | True if you want to see debugging output for the API requests used to materialize the cohort; defaults to False.  
-
-### `aou_workbench_client.cohorts.materialize_cohort_page`
-
-`materialize_cohort_page` is used to fetch a single page of results from cohort
-materialization, as a [MaterializeCohortResponse](swagger_docs/MaterializeCohortResponse.md).
-
-Normally you should be able to call [`materialize_cohort`](#aou_workbench_clientcohortsmaterialize_cohort) instead
-of this function, but you may use this function to get better control over
-when requests to retrieve results from the server are executed.
-
-#### `materialize_cohort_page` parameters
-Name | Required? | Description
----- | --------- | -----------  
-`request` | Yes | A [MaterializeCohortRequest](#materializecohortrequest) indicating what cohort to materialize, what filtering and ordering criteria to apply, what fields to retrieve, and what pagination token to use (for subsequent requests.)
-`debug` | No | True if you want to see debugging output for the API requests used to materialize the cohort; defaults to False.
- 
-
-### MaterializeCohortRequest
-
-When you want to materialize data about a cohort you've defined in workbench, you construct
-a [MaterializeCohortRequest object](swagger_docs/MaterializeCohortRequest.md). 
-
-You will later pass this request to [materialize_cohort](#aou_workbench_clientcohortsmaterialize_cohort) if you wish
-to retrieve all the results as a generator of dictionaries, or you can pass it to 
-[`materialize_cohort_page`](#aou_workbench_clientcohortsmaterialize_cohort_page) if you wish to make server calls
-to retrieve paginated responses containing results, one page at a time.
-
-#### `MaterializeCohortRequest` fields
-
-Name | Required? | Description
----- | --------- | -----------
-`cohort_name`|Yes|The name of a cohort you defined in workbench. (Make sure to update any references in notebooks if you change the cohort's name.)
-`field_set`|Yes|A [FieldSet](#field-sets) indicating what data you want to retrieve about the cohort.
-`status_filter`|No|A list of [CohortStatus](swagger_docs/CohortStatus.md) values indicating cohort review statuses to filter the participants whose data is returned. By default, `[INCLUDED, NEEDS_FURTHER_REVIEW, NOT_REVIEWED]` will be used -- everything except `EXCLUDED` (participants that have been explicitly excluded.) There is no need to set this for cohorts which have not been reviewed. 
-`page_size`|No|The number of results to return in a single request to the server. Defaults to 1000. Depending on the size of data returned, you may try increasing or decreasing this to improve performance, but you generally should not have to set this.
-`page_token`|No|A pagination token used to retrieve additional results from the server after the first request. You will only need to set this if you use the [materialize_cohort_page][#aou_workbench_clientcohortsmaterialize_cohort_page] function repeatedly to retrieve multiple pages of data explicitly.
-
-#### Field sets
-
-Field sets represent what data you want to retrieve about a cohort. 
-
-A [FieldSet object](swagger_docs/FieldSet.md) must have either its 
-[`table_query`](#table-queries) or [`annotation_query`](#annotation-queries) 
-field populated. Details for table queries and annotation queries follow.
-
-#### Table queries
-
-A [TableQuery object](swagger_docs/TableQuery.md) is used to 
-specify how to retrieve data about the cohort from a table with 
-a person_id column in the version of the curated data repository (CDR)
-associated with the workspace that contains this notebook.
-
-You can retrieve, filter, and sort by data directly in the requested table, 
-or in related tables the table has foreign key relationships to.
-
-Tables and columns referenced in table queries can be specified using fields 
-from the [CDR model](#cdr-model).
-
-##### `TableQuery` fields
-
-Name | Required? | Description
----- | --------- | -----------
-`table` | No | The class representing the primary / starting table to retrieve data from, taken from the `aou_workbench_client.cdr.model` package. Either this or table_name must be specified. The table class must have a person_id column. 
-`table_name`| No |The name of the primary / starting table to retrieve data from. Either this or table must be specified. The list of supported tables for **table_name** is `aou_workbench_client.cdr.model.cohort_tables`; the value of the `table_name` field on each class in `aou_workbench_client.cdr.model` can be provided here.
-`columns`|No|What columns you want to retrieve from the table or related tables. By default, all columns on the specified table (but no related tables) will be returned.
-`filters`|No|[ResultFilters](#result-filters) that specifies criteria results returned must match based on matching values to the columns on the table or related tables.  By default, no filtering criteria is returned.
-`order_by`|No|The columns from the specified table or related tables to sort results by, optionally wrapped by `DESCENDING()` (which can be generated using `aou_workbench_client.cdr.model.descending`) to indicate a descending sort order. Defaults to `['person_id', <table ID>]`.
-
-Columns referred to by name in `columns`, `filters`, and `order_by` can either
-be the name of a column (e.g. "person_id", "observation_id") in the table you specified, 
-as listed in the [CDR model](#cdr-model);
-or they can be columns from [related tables](#related-table-columns).
-
-##### CDR model
+#### CDR model
 
 Metadata about the tables and columns you can query against can be found in 
 the client library in the [`aou_workbench_client.cdr.model`](aou_workbench_client/cdr/model.py) module. 
@@ -280,7 +167,7 @@ the CDR.
 The `descending` function can be used to produce a `DESCENDING()` expression for
 use in `order_by` lists.
 
-##### Related table columns
+#### Related table columns
 
 Related table columns are specified with a dot notation going one
 or more levels deep (e.g. "gender_concept.concept_name", "care_site.location.address_1").
@@ -320,7 +207,7 @@ Name | Required? | Description
 `any_of` | No | A list of [ResultFilters](#result-filters) specifying a list of conditions that at least one of must be satisfied for results that are returned.
 `if_not` | No | If set to True, only results that DO NOT match the criteria specified by this filter are returned. Defaults to False.
 
-##### Column filters
+#### Column filters
 
 A [ColumnFilter object](swagger_docs/ColumnFilters.md) specifies a filter
 that a given column value in a table in the CDR must match a provided value.
@@ -351,7 +238,7 @@ Name | Required? | Description
 `value_date` | No | A date value to use in comparisons with date columns.
 `value_null` | No | Set to true if you wish to compare to NULL / not set value (with the `EQUAL` operator for checking for matching NULL, or the `NOT_EQUAL` operator for matching anything but NULL.)
 
-##### `TableQuery` examples
+#### `load_data` examples
 
 All examples below reference modules that can be imported from `aou_workbench_client.swagger_client.models`
 and `aou_workbench_client.cdr.model`.
@@ -359,13 +246,13 @@ and `aou_workbench_client.cdr.model`.
 Return all columns in observation for all observation rows:
 
 ```python
-table_query = TableQuery(table=Observation)
+df = load_data(cohort_name='My Cohort', table=Observation)
 ```
 
 Return specific columns on observation for all observation rows:
 
 ```python
-table_query = TableQuery(table=Observation, 
+df = load_data(cohort_name='My Cohort', table=Observation, 
     columns=[Observation.observation_id, Observation.person_id, Observation.value_as_number])
 ```
 
@@ -375,7 +262,7 @@ Return all columns in observation for rows matching a filter on `observation_con
 concept_column_filter = ColumnFilter(column_name=Observation.observation_concept_id, 
                                      value_number=123456)
 concept_filter = ResultFilters(column_filter=concept_column_filter)
-table_query = TableQuery(table=Observation, filters=concept_filter)
+df = load_data(cohort_name='My Cohort', table=Observation, filters=concept_filter)
 ```
 
 Return all columns in observation for rows matching `observation_concept_id` = 123456 AND `value_as_number` > 1000:
@@ -388,7 +275,7 @@ value_column_filter = ColumnFilter(column_name=Observation.value_as_number,
                                    operator=Operator.GREATER_THAN)
 value_as_number_filter = ResultFilters(column_filter=value_column_filter)
 both_filters = ResultFilters(all_of=[concept_filter, value_as_number_filter])
-table_query = TableQuery(table=Observation, filters=both_filter)
+df = load_data(cohort_name='My Cohort', table=Observation, filters=both_filter)
 ```
  
 Return all columns in observation for rows matching `observation_concept_id` = 123456 OR `value_as_number` > 1000:
@@ -401,7 +288,7 @@ value_column_filter = ColumnFilter(column_name=Observation.value_as_number,
                                    operator=Operator.GREATER_THAN)
 value_as_number_filter = ResultFilters(column_filter=value_column_filter)
 either_filter = ResultFilters(any_of=[concept_filter, value_as_number_filter])
-table_query = TableQuery(table=Observation, filters=either_filter)
+df = load_data(cohort_name='My Cohort', table=Observation, filters=either_filter)
 ```
 
 Return all columns in observation for rows that DO NOT match `observation_concept_id` = 123456 OR `value_as_number` > 1000:
@@ -416,21 +303,21 @@ value_as_number_filter = ResultFilters(column_filter=value_column_filter)
 not_either_filter = ResultFilters(if_not=True, 
                                   any_of=[concept_filter, 
                                           value_as_number_filter])
-table_query = TableQuery(table=Observation, filters=not_either_filter)
+df = load_data(cohort_name='My Cohort', table=Observation, filters=not_either_filter)
 ```
 
 Return all columns in observation for all rows ordered by observation_concept_id (ascending) and value_as_number (descending):
 ```python
-table_query = TableQuery(table=Observation, 
-                         order_by=[Observation.observation_concept_id, 
-                                   descending(Observation.value_as_number)])
+df = load_data(cohort_name='My Cohort', table=Observation, 
+               order_by=[Observation.observation_concept_id, 
+                         descending(Observation.value_as_number)])
 ``` 
 
 Return person_id, gender concept name, and care site's location city for rows in the person table:
 ```python
-table_query = TableQuery(table=Person, 
-                          columns=[Person.person_id, Person.gender_concept.name, 
-                                   Person.care_site.location.city])
+df = load_data(cohort_name='My Cohort', table=Person, 
+               columns=[Person.person_id, Person.gender_concept.name, 
+                        Person.care_site.location.city])
 ```
 
 Return person_id and care site's location city for rows in the person table where 
@@ -440,111 +327,80 @@ state_column_filter = ColumnFilter(column_name=Person.care_site.location.city,
                                    value='TX')
 state_filter = ResultFilters(column_filter=state_column_filter)
 
-table_query = TableQuery(table=Person,
-                         columns=[Person.person_id, Person.care_site.location.city],
-                         filters=state_filter, 
-                         order_by=[Person.care_site.location.city])
+df = load_data(cohort_name='My Cohort', table=Person,
+               columns=[Person.person_id, Person.care_site.location.city],
+               filters=state_filter, 
+               order_by=[Person.care_site.location.city])
 ```
 
-#### Annotation queries
+### `aou_workbench_client.data.load_annotations`
 
-An [AnnotationQuery object](swagger_docs/AnnotationQuery.md) is used to retrieve the 
-review status and annotations created as a part of cohort review, along with
-the person_id they were created for. They are only useful for cohorts which have been
-reviewed; cohorts without reviews will get no results in response to these queries.
+`load_annotations` allows you to retrieve annotation values or cohort review statuses you created 
+in workbench during cohort review. 
 
-Note that by default, participants that were sampled as a part of the review
-but have not had their cohort status updated will be included in the results,
-with a review status of `NOT_REVIEWED`. (These participants may have had 
-annotations created, even if their review status is not set.)
+Results from this method are returned as Pandas DataFrame with the annotations requested as columns.
+All results will be loaded into memory. 
 
-If you wish to only get results for participants with an explicit cohort status,
-use the `status_filter` field on the request to not include `NOT_REVIEWED`.
 
-##### `AnnotationQuery` fields
- 
+#### `load_annotations` parameters
+
 Name | Required? | Description
----- | --------- | -----------
-`columns` | No | A list of `'person_id'`, `'review_status'`, or names of annotations defined on the cohort. Defaults to `['person_id', 'review_status', <all defined annotation names>]`.
-`order_by` | No | A list of `'person_id'`, `'review_status'`, or names of annotations defined on the cohort, any of which can optionally be wrapped in `DESCENDING()` to request descending sort order. Defaults to `['person_id']`. Any annotations in `order_by` must also be present in `columns` (if `columns` is specified.)
+---- | --------- | -----------  
+`cohort_name`| Yes | The name of a cohort in the workspace that contains the calling notebook
+`columns` | No | A list of `'person_id'`, `'review_status'`, or names of annotations  defined on the cohort. Defaults to `['person_id', 'review_status', <all defined annotation names>]`.
+`cohort_statuses` | No | A list of CohortStatus indicating a filter on the review status of  participants to be returned in the resulting data table; defaults to `['INCLUDED', 'NEEDS_FURTHER_REVIEW', 'NOT_REVIEWED']` (not excluded).
+`order_by` | No | A list of `'person_id'`, `'review_status'`, or names of annotations  defined on the cohort, any of which can optionally be wrapped in `DESCENDING()`  to request descending sort order. Defaults to `['person_id']`. Any annotations in `order_by` must also be present in `columns` (if `columns` is specified.)
+`debug` | No | True if debug request and response information should be displayed; defaults to false.  
 
-##### `AnnotationQuery` examples
 
-Return `person_id`, `review_status`, and all annotations, ordered by `person_id`:
+#### `load_annotations` examples
+
+Return `person_id`, `review_status`, and all defined annotations, ordered by `person_id`:
 
 ```python
-annotation_query = AnnotationQuery()
+annotations = load_annotations(cohort_name='My Cohort')
 ```
 
 Return just `person_id` and `review_status`, ordered by `person_id`:
 
 ```python
-annotation_query = AnnotationQuery(columns=['person_id', 'review_status'])
+annotations = load_annotations(cohort_name='My Cohort', columns=['person_id', 'review_status'])
 ```
 
 Return `person_id` and an annotation named `is obese`, ordered by `person_id`:
 
 ```python
-annotation_query = AnnotationQuery(columns=['person_id', 'is_obese'])
+annotations = load_annotations(cohort_name='My Cohort', columns=['person_id', 'is_obese'])
 ```
 
 Return `person_id`, `review_status, and all annotations, ordered by the `is_obese` annotation and review status, descending:
 
 ```python
-annotation_query = AnnotationQuery(order_by=['is_obese', 'DESCENDING(review_status)'])
+annotations = load_annotations(cohort_name='My Cohort', order_by=['is_obese', 'DESCENDING(review_status)'])
 ```
 
  
 #### Putting it all together
 
-Here's an example of materializing a cohort to retrieve a data frame containing 1000 measurement 
-values where the source value is 'Temper' for a cohort named 'Flu', using [`load_data_frame`](#aou_workbench_clientdataload_data_frame):
+Here's an example of retrieving a data frame containing 1000 measurement 
+values where the source value is 'Temper' for a cohort named 'Flu', using [`load_data`](#aou_workbench_clientdataload_data):
 
 ```python
 from aou_workbench_client.swagger_client.models import ColumnFilter, ResultFilters
 from aou_workbench_client.cdr.model import Measurement
 
-from aou_workbench_client.data import load_data_frame
-
-import pandas as pd
+from aou_workbench_client.data import load_data
 
 temp_filter = ResultFilters(column_filter=ColumnFilter(Measurement.measurement_source_value, 
                                                        value='Temper'))
-measure_df = load_data_frame(cohort_name='Flu', table=Measurement,
-                             columns=[Measurement.person_id, 
-                                      Measurement.measurement_id, 
-                                      Measurement.measurement_date, 
-                                      Measurement.measurement_source_value,
-                                      Measurement.value_as_number],
-                             filters=temp_filter,
-                             max_results=1000)
-```
-
-Here is the more complicated but equivalent Python using [`materialize_cohort`](#aou_workbench_clientcohortsmaterialize_cohort):
-
-```python
-from aou_workbench_client.swagger_client.models import ResultFilters, MaterializeCohortRequest, CohortStatus
-from aou_workbench_client.swagger_client.models import TableQuery, ColumnFilter, Operator, FieldSet, AnnotationQuery
-from aou_workbench_client.cohorts import materialize_cohort
-from aou_workbench_client.cdr.model import Measurement
-
-import pandas as pd
-
-temp_filter = ResultFilters(column_filter=ColumnFilter(Measurement.measurement_source_value, 
-                                                       value='Temper'))
-measure_query = TableQuery(table=Measurement,
-                          columns=[Measurement.person_id, 
-                                   Measurement.measurement_id, 
-                                   Measurement.measurement_date, 
-                                   Measurement.measurement_source_value,
-                                   Measurement.value_as_number],
-                          filters=temp_filter)
-field_set = FieldSet(table_query=measure_query)
-measure_request = MaterializeCohortRequest(cohort_name='Flu', 
-                                           field_set=field_set, 
-                                           page_size=1000)
-measure_response = materialize_cohort(measure_request, max_results=1000)
-measure_df = pd.DataFrame(list(measure_response))
+measure_df = load_data(cohort_name='Flu', table=Measurement,
+                       columns=[Measurement.person_id, 
+                                Measurement.measurement_id, 
+                                Measurement.measurement_date, 
+                                Measurement.measurement_source_value,
+                                Measurement.value_as_number],
+                       filters=temp_filter,
+                       max_results=1000)
 ```
 
 The resulting data frame would look like:
@@ -556,15 +412,11 @@ Row | measurement_date | measurement_id | measurement_source_value | person_id |
 2 | 2011-08-08 | 104223671 | Temper | 172 | 36.72
 
 
-Here's an example of materializing an annotation query:
+Here's an example of loading some annotations:
 ```python
-annotation_query = AnnotationQuery(columns=['person_id', 'review_status', 'my annotation'])
-annotation_field_set = FieldSet(annotation_query=annotation_query)
-annotation_request = MaterializeCohortRequest(cohort_name='Flu', 
-                                              field_set=annotation_field_set, 
-                                              page_size=1000)
-annotation_response = materialize_cohort(annotation_request, max_results=1000)
-annotation_df = pd.DataFrame(list(annotation_response))
+from aou_workbench_client.data import load_annotations
+annotations = load_annotations(cohort_name='Flu', 
+                               columns=['person_id', 'review_status', 'my annotation'])
 ```
 
 resulting in a data frame like:

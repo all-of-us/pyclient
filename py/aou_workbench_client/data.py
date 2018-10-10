@@ -53,8 +53,8 @@ the results in pages as you iterate over the generator.
     filters and concept_set_name / concept_ids / source_concept_ids are specified,
     rows returned must match both.
   :param cohort_statuses: a list of CohortStatus indicating a filter on the review status of 
-    participants to be returned in the resulting data table; defaults to all non-excluded participants
-    being returned.
+    participants to be returned in the resulting data table; defaults to 
+    `['INCLUDED', 'NEEDS_FURTHER_REVIEW', 'NOT_REVIEWED']` (not excluded).
   :param max_results: the maximum number of rows to return in the resulting data table; defaults
     to no limit (all matching rows will be returned.) Note that for large cohorts, it may take a 
     long time to get all results.
@@ -127,9 +127,9 @@ Loads annotations for reviewed participants for the specified cohort.
 :param cohort_name: the name of a cohort in the workspace that contains the calling notebook
 :param columns: list of `'person_id'`, `'review_status'`, or names of annotations 
     defined on the cohort. Defaults to `['person_id', 'review_status', <all defined annotation names>]`.
-:param cohort_statuses: a list of CohortStatus indicating a filter on the review status of 
-    participants to be returned in the resulting data table; defaults to all non-excluded participants
-    being returned.
+:param cohort_statuses: A list of CohortStatus indicating a filter on the review status of participants 
+    to be returned in the resulting data table; defaults to 
+    `['INCLUDED', 'NEEDS_FURTHER_REVIEW', 'NOT_REVIEWED']` (not excluded).
 :param order_by: A list of `'person_id'`, `'review_status'`, or names of annotations 
     defined on the cohort, any of which can optionally be wrapped in `DESCENDING()` 
     to request descending sort order. Defaults to `['person_id']`. 
