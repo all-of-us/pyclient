@@ -9,7 +9,8 @@ def get_data_table_query(data_table_specification, debug=False):
     :param data_table_specification: the DataTableSpecification to get the query for
     :param debug: true if debug request and response information should be
     displayed; defaults to false.
-    :return a query with the SQL and configuration to use when retrieving data
+    :return `aou_workbench_client.swagger_client.model.cdr_query.CdrQuery`
+    with the SQL and configuration to use when retrieving data
     from BigQuery. If SQL is not present in the response, the specification
     matches no participants and there is no need to run a query against BigQuery;
     the resulting data should be empty.
@@ -28,10 +29,10 @@ def get_cohort_annotations(cohort_annotations_request, debug=False):
     what annotations to retrieve for what cohort.
     :param debug: true if debug request and response information should be
     displayed; defaults to false.
-    :return a CohortAnnotationsResponse with a list of dictionaries; each
-    dictionary represents the requested annotations for a single participant.
-    If no dictionaries are present in the response, there are no annotations
-    present.
+    :return `aou_workbench_client.swagger_client.model.cohort_annotations_response.CohortAnnotationsResponse`
+    with a list of dictionaries; each dictionary represents the requested
+    annotations for a single participant. If no dictionaries are present in the
+    response, there are no annotations present.
     """
     client = get_authenticated_swagger_client(debug=debug)
     cohorts_api = CohortsApi(api_client=client)

@@ -66,10 +66,10 @@ the results in pages as you iterate over the generator.
     false.  
   :return a Pandas data frame representing the results of the query
 """
-def load_data_frame(cohort_name, table, columns=None, concept_set_name=None, concept_ids=None,
-                    concept_id_column=None, source_concept_ids=None, filters=None,
-                    cohort_statuses=None, max_results=None,
-                    order_by=None, debug=False):
+def load_data(cohort_name, table, columns=None, concept_set_name=None, concept_ids=None,
+              concept_id_column=None, source_concept_ids=None, filters=None,
+              cohort_statuses=None, max_results=None,
+              order_by=None, debug=False):
     all_filters = filters
     concept_filters = []
     if concept_ids:

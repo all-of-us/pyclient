@@ -1,13 +1,13 @@
 import unittest
 from aou_workbench_client.cdr.model import Person
-from aou_workbench_client.data import load_annotations, load_data_frame
+from aou_workbench_client.data import load_annotations, load_data
 from aou_workbench_client.swagger_client.models.cohort_status import CohortStatus
 import pandas as pd
 
 class CohortsApiTest(unittest.TestCase):
 
-    def test_load_data_frame(self):
-        df = load_data_frame(cohort_name='Old Men', table=Person,
+    def test_load_data(self):
+        df = load_data(cohort_name='Old Men', table=Person,
                              columns=[Person.person_id, Person.gender_concept.concept_id],
                              max_results=10)
         expected = pd.DataFrame({'person_id':
