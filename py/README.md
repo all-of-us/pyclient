@@ -113,7 +113,7 @@ specified cohort.
 cohort. Results are returned matching the specified concept IDs, filters, and cohort statuses, in 
 the order specified. 
 
-Results from this method are returned as Pandas DataFrame with the columns requested. All results
+Results from this method are returned as a Pandas DataFrame with the columns requested. All results
 will be loaded into memory. The results returned at present must be smaller than 128 MB compressed
 due to BigQuery maximum response size limits; see https://cloud.google.com/bigquery/quotas for 
 more information.
@@ -338,7 +338,7 @@ df = load_data(cohort_name='My Cohort', table=Person,
 `load_annotations` allows you to retrieve annotation values or cohort review statuses you created 
 in workbench during cohort review. 
 
-Results from this method are returned as Pandas DataFrame with the annotations requested as columns.
+Results from this method are returned as a Pandas DataFrame with the annotations requested as columns.
 All results will be loaded into memory. 
 
 
