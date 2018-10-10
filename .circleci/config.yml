@@ -2,7 +2,7 @@ version: 2
 
 defaults: &defaults
   docker:
-    - image: allofustest/pyclient:buildimage-1.1.6
+    - image: allofustest/pyclient:buildimage-1.1.7
   working_directory: ~/pyclient
 
 jobs:
