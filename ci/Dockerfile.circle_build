@@ -10,7 +10,7 @@
 # For permission to push, request to be added to the DockerHub repository.
 # Include your changes to circle.yml in the PR that uses the build image.
 
-FROM circleci/python:3.6.1
+FROM circleci/python:3.6.6
 
 USER circleci
 

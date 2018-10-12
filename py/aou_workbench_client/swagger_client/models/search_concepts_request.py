@@ -36,7 +36,9 @@ class SearchConceptsRequest(object):
         'vocabulary_ids': 'list[str]',
         'domain': 'Domain',
         'max_results': 'int',
-        'min_count': 'int'
+        'min_count': 'int',
+        'include_domain_counts': 'bool',
+        'include_vocabulary_counts': 'bool'
     }
 
     attribute_map = {
@@ -45,10 +47,12 @@ class SearchConceptsRequest(object):
         'vocabulary_ids': 'vocabularyIds',
         'domain': 'domain',
         'max_results': 'maxResults',
-        'min_count': 'minCount'
+        'min_count': 'minCount',
+        'include_domain_counts': 'includeDomainCounts',
+        'include_vocabulary_counts': 'includeVocabularyCounts'
     }
 
-    def __init__(self, query=None, standard_concept_filter=None, vocabulary_ids=None, domain=None, max_results=None, min_count=None):
+    def __init__(self, query=None, standard_concept_filter=None, vocabulary_ids=None, domain=None, max_results=None, min_count=None, include_domain_counts=None, include_vocabulary_counts=None):
         """
         SearchConceptsRequest - a model defined in Swagger
         """
@@ -59,9 +63,12 @@ class SearchConceptsRequest(object):
         self._domain = None
         self._max_results = None
         self._min_count = None
+        self._include_domain_counts = None
+        self._include_vocabulary_counts = None
         self.discriminator = None
 
-        self.query = query
+        if query is not None:
+          self.query = query
         if standard_concept_filter is not None:
           self.standard_concept_filter = standard_concept_filter
         if vocabulary_ids is not None:
@@ -72,12 +79,16 @@ class SearchConceptsRequest(object):
           self.max_results = max_results
         if min_count is not None:
           self.min_count = min_count
+        if include_domain_counts is not None:
+          self.include_domain_counts = include_domain_counts
+        if include_vocabulary_counts is not None:
+          self.include_vocabulary_counts = include_vocabulary_counts
 
     @property
     def query(self):
         """
         Gets the query of this SearchConceptsRequest.
-        A query string that can be used to match a subset of the name (case-insensitively), the entire code value (case-insensitively), or the concept ID. 
+        A query string that can be used to match a subset of the name (case-insensitively), the entire code value (case-insensitively), or the concept ID. If not specified, all concepts are returned. 
 
         :return: The query of this SearchConceptsRequest.
         :rtype: str
@@ -88,13 +99,11 @@ class SearchConceptsRequest(object):
     def query(self, query):
         """
         Sets the query of this SearchConceptsRequest.
-        A query string that can be used to match a subset of the name (case-insensitively), the entire code value (case-insensitively), or the concept ID. 
+        A query string that can be used to match a subset of the name (case-insensitively), the entire code value (case-insensitively), or the concept ID. If not specified, all concepts are returned. 
 
         :param query: The query of this SearchConceptsRequest.
         :type: str
         """
-        if query is None:
-            raise ValueError("Invalid value for `query`, must not be `None`")
 
         self._query = query
 
@@ -212,6 +221,52 @@ class SearchConceptsRequest(object):
         """
 
         self._min_count = min_count
+
+    @property
+    def include_domain_counts(self):
+        """
+        Gets the include_domain_counts of this SearchConceptsRequest.
+        True if per-domain counts of concepts matching the criteria should be included in the response
+
+        :return: The include_domain_counts of this SearchConceptsRequest.
+        :rtype: bool
+        """
+        return self._include_domain_counts
+
+    @include_domain_counts.setter
+    def include_domain_counts(self, include_domain_counts):
+        """
+        Sets the include_domain_counts of this SearchConceptsRequest.
+        True if per-domain counts of concepts matching the criteria should be included in the response
+
+        :param include_domain_counts: The include_domain_counts of this SearchConceptsRequest.
+        :type: bool
+        """
+
+        self._include_domain_counts = include_domain_counts
+
+    @property
+    def include_vocabulary_counts(self):
+        """
+        Gets the include_vocabulary_counts of this SearchConceptsRequest.
+        True if per-vocabulary counts of concepts matching the criteria in the specified domain should be included in the response
+
+        :return: The include_vocabulary_counts of this SearchConceptsRequest.
+        :rtype: bool
+        """
+        return self._include_vocabulary_counts
+
+    @include_vocabulary_counts.setter
+    def include_vocabulary_counts(self, include_vocabulary_counts):
+        """
+        Sets the include_vocabulary_counts of this SearchConceptsRequest.
+        True if per-vocabulary counts of concepts matching the criteria in the specified domain should be included in the response
+
+        :param include_vocabulary_counts: The include_vocabulary_counts of this SearchConceptsRequest.
+        :type: bool
+        """
+
+        self._include_vocabulary_counts = include_vocabulary_counts
 
     def to_dict(self):
         """

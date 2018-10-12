@@ -57,13 +57,13 @@ swagger_client.configuration.access_token = 'YOUR_ACCESS_TOKEN'
 api_instance = swagger_client.CohortsApi()
 workspace_namespace = 'workspace_namespace_example' # str | The Workspace namespace
 workspace_id = 'workspace_id_example' # str | The Workspace ID (a.k.a. the workspace's Firecloud name)
-request = swagger_client.MaterializeCohortRequest() # MaterializeCohortRequest | cohort materialization request (optional)
+request = swagger_client.CohortAnnotationsRequest() # CohortAnnotationsRequest | a request indicating what annotations to retrieve (optional)
 
 try:
-    api_response = api_instance.materialize_cohort(workspace_namespace, workspace_id, request=request)
+    api_response = api_instance.get_cohort_annotations(workspace_namespace, workspace_id, request=request)
     pprint(api_response)
 except ApiException as e:
-    print("Exception when calling CohortsApi->materialize_cohort: %s\n" % e)
+    print("Exception when calling CohortsApi->get_cohort_annotations: %s\n" % e)
 
 ```
 
@@ -73,27 +73,31 @@ All URIs are relative to *https://api.pmi-ops.org*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
-*CohortsApi* | [**materialize_cohort**](docs/CohortsApi.md#materialize_cohort) | **POST** /v1/workspaces/{workspaceNamespace}/{workspaceId}/materializeCohort | 
+*CohortsApi* | [**get_cohort_annotations**](docs/CohortsApi.md#get_cohort_annotations) | **POST** /v1/workspaces/{workspaceNamespace}/{workspaceId}/getCohortAnnotations | 
+*CohortsApi* | [**get_data_table_query**](docs/CohortsApi.md#get_data_table_query) | **POST** /v1/workspaces/{workspaceNamespace}/{workspaceId}/getDataTableQuery | 
 *ConceptsApi* | [**search_concepts**](docs/ConceptsApi.md#search_concepts) | **POST** /v1/workspaces/{workspaceNamespace}/{workspaceId}/searchConcepts | 
 
 
 ## Documentation For Models
 
  - [AnnotationQuery](docs/AnnotationQuery.md)
+ - [CdrQuery](docs/CdrQuery.md)
+ - [CohortAnnotationsRequest](docs/CohortAnnotationsRequest.md)
+ - [CohortAnnotationsResponse](docs/CohortAnnotationsResponse.md)
  - [CohortStatus](docs/CohortStatus.md)
  - [ColumnFilter](docs/ColumnFilter.md)
  - [Concept](docs/Concept.md)
  - [ConceptListResponse](docs/ConceptListResponse.md)
- - [Domain](docs/Domain.md)
- - [FieldSet](docs/FieldSet.md)
+ - [ConceptSynonym](docs/ConceptSynonym.md)
+ - [DataTableSpecification](docs/DataTableSpecification.md)
+ - [DomainCount](docs/DomainCount.md)
  - [MatchType](docs/MatchType.md)
- - [MaterializeCohortRequest](docs/MaterializeCohortRequest.md)
- - [MaterializeCohortResponse](docs/MaterializeCohortResponse.md)
  - [Operator](docs/Operator.md)
  - [ResultFilters](docs/ResultFilters.md)
  - [SearchConceptsRequest](docs/SearchConceptsRequest.md)
  - [StandardConceptFilter](docs/StandardConceptFilter.md)
  - [TableQuery](docs/TableQuery.md)
+ - [VocabularyCount](docs/VocabularyCount.md)
 
 
 ## Documentation For Authorization

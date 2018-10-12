@@ -15,17 +15,20 @@ from __future__ import absolute_import
 
 # import models into model package
 from .annotation_query import AnnotationQuery
+from .cdr_query import CdrQuery
+from .cohort_annotations_request import CohortAnnotationsRequest
+from .cohort_annotations_response import CohortAnnotationsResponse
 from .cohort_status import CohortStatus
 from .column_filter import ColumnFilter
 from .concept import Concept
 from .concept_list_response import ConceptListResponse
-from .domain import Domain
-from .field_set import FieldSet
+from .concept_synonym import ConceptSynonym
+from .data_table_specification import DataTableSpecification
+from .domain_count import DomainCount
 from .match_type import MatchType
-from .materialize_cohort_request import MaterializeCohortRequest
-from .materialize_cohort_response import MaterializeCohortResponse
 from .operator import Operator
 from .result_filters import ResultFilters
 from .search_concepts_request import SearchConceptsRequest
 from .standard_concept_filter import StandardConceptFilter
 from .table_query import TableQuery
+from .vocabulary_count import VocabularyCount
