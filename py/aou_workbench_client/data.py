@@ -118,7 +118,7 @@ def load_data(cohort_name, table, columns=None, concept_set_name=None, concept_i
     if not cdr_query.sql:
       return pd.DataFrame(columns=cdr_query.columns)
     df = pd.read_gbq(query=cdr_query.sql,
-                     project_id=all_of_us_config.workspace_namespace,
+                     project_id=all_of_us_config.billing_cloud_project,
                      configuration=cdr_query.configuration)
     df.columns = cdr_query.columns
     return df

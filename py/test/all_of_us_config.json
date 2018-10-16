@@ -4,5 +4,6 @@
   "CDR_VERSION_BIGQUERY_DATASET": "test_merge_dec26",
   "WORKSPACE_NAMESPACE": "aou-rw-test-158-1",
   "BUCKET_NAME": "fc-a7da7a8a-7a69-423b-a606-6f2cde64de34",
-  "CDR_VERSION_CLOUD_PROJECT": "all-of-us-ehr-dev"
+  "CDR_VERSION_CLOUD_PROJECT": "all-of-us-ehr-dev",
+  "BILLING_CLOUD_PROJECT": "aou-rw-test-158-1"
 }

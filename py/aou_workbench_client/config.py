@@ -14,6 +14,7 @@ API_HOST_KEY = 'API_HOST'
 BUCKET_NAME_KEY = 'BUCKET_NAME'
 CDR_VERSION_CLOUD_PROJECT = 'CDR_VERSION_CLOUD_PROJECT'
 CDR_VERSION_BIGQUERY_DATASET = 'CDR_VERSION_BIGQUERY_DATASET'
+BILLING_CLOUD_PROJECT = 'BILLING_CLOUD_PROJECT'
 
 class AllOfUsConfig(object):
     def __init__(self):
@@ -25,6 +26,7 @@ class AllOfUsConfig(object):
             self.bucket_name = self.config_json[BUCKET_NAME_KEY]
             self.cdr_version_cloud_project = self.config_json[CDR_VERSION_CLOUD_PROJECT]
             self.cdr_version_bigquery_dataset = self.config_json[CDR_VERSION_BIGQUERY_DATASET]
+            self.billing_cloud_project = self.config_json[BILLING_CLOUD_PROJECT]
 
 all_of_us_config = AllOfUsConfig()
 
