@@ -55,6 +55,9 @@ def get_authenticated_swagger_client(force=False, debug=False):
     conf = OauthConfiguration(force)
     conf.debug = debug
     conf.host = all_of_us_config.api_host
+    # See RW-1804; this may be temporary.
+    if (not conf.host.startswith('https://') and not conf.host.startswith('http://')):
+      conf.host = 'https://' + conf.host
     return ApiClient(conf)
 
 
