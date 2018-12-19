@@ -5,31 +5,34 @@ from aou_workbench_client.swagger_client.models.cohort_status import CohortStatu
 import pandas as pd
 
 class CohortsApiTest(unittest.TestCase):
+    """Cohorts API tests.
+
+    These tests use live golden data in the test environment. See
+    all_of_us_config.json for workspace details. In the event that this data
+    needs to be updated, either get access from a team member or recreate the
+    workspace/cohort.
+
+    The default GAE service account which is used for testing has automatic
+    access to all workspaces, which is how this test is able to execute.
+    """
 
     def test_load_data(self):
-        df = load_data(cohort_name='Old Men', table=Person,
+        df = load_data(cohort_name='diabetes cases', table=Person,
                              columns=[Person.person_id, Person.gender_concept.concept_id],
                              max_results=10)
-        expected = pd.DataFrame({'person_id':
-                                   [17, 269, 277, 380, 390, 444, 675, 814, 990, 1012],
-                                 'gender_concept.concept_id':
-                                   [8507, 8507, 8507, 8507, 8507, 8507, 8507, 8507, 8507, 8507]},
-                                columns=['person_id', 'gender_concept.concept_id'])
-        pd.testing.assert_frame_equal(expected, df)
+        self.assertEqual((10, 2), df.shape)
 
     def test_load_annotations(self):
-        df = load_annotations(cohort_name='Old Men',
+        df = load_annotations(cohort_name='diabetes cases',
                               cohort_statuses=[CohortStatus.INCLUDED, CohortStatus.NEEDS_FURTHER_REVIEW])
-        expected = pd.DataFrame({'person_id': [17, 269],
+        expected = pd.DataFrame({'person_id': [5, 6],
                                  'review_status': ['INCLUDED', 'NEEDS_FURTHER_REVIEW'],
-                                 'boolean annotation': [1, 1],
-                                 'date annotation': ['2018-10-09', None],
-                                 'enum annotation': ['A', None],
-                                 'integer annotation': [123, 789],
-                                 'text annotation': ['blah blah', 'Needs further review!']},
-                                columns=['person_id', 'review_status', 'boolean annotation',
-                                         'date annotation', 'enum annotation', 'integer annotation',
-                                         'text annotation'])
+                                 'bool anno': [1, 1],
+                                 'date anno': [None, '2018-10-09'],
+                                 'enum anno': [None, 'A'],
+                                 'int anno': [789, 123],
+                                 'text anno': ['XD', 'blah blah']},
+                                columns=['person_id', 'review_status', 'bool anno',
+                                         'date anno', 'enum anno', 'int anno',
+                                         'text anno'])
         pd.testing.assert_frame_equal(expected, df)
-      
-      
